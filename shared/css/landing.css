@@ -1,0 +1,116 @@
+body {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+.landing-header,
+.workshop-options,
+.landing-footer {
+  width: min(100% - 2rem, 68rem);
+  margin-inline: auto;
+}
+
+.landing-header {
+  padding-block: clamp(3rem, 9vw, 7rem) clamp(2rem, 5vw, 4rem);
+}
+
+.eyebrow,
+.card-label {
+  margin-bottom: 0.55rem;
+  color: var(--accent-dark);
+  font-size: 0.82rem;
+  font-weight: 750;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.landing-header h1 {
+  margin-bottom: 1.25rem;
+}
+
+.introduction {
+  max-width: 56ch;
+  color: var(--muted);
+  font-size: clamp(1.1rem, 1rem + 0.45vw, 1.35rem);
+}
+
+.workshop-options {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: stretch;
+  padding-bottom: 4rem;
+}
+
+.workshop-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 21rem;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.primary-workshop {
+  border-top: 0.5rem solid var(--accent);
+}
+
+.workshop-card h2 {
+  margin-bottom: 1rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.75rem, 3vw, 2.55rem);
+  font-weight: 500;
+}
+
+.workshop-card > p:not(.card-label) {
+  max-width: 48ch;
+  color: var(--muted);
+}
+
+.workshop-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  margin-top: auto;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--accent-dark);
+  border-radius: var(--radius);
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.workshop-link:hover {
+  background: var(--accent-soft);
+}
+
+.primary-link {
+  background: var(--accent);
+  color: white;
+}
+
+.primary-link:hover {
+  background: var(--accent-dark);
+}
+
+.landing-footer {
+  padding-block: 1.5rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.landing-footer p {
+  margin: 0;
+}
+
+@media (max-width: 45rem) {
+  .workshop-options {
+    grid-template-columns: 1fr;
+  }
+
+  .workshop-card {
+    min-height: 18rem;
+  }
+}

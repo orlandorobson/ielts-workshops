@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A functional IELTS Academic Writing Task 1 visual, introduction, overview and detail-writing workshop prototype." />
+    <title>Academic Task 1 prototype — IELTS Workshops</title>
+    <link rel="stylesheet" href="../../../shared/css/base.css" />
+    <link rel="stylesheet" href="../../../shared/css/workshop.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#learning-unit">Skip to the learning activity</a>
+
+    <header class="site-header">
+      <a class="site-name" href="./" aria-label="IELTS Workshops, Academic Task 1 prototype">
+        <span>IELTS Workshops</span>
+        <small>Academic Writing · Task 1</small>
+      </a>
+      <button class="text-button reset-button" id="reset-progress" type="button">Reset this workshop</button>
+    </header>
+
+    <nav class="journey-nav" aria-label="Prototype progress">
+      <p class="journey-label">Academic Task 1 journey</p>
+      <ol id="unit-progress"></ol>
+      <p class="current-stage" id="current-stage"></p>
+    </nav>
+
+    <main id="learning-unit" tabindex="-1">
+      <noscript>
+        <p class="noscript-message">This functional workshop needs JavaScript enabled to preserve and respond to your work.</p>
+      </noscript>
+      <div id="app"></div>
+    </main>
+
+    <footer class="site-footer">
+      <p>Prototype v0.1.1 · Original teaching material · Your work is saved on this device.</p>
+    </footer>
+
+    <script type="module" src="../../../shared/js/academic-task-1.js?v=classroom-pilot-1"></script>
+  </body>
+</html>

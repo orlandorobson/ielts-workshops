@@ -1578,6 +1578,53 @@ If several options are defensible, prefer Type B judgement with conditional feed
 For the classroom spine, prioritise **UNDERSTAND → THINK → DISCUSS / COMPARE → BUILD → WRITE → REVISE**. **IF REDUCING INTERACTIONS CREATES MORE THINKING, DISCUSSION OR WRITING, THAT IS AN IMPROVEMENT.** Additional depth can remain optional or belong to a later self-study layer.
 
 
+# Learner-Facing Language and Entry Scaffolding
+
+Use these principles across IELTS Workshops whenever a learner first meets a task, idea or interaction:
+
+> **USE THE SIMPLEST NATURAL ENGLISH THAT DOES THE JOB.**
+
+> **THE PEDAGOGICAL ARCHITECTURE SHOULD BE FELT, NOT EXPLAINED.**
+
+Design language belongs in specifications, not on the learner's screen. **DO NOT TRANSLATE DESIGN DOCUMENT LANGUAGE INTO LEARNER-FACING PROSE.** Give the learner a clear thing to read, notice, choose, discuss or write. Remove unnecessary explanation before trying to simplify it: **DELETE BEFORE SIMPLIFYING.**
+
+Teach ideas when the learner needs them. **NEVER TEACH SOMETHING MERELY BECAUSE IT WILL BE USEFUL LATER.** Prefer this sequence:
+
+**EXPERIENCE → UNDERSTAND → NAME → USE**
+
+> **DO NOT NAME THE THINKING BEFORE YOU HAVE MADE THE THINKING VISIBLE.**
+
+Let learners first experience a concrete question, example, contrast or decision. Introduce a formal term only after its meaning is available through that experience. For example, learners can identify every part of a task before meeting the name **Task Response**.
+
+Vocabulary support must protect access to the intended thinking:
+
+> **A DIFFICULT WORD MUST NOT PREVENT ACCESS TO THE THINKING WE ARE ACTUALLY TEACHING.**
+
+When a small number of task words may block understanding, provide an optional, collapsed **Lexical Bank** close to the task. Give the term, a short plain-English meaning and, where it will help the intended learners, a carefully checked Arabic precision support. The bank must remain optional, work when closed, preserve progress when opened or closed and never gate continuation. Translation supports meaning; it does not replace the English teaching context.
+
+Progressive help should shorten the learner's route to the next useful thought:
+
+> **A HINT SHOULD REDUCE THE THINKING DISTANCE.**
+
+Use the sequence **ATTENTION → RELATIONSHIP → EXPLANATION → MODEL**. First point to the relevant word, sentence, contrast or part of the task. Then help the learner connect the parts. Explain the principle only when necessary. Supply a model after the learner has had a fair chance to think, or when less support is unlikely to work. Do not make early hints vague or cryptic.
+
+Control cognitive load:
+
+> **ONE NEW THINKING DISTINCTION AT A TIME.**
+
+> **DO NOT TEACH TWO WORDS WHEN THE LEARNER ONLY NEEDS ONE.**
+
+Avoid introducing several labels, contrasts or decision rules in one small activity. Separate them into a sequence of concrete encounters. A useful entry rule is: **FIRST GIVE THE LEARNER SOMETHING THEY CAN DO. THEN HELP THEM DO IT BETTER.**
+
+Review the resulting learner experience using three questions:
+
+- **Firm:** Is the required action and next step unambiguous?
+- **Easy to take:** Can a developing learner understand the screen without decoding workshop-design language?
+- **Productive:** Does the action lead to useful noticing, discussion, writing or revision?
+
+Apply a strict firewall during content review. Words such as *architecture*, *diagnostic*, *progression condition*, *transfer*, *criterion lens* and internal type names may be useful in documentation or code, but should not appear in learner-facing copy unless the term itself is genuinely being taught at that point.
+
+
 # Task 2 Progressive Learning Interactions
 
 These behaviours extend the existing **Progressive Help**, **AI Feedback for Free Writing** and **Option Randomisation** systems. They do not replace them.

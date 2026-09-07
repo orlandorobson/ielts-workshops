@@ -1,6 +1,7 @@
 const STORAGE_KEY = "ielts-workshops:writing-task-2:v1";
-const VERSION = 2;
-const SUPPORTED_VERSIONS = new Set([1, VERSION]);
+const VERSION = 3;
+const SUPPORTED_VERSIONS = new Set([1, 2, VERSION]);
+const REDESIGNED_OPENING_IDS = ["u1", "u2", "u3", "u3p", "u4", "u5", "u6"];
 
 const defaultState = () => ({
   version: VERSION,
@@ -28,7 +29,7 @@ export function loadTask2State() {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
     if (!saved || !SUPPORTED_VERSIONS.has(saved.version)) return defaultState();
     const defaults = defaultState();
-    return {
+    const migrated = {
       ...defaults,
       ...saved,
       version: VERSION,
@@ -41,6 +42,17 @@ export function loadTask2State() {
         transferPlan: { ...defaults.drafts.transferPlan, ...(saved.drafts?.transferPlan || {}) },
       },
     };
+    if (saved.version < VERSION) {
+      migrated.currentUnit = "u1";
+      migrated.completed = [];
+      REDESIGNED_OPENING_IDS.forEach((id) => {
+        delete migrated.units[id];
+        Object.keys(migrated.units)
+          .filter((key) => key.startsWith(`${id}-`))
+          .forEach((key) => delete migrated.units[key]);
+      });
+    }
+    return migrated;
   } catch {
     return defaultState();
   }

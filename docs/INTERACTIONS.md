@@ -1535,6 +1535,49 @@ Multiple answers may be defensible. Store meaning, quality, feedback and accepta
 Before approving distractors, check that linguistic difficulty is not concealing the intended judgement. Make alternatives intellectually plausible in language a developing A2–B1 learner can normally understand with available help.
 
 
+# Completion and Classroom Interaction Architecture
+
+Use these principles across IELTS Workshops:
+
+> **CORRECTNESS ≠ COMPLETION.**
+
+The normal learning sequence is **DO → THINK → CHECK / COMPARE → LEARN → CONTINUE**. A checked answer may lead to different feedback without controlling access to the next unit. A weaker, non-preferred or defensible alternative can still be a completed learning action. Avoid indefinite **WRONG → TRY AGAIN** loops that add no new information.
+
+Keep these concepts separate in activity state:
+
+- **engaged** — the learner has begun the meaningful action;
+- **checked** — the learner has asked to compare or receive feedback;
+- **completed** — the progression requirement has been met;
+- **answer quality / diagnostic result** — information used to choose feedback, not automatically to grant access.
+
+Use an explicit, appropriate completion policy such as **after-check**, **after-save**, **after-attempt**, **on-arrival** or **optional**. Use the smallest implementation that expresses the learning design.
+
+Four interaction types guide that design:
+
+- **Type A — Discover:** a reasonably determinate answer or relationship. Use **ANSWER → CHECK → EXPLANATION → CONTINUE**. A meaningful checked attempt normally allows continuation, even when the first answer was wrong; retry may remain optional.
+- **Type B — Judge:** quality is graduated, interpretations may be defensible or usefulness is conditional. Use **JUDGE → DIFFERENTIATED FEEDBACK → COMPARE POSSIBILITIES → CONTINUE**. Do not hide an exact combination behind nuanced material.
+- **Type C — Make:** the learner writes, plans, reasons, revises or creates a connection. Completion means a genuine attempt, normally kept or saved. Do not pretend to grade open writing automatically.
+- **Type D — Understand:** communicate or consolidate a principle, process or useful terminology. Continue may be available on arrival. **INFORMATION DOES NOT NEED TO PRETEND TO BE A TASK.**
+
+Distinguish **core action**, **optional exploration** and **help**. **ONLY THE MEANINGFUL CORE ACTION SHOULD NORMALLY GATE PROGRESSION.** Extra examples and help can deepen understanding without becoming click-all requirements. Use **EXPLORATION BEFORE CLASSIFICATION** when noticing and discussion better serve the learning goal than naming a category first.
+
+> **CONTINUE SHOULD NOT BE DISABLED UNLESS THERE IS A GOOD PEDAGOGICAL REASON.**
+
+The reason must be obvious from the core control or stated briefly and specifically, for example, “Choose an answer and check it first.” Never make the learner discover a hidden clickable requirement. Optional controls must not compete visually with the dominant next action.
+
+Use accessible instruction language for sophisticated thinking: **DIFFICULT THINKING ≠ DIFFICULT ENGLISH.** Explain the action or meaning before introducing a technical label.
+
+Retain plausible alternatives, and add these permanent tests:
+
+> **PLAUSIBLE ALTERNATIVES SHOULD CREATE SOMETHING TO DISCUSS, NOT SOMETHING TO GUESS.**
+
+> **DON'T TURN NUANCE INTO A PASSWORD.**
+
+If several options are defensible, prefer Type B judgement with conditional feedback over a secret exact key. Feedback should enlarge understanding by explaining what an answer does, what works and what needs a clearer connection.
+
+For the classroom spine, prioritise **UNDERSTAND → THINK → DISCUSS / COMPARE → BUILD → WRITE → REVISE**. **IF REDUCING INTERACTIONS CREATES MORE THINKING, DISCUSSION OR WRITING, THAT IS AN IMPROVEMENT.** Additional depth can remain optional or belong to a later self-study layer.
+
+
 # Task 2 Progressive Learning Interactions
 
 These behaviours extend the existing **Progressive Help**, **AI Feedback for Free Writing** and **Option Randomisation** systems. They do not replace them.

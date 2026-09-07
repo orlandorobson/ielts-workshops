@@ -1,4 +1,4 @@
-import { task2Content as content } from "../../content/writing/task-2.js";
+import { task2Content as content } from "../../content/writing/task-2.js?v=pass-1";
 import { buildTask2AIFeedbackPrompt, buildTask2RevisionAIFeedbackPrompt, copyText } from "./ai-feedback.js";
 import { isValidStoredOrder, shuffleOptionIds } from "./randomise.js";
 import { clearTask2State, loadTask2State, saveTask2State } from "./task-2-storage.js";
@@ -24,6 +24,20 @@ function setUnitState(id, patch) {
 }
 
 function completeUnit(id) {
+  if (!state.completed.includes(id)) state.completed.push(id);
+  saveTask2State(state);
+}
+
+const completionPolicy = Object.freeze({
+  afterCheck: "after-check",
+  afterSave: "after-save",
+  afterAttempt: "after-attempt",
+  onArrival: "on-arrival",
+  optional: "optional",
+});
+
+function recordCompletion(id, policy, patch = {}) {
+  state.units[id] = { ...getUnitState(id), ...patch, engaged: true, completionPolicy: policy };
   if (!state.completed.includes(id)) state.completed.push(id);
   saveTask2State(state);
 }
@@ -255,17 +269,18 @@ function renderU1(unit) {
   const saved = getUnitState("u1");
   const patterns = orderedOptions("u1-patterns", content.patterns, true);
   const activeId = saved.activeId || content.patterns[0].id;
-  const viewed = [...new Set([...(saved.viewed || []), activeId])];
+  const viewed = [...new Set(saved.viewed || [])];
   const active = content.patterns.find((pattern) => pattern.id === activeId);
-  if (!saved.activeId || viewed.length !== (saved.viewed || []).length) setUnitState("u1", { activeId, viewed });
-  if (viewed.length === content.patterns.length) completeUnit("u1");
-  app.innerHTML = `<article>${unitHeader(unit, "Task 2 questions use several common patterns. These are useful descriptions, not a complete list of fixed essay types.")}
-    <div class="context-entry"><section><p class="prompt">Select each question pattern to inspect the writing job.</p>
+  recordCompletion("u1", completionPolicy.onArrival, { activeId, viewed });
+  app.innerHTML = `<article>${unitHeader(unit, "Different questions give you different jobs. Read the exact instruction before you decide what to write.")}
+    <blockquote class="principle-panel"><p><strong>Different questions give you different jobs. Read the exact instruction.</strong></p><p>The patterns below are examples, not fixed essay formulas.</p></blockquote>
+    <div class="context-entry"><section><p class="prompt">One example: an agreement question asks you to decide and support a position.</p>
+      <p class="choice-note">Optional: choose another pattern to compare its writing job.</p>
       <ul class="pattern-list">${patterns.map((pattern) => `<li><button class="pattern-button" type="button" data-pattern="${pattern.id}" aria-pressed="${pattern.id === activeId}"><strong>${pattern.label}</strong><span>${pattern.question}</span></button></li>`).join("")}</ul></section>
       <figure class="context-illustration"><img src="../../media/writing/task-2/university-context.png?v=2" alt="A student reviews notes beside a laptop."/><figcaption>A university context. The image establishes the setting, not an answer about tuition.</figcaption></figure></div>
     <section class="pattern-detail" aria-live="polite"><h2>${active.label}</h2><p>${active.jobs}</p></section>
-    <p class="choice-note">${viewed.length} of ${content.patterns.length} patterns inspected.</p>
-    ${navigationMarkup({ canContinue: state.completed.includes("u1") })}</article>`;
+    <p class="choice-note">Optional examples opened: ${viewed.length} of ${content.patterns.length}.</p>
+    ${navigationMarkup({ canContinue: true })}</article>`;
   document.querySelectorAll("[data-pattern]").forEach((button) => button.addEventListener("click", () => {
     setUnitState("u1", { activeId: button.dataset.pattern, viewed: [...new Set([...viewed, button.dataset.pattern])] });
     render();
@@ -392,51 +407,73 @@ function renderB1(unit) {
   const source = content.b1;
   const saved = getUnitState(id);
   const answers = saved.answers || {};
-  const ideas = orderedOptions(id, source.ideas, source.shuffle);
-  const ready = ideas.every((idea) => answers[idea.id]);
-  const correct = ready && source.ideas.every((idea) => answers[idea.id] === idea.answer);
-  app.innerHTML = `<article>${unitHeader(unit, "An idea can use the same topic words without helping to answer the instruction.")}${questionMarkup(content.canonicalQuestion)}<form id="b1-form" class="classification-list"><p class="prompt">Classify each idea by what it contributes to this exact question.</p>${ideas.map((idea) => `<div class="classification-row"><label for="b1-${idea.id}">${idea.text}</label><select id="b1-${idea.id}" name="${idea.id}"><option value="">Choose…</option>${source.labels.map((label) => `<option value="${label.id}" ${answers[idea.id] === label.id ? "selected" : ""}>${label.text}</option>`).join("")}</select>${saved.checked && answers[idea.id] ? `<p class="row-feedback">${idea.feedback}</p>` : ""}</div>`).join("")}<button class="primary-button" type="submit" ${ready ? "" : "disabled"}>Check the connections</button></form>${saved.checked ? feedbackMarkup(correct ? "You separated ideas that answer directly, ideas that need a clearer connection and ideas that only share the topic." : "At least one connection needs another look. Ask what claim the idea would help you make about whether tuition should be free.", correct ? "success" : "reconsider") : ""}<blockquote class="principle-panel"><p><strong>Related to the topic ≠ helps answer the question.</strong></p></blockquote>${criterionMarkup("Task Response", "This idea is connected to the topic. But does it help answer the exact question?")}${helpMarkup(id, source.help)}${navigationMarkup({ canContinue: state.completed.includes(id) })}</article>`;
+  const coreIdeas = orderedOptions("b1-core", source.ideas.filter((idea) => idea.core), source.shuffle);
+  const extraIdeas = orderedOptions("b1-extra", source.ideas.filter((idea) => !idea.core), source.shuffle);
+  const ready = coreIdeas.every((idea) => answers[idea.id]);
+  const labelFor = (value) => source.labels.find((label) => label.id === value)?.text || "Not chosen";
+  app.innerHTML = `<article>${unitHeader(unit, "An idea can be about university without helping you answer this question. Judge the connection, then compare your thinking with the workshop view.")}${questionMarkup(content.canonicalQuestion)}<form id="b1-form" class="classification-list"><p class="prompt">For each idea, choose how useful it is for this exact question.</p>${coreIdeas.map((idea) => `<div class="classification-row"><label for="b1-${idea.id}">${idea.text}</label><select id="b1-${idea.id}" name="${idea.id}"><option value="">Choose…</option>${source.labels.map((label) => `<option value="${label.id}" ${answers[idea.id] === label.id ? "selected" : ""}>${label.text}</option>`).join("")}</select>${saved.checked && answers[idea.id] ? `<p class="row-feedback"><strong>Your judgement:</strong> ${labelFor(answers[idea.id])}<br/><strong>Workshop view:</strong> ${labelFor(idea.answer)}. ${idea.feedback}</p>` : ""}</div>`).join("")}<button class="primary-button" type="submit" ${ready ? "" : "disabled"}>Compare my judgements</button></form>${saved.checked ? feedbackMarkup("You have compared three kinds of connection. A different judgement can still give the class something useful to discuss.", "success") : ""}${saved.checked ? `<details class="workspace-note"><summary>Optional: compare two more ideas</summary>${extraIdeas.map((idea) => `<section><p><strong>${idea.text}</strong></p><p><strong>Workshop view:</strong> ${labelFor(idea.answer)}. ${idea.feedback}</p></section>`).join("")}</details>` : ""}<blockquote class="principle-panel"><p><strong>Related to the topic ≠ helps answer the question.</strong></p></blockquote>${criterionMarkup("Task Response", "First ask: does this idea help answer the exact instruction?")}${helpMarkup(id, source.help)}${navigationMarkup({ canContinue: state.completed.includes(id) })}</article>`;
   const form = document.querySelector("#b1-form");
   form.addEventListener("change", () => {
     const data = new FormData(form);
-    const next = Object.fromEntries(source.ideas.map((idea) => [idea.id, data.get(idea.id)]));
+    const next = { ...answers, ...Object.fromEntries(coreIdeas.map((idea) => [idea.id, data.get(idea.id)])) };
     setUnitState(id, { answers: next, checked: false });
-    form.querySelector('button[type="submit"]').disabled = !source.ideas.every((idea) => next[idea.id]);
+    form.querySelector('button[type="submit"]').disabled = !coreIdeas.every((idea) => next[idea.id]);
   });
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     const data = new FormData(form);
-    const next = Object.fromEntries(source.ideas.map((idea) => [idea.id, data.get(idea.id)]));
-    setUnitState(id, { answers: next, checked: true });
-    if (source.ideas.every((idea) => next[idea.id] === idea.answer)) completeUnit(id);
+    const next = { ...answers, ...Object.fromEntries(coreIdeas.map((idea) => [idea.id, data.get(idea.id)])) };
+    recordCompletion(id, completionPolicy.afterCheck, { answers: next, checked: true, diagnosticResult: { preferred: coreIdeas.filter((idea) => next[idea.id] === idea.answer).length, total: coreIdeas.length } });
+    render();
+  });
+  bindHelp(id);
+}
+
+function renderSequentialJudgement(id, unit, { source, introduction, prompt, labels, principle, criterion = "", required = 2 }) {
+  const saved = getUnitState(id);
+  const ordered = orderedOptions(`${id}-examples`, source.options, source.shuffle);
+  const reviewed = saved.reviewed || [];
+  const judgements = saved.judgements || {};
+  const activeId = ordered.some((item) => item.id === saved.activeId) ? saved.activeId : ordered[0].id;
+  const active = source.options.find((item) => item.id === activeId);
+  const current = judgements[activeId];
+  const enough = reviewed.length >= required;
+  const next = ordered.find((item) => !reviewed.includes(item.id) && item.id !== activeId);
+  const labelFor = (value) => labels.find((label) => label.id === value)?.text || "Not chosen";
+  app.innerHTML = `<article>${unitHeader(unit, introduction)}${questionMarkup(content.canonicalQuestion)}${source.idea ? `<blockquote class="principle-panel"><p><strong>Idea:</strong> ${source.idea}</p></blockquote>` : ""}<section class="interaction-pane"><p class="prompt">${prompt}</p><article class="judgement-focus"><p class="eyebrow">Example ${Math.min(reviewed.length + (reviewed.includes(activeId) ? 0 : 1), source.options.length)} of ${source.options.length}</p><p class="judgement-text">${active.text}</p><fieldset><legend>What is your judgement?</legend><div class="inline-choices">${labels.map((label) => compactChoice({ value: label.id, label: label.text, name: `${id}-judgement`, checked: current?.choice === label.id })).join("")}</div></fieldset>${current?.checked ? `<div class="row-feedback"><p><strong>Your judgement:</strong> ${labelFor(current.choice)}</p><p><strong>Workshop view:</strong> ${labelFor(active.answer)}. ${active.feedback}</p></div>` : ""}</article><div class="action-row">${!current?.checked ? `<button class="primary-button" type="button" data-check-example ${current?.choice ? "" : "disabled"}>Compare my judgement</button>` : next ? `<button class="${enough ? "secondary-button" : "primary-button"}" type="button" data-next-example>${enough ? "Explore another example" : "Try another example"}</button>` : ""}</div><p class="choice-note">${enough ? `Core complete: ${reviewed.length} examples compared. The remaining examples are optional.` : `Compare ${required - reviewed.length} more ${required - reviewed.length === 1 ? "example" : "examples"} to continue.`}</p>${principle ? `<blockquote class="principle-panel"><p>${principle}</p></blockquote>` : ""}${criterion ? criterionMarkup("Task Response", criterion) : ""}${helpMarkup(id, source.help)}</section>${navigationMarkup({ canContinue: state.completed.includes(id) })}</article>`;
+  document.querySelectorAll(`input[name="${id}-judgement"]`).forEach((input) => input.addEventListener("change", () => {
+    setUnitState(id, { activeId, judgements: { ...judgements, [activeId]: { choice: input.value, checked: false } } });
+    render();
+  }));
+  document.querySelector("[data-check-example]")?.addEventListener("click", () => {
+    const choice = document.querySelector(`input[name="${id}-judgement"]:checked`)?.value;
+    if (!choice) return;
+    const nextReviewed = [...new Set([...reviewed, activeId])];
+    const nextJudgements = { ...judgements, [activeId]: { choice, checked: true, preferred: choice === active.answer } };
+    if (nextReviewed.length >= required) {
+      recordCompletion(id, completionPolicy.afterCheck, { activeId, reviewed: nextReviewed, judgements: nextJudgements, checked: true, diagnosticResult: { preferred: Object.values(nextJudgements).filter((item) => item.preferred).length, reviewed: nextReviewed.length } });
+    } else {
+      setUnitState(id, { activeId, reviewed: nextReviewed, judgements: nextJudgements, checked: true });
+    }
+    render();
+  });
+  document.querySelector("[data-next-example]")?.addEventListener("click", () => {
+    if (!next) return;
+    setUnitState(id, { activeId: next.id, checked: false });
     render();
   });
   bindHelp(id);
 }
 
 function renderB2(unit) {
-  const id = "b2";
-  const source = content.b2;
-  const saved = getUnitState(id);
-  const selected = saved.selected || [];
-  const ordered = orderedOptions(id, source.options, source.shuffle);
-  const expected = source.options.filter((option) => option.viable).map((option) => option.id);
-  const correct = selected.length === expected.length && expected.every((value) => selected.includes(value));
-  app.innerHTML = `<article>${unitHeader(unit, "A relevant idea is a start. The reader may still need to understand why or how it works.")}${questionMarkup(content.canonicalQuestion)}<blockquote class="principle-panel"><p><strong>Idea:</strong> ${source.idea}</p></blockquote><form id="b2-form"><fieldset><legend class="prompt">${source.prompt}</legend><div class="choice-list">${ordered.map((option) => choiceMarkup({ option, name: id, type: "checkbox", checked: selected.includes(option.id) })).join("")}</div></fieldset><button class="primary-button" type="submit">Check my selections</button></form>${saved.checked ? `<div class="classification-list">${source.options.filter((option) => selected.includes(option.id)).map((option) => `<p class="row-feedback"><strong>${option.viable ? "Moves forward:" : "Check this:"}</strong> ${option.feedback}</p>`).join("")}</div>${feedbackMarkup(correct ? "Several different continuations can develop the idea. You selected every strong continuation in this set." : "Reconsider whether each selected sentence adds a reason, result or other useful meaning rather than repetition or a different argument.", correct ? "success" : "reconsider")}` : ""}<blockquote class="principle-panel"><p><strong>Idea ≠ explanation.</strong> Ask why, how, what this means or what happens as a result.</p></blockquote>${helpMarkup(id, source.help)}${navigationMarkup({ canContinue: state.completed.includes(id) })}</article>`;
-  const form = document.querySelector("#b2-form");
-  form.addEventListener("change", () => {
-    const next = [...form.querySelectorAll('input[type="checkbox"]:checked')].map((input) => input.value);
-    setUnitState(id, { selected: next, checked: false });
+  renderSequentialJudgement("b2", unit, {
+    source: content.b2,
+    introduction: "A relevant idea is a start. Look at what the next sentence does: it may explain, add a result, repeat, or begin another possible argument.",
+    prompt: content.b2.prompt,
+    labels: content.b2.labels,
+    principle: "<strong>Idea ≠ explanation.</strong> Reasoning can move forward in more than one useful way.",
+    criterion: "Ask what new understanding the next sentence gives the reader.",
   });
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const next = [...form.querySelectorAll('input[type="checkbox"]:checked')].map((input) => input.value);
-    const success = next.length === expected.length && expected.every((value) => next.includes(value));
-    setUnitState(id, { selected: next, checked: true });
-    if (success) completeUnit(id);
-    render();
-  });
-  bindHelp(id);
 }
 
 function renderB3(unit) {
@@ -447,8 +484,8 @@ function renderB3(unit) {
   const whys = saved.idea ? orderedOptions("b3-whys", source.whys.filter((item) => item.idea === saved.idea), true) : [];
   const supports = saved.idea ? orderedOptions("b3-supports", source.supports.filter((item) => item.idea === saved.idea || item.idea === "all"), true) : [];
   const customNeeded = saved.position === "I want to write my position differently";
-  const ready = saved.position && saved.idea && saved.why && saved.support && (!customNeeded || saved.customPosition?.trim());
-  app.innerHTML = `<article>${unitHeader(unit, "Build a reasoning chain one relationship at a time. Use only the steps your idea needs.")}${questionMarkup(content.canonicalQuestion)}<form id="b3-form" class="reasoning-builder"><label class="reasoning-step"><strong>My position</strong><select name="position"><option value="">Choose planning support…</option>${source.positions.map((position) => `<option ${saved.position === position ? "selected" : ""}>${position}</option>`).join("")}</select></label>${customNeeded ? `<label class="reasoning-step"><strong>My position in my own words</strong><input class="reasoning-note" name="customPosition" value="${escapeHTML(saved.customPosition)}"/></label>` : ""}<label class="reasoning-step"><strong>Relevant idea</strong><select name="idea"><option value="">Choose an idea…</option>${ideas.map((idea) => `<option value="${idea.id}" ${saved.idea === idea.id ? "selected" : ""}>${idea.text}</option>`).join("")}</select></label><label class="reasoning-step"><strong>Why or how?</strong><select name="why" ${saved.idea ? "" : "disabled"}><option value="">Choose a reasoning link…</option>${whys.map((item) => `<option value="${item.id}" ${saved.why === item.id ? "selected" : ""}>${item.text}</option>`).join("")}</select></label><label class="reasoning-step"><strong>What else, if anything, would help the reader?</strong><select name="support" ${saved.idea ? "" : "disabled"}><option value="">Choose another useful step, or decide the reason is enough…</option>${supports.map((item) => `<option value="${item.id}" ${saved.support === item.id ? "selected" : ""}>${item.text}</option>`).join("")}</select></label><label class="reasoning-step"><strong>Optional note in my own words</strong><textarea name="note" rows="3">${escapeHTML(state.drafts.reasoningNote)}</textarea></label><button class="primary-button" type="submit" ${ready ? "" : "disabled"}>Keep this reasoning</button></form>${saved.saved ? feedbackMarkup("Your chain is saved as reasoning notes, not polished prose. You decide how to turn it into writing.") : ""}<blockquote class="principle-panel"><p>A reason may already make the idea clear. Add a result, comparison, clearer detail or realistic example only when the reader needs it.</p><p>You can use realistic examples. You do not need to invent facts, statistics or authorities.</p></blockquote>${navigationMarkup({ canContinue: state.completed.includes(id) })}</article>`;
+  const ready = saved.position && saved.idea && saved.why && (!customNeeded || saved.customPosition?.trim());
+  app.innerHTML = `<article>${unitHeader(unit, "Start with an idea, then move the reasoning forward. A clear why or how may be enough for this planning note; another step is optional.")}${questionMarkup(content.canonicalQuestion)}<form id="b3-form" class="reasoning-builder"><p class="choice-note">Choose a position, an idea and a why/how link. The final step and your own note are optional.</p><label class="reasoning-step"><strong>My position</strong><select name="position"><option value="">Choose planning support…</option>${source.positions.map((position) => `<option ${saved.position === position ? "selected" : ""}>${position}</option>`).join("")}</select></label>${customNeeded ? `<label class="reasoning-step"><strong>My position in my own words</strong><input class="reasoning-note" name="customPosition" value="${escapeHTML(saved.customPosition)}"/></label>` : ""}<label class="reasoning-step"><strong>Relevant idea</strong><select name="idea"><option value="">Choose an idea…</option>${ideas.map((idea) => `<option value="${idea.id}" ${saved.idea === idea.id ? "selected" : ""}>${idea.text}</option>`).join("")}</select></label><label class="reasoning-step"><strong>Why or how?</strong><select name="why" ${saved.idea ? "" : "disabled"}><option value="">Choose a reasoning link…</option>${whys.map((item) => `<option value="${item.id}" ${saved.why === item.id ? "selected" : ""}>${item.text}</option>`).join("")}</select></label><label class="reasoning-step"><strong>Optional: What else, if anything, would help the reader?</strong><select name="support" ${saved.idea ? "" : "disabled"}><option value="">No extra step needed, or choose one…</option>${supports.map((item) => `<option value="${item.id}" ${saved.support === item.id ? "selected" : ""}>${item.text}</option>`).join("")}</select></label><label class="reasoning-step"><strong>Optional note in my own words</strong><textarea name="note" rows="3">${escapeHTML(state.drafts.reasoningNote)}</textarea></label><button class="primary-button" type="submit" ${ready ? "" : "disabled"}>Keep this reasoning</button></form>${saved.saved ? feedbackMarkup("Your reasoning notes are saved. They are not a paragraph formula: use only the moves your idea needs.") : ""}<blockquote class="principle-panel"><p>A reason may already make the idea clear. Add a result, comparison, clarification, condition, situation or realistic example only when the reader needs it.</p><p>You do not need to invent facts, statistics or authorities.</p></blockquote>${navigationMarkup({ canContinue: state.completed.includes(id) })}</article>`;
   const form = document.querySelector("#b3-form");
   form.addEventListener("change", () => {
     const data = new FormData(form);
@@ -462,21 +499,27 @@ function renderB3(unit) {
     event.preventDefault();
     const data = new FormData(form);
     saveDraft("reasoningNote", data.get("note") || "");
-    setUnitState(id, { saved: true });
-    completeUnit(id);
+    recordCompletion(id, completionPolicy.afterSave, { saved: true });
     render();
   });
 }
 
 function renderB4(unit) {
-  renderMatrixJudgement("b4", unit, { introduction: "More sentences, difficult words and a precise-looking study do not automatically develop an idea.", question: content.canonicalQuestion, items: content.b4.options, values: [{ id: "strong", label: "Strong development" }, { id: "could", label: "Could work — needs more" }, { id: "weak", label: "Does not develop this idea well" }], prompt: content.b4.prompt, help: content.b4.help, principle: "<strong>More words ≠ more development. Difficult vocabulary ≠ better reasoning. A specific example ≠ relevant support.</strong>", successMessage: "You distinguished clear development, a promising but incomplete route, repetition and unsupported invented evidence.", retryMessage: "Look at what each version helps the reader understand. Relevant wording alone does not show why the access idea works." });
+  renderSequentialJudgement("b4", unit, {
+    source: content.b4,
+    introduction: "A longer paragraph is not automatically better. Judge what each version actually helps the reader understand.",
+    prompt: content.b4.prompt,
+    labels: [{ id: "strong", text: "Explains the idea clearly" }, { id: "could", text: "Could work with a clearer link" }, { id: "weak", text: "Adds little useful explanation" }],
+    principle: "<strong>More words ≠ more development. Difficult vocabulary ≠ better reasoning. A specific example ≠ relevant support.</strong>",
+    criterion: "Look first at whether the reasoning is clear and connected.",
+  });
 }
 
 function reasoningSummary() {
   const saved = getUnitState("b3");
   const idea = content.b3.ideas.find((item) => item.id === saved.idea)?.text || "No saved idea";
   const why = content.b3.whys.find((item) => item.id === saved.why)?.text || "No saved explanation";
-  const support = content.b3.supports.find((item) => item.id === saved.support)?.text || "No saved support";
+  const support = content.b3.supports.find((item) => item.id === saved.support)?.text || "No additional step chosen";
   return `Position: ${saved.customPosition || saved.position || "Not recorded"}\nIdea: ${idea}\nWhy/how: ${why}\nSupport: ${support}${state.drafts.reasoningNote ? `\nOwn note: ${state.drafts.reasoningNote}` : ""}`;
 }
 
@@ -484,10 +527,10 @@ function renderB5(unit) {
   const summary = reasoningSummary();
   const saved = getUnitState("b5");
   const draft = state.drafts.bodyParagraph || "";
-  app.innerHTML = `<article>${unitHeader(unit, "Turn your reasoning into one genuine paragraph. Focus, develop and stop when the idea has done its job.")}${questionMarkup(content.canonicalQuestion)}<div class="activity-layout writing-layout"><aside><h2>Your reasoning notes</h2><pre class="workspace-note">${escapeHTML(summary)}</pre><div class="framework-strip"><section><strong>Focus</strong><span>What does this contribute?</span></section><section><strong>Develop</strong><span>Explain and support it.</span></section><section><strong>Close</strong><span>Has the idea done its job?</span></section></div></aside><section class="writing-pane"><label for="b5-draft">Your body paragraph</label><textarea class="writing-area paragraph-area" id="b5-draft">${escapeHTML(draft)}</textarea><div class="writing-meta"><span data-word-count>${wordCount(draft)} words</span></div>${helpMarkup("b5", content.b5.help)}${aiMarkup("b5")}<button class="primary-button" type="button" data-save ${draft.trim() ? "" : "disabled"}>Keep this paragraph</button></section></div>${navigationMarkup({ canContinue: state.completed.includes("b5") })}</article>`;
+  app.innerHTML = `<article>${unitHeader(unit, "Use what you noticed about relevance and reasoning to build one genuine paragraph. Focus, develop and stop when the idea has done its job.")}${questionMarkup(content.canonicalQuestion)}<div class="activity-layout writing-layout"><aside><h2>Your reasoning notes</h2><pre class="workspace-note">${escapeHTML(summary)}</pre><div class="framework-strip"><section><strong>Focus</strong><span>How does this help answer?</span></section><section><strong>Develop</strong><span>Move the reasoning forward.</span></section><section><strong>Close</strong><span>Has the idea done its job?</span></section></div></aside><section class="writing-pane"><label for="b5-draft">Your body paragraph</label><textarea class="writing-area paragraph-area" id="b5-draft">${escapeHTML(draft)}</textarea><div class="writing-meta"><span data-word-count>${wordCount(draft)} words</span></div>${helpMarkup("b5", content.b5.help)}${aiMarkup("b5")}<button class="primary-button" type="button" data-save ${draft.trim() ? "" : "disabled"}>Keep this paragraph</button></section></div>${navigationMarkup({ canContinue: state.completed.includes("b5") })}</article>`;
   const textarea = document.querySelector("#b5-draft");
   textarea.addEventListener("input", () => { saveDraft("bodyParagraph", textarea.value); document.querySelector("[data-word-count]").textContent = `${wordCount(textarea.value)} words`; document.querySelector("[data-save]").disabled = !textarea.value.trim(); });
-  document.querySelector("[data-save]").addEventListener("click", () => { if (!textarea.value.trim()) return; saveDraft("bodyParagraph", textarea.value); completeUnit("b5"); render(); });
+  document.querySelector("[data-save]").addEventListener("click", () => { if (!textarea.value.trim()) return; saveDraft("bodyParagraph", textarea.value); recordCompletion("b5", completionPolicy.afterSave, { saved: true }); render(); });
   bindHelp("b5");
   bindAI({ id: "b5", textarea, question: content.canonicalQuestion, analysis: reasoningSummary(), feedback: content.b5.aiFeedback });
 }

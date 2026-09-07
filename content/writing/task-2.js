@@ -144,11 +144,11 @@ export const task2Content = {
     ],
     shuffle: true,
     ideas: [
-      { id: "access", text: "Free tuition may widen access for capable students whose families cannot afford fees.", answer: "helps", feedback: "This directly supports agreement by connecting cost with access." },
-      { id: "priorities", text: "Funding tuition for everyone may leave less money for other public services.", answer: "helps", feedback: "This directly supports disagreement or a position that agrees only partly." },
-      { id: "quality", text: "Universities need stable funding to maintain teaching quality.", answer: "could", feedback: "This could matter if the writer connects funding sources to whether tuition should be free." },
-      { id: "formats", text: "University courses commonly include lectures, seminars and independent study.", answer: "topic", feedback: "This is about university, but it does not address whether tuition should be free." },
-      { id: "course-choice", text: "University students often choose courses according to their future career goals.", answer: "topic", feedback: "This is a genuine point about students and education, but it does not yet help the writer judge whether university should be free for everyone." },
+      { id: "access", core: true, text: "Free tuition may widen access for capable students whose families cannot afford fees.", answer: "helps", feedback: "This directly supports agreement by connecting cost with access." },
+      { id: "priorities", core: false, text: "Funding tuition for everyone may leave less money for other public services.", answer: "helps", feedback: "This directly supports disagreement or a position that agrees only partly." },
+      { id: "quality", core: true, text: "Universities need stable funding to maintain teaching quality.", answer: "could", feedback: "This could matter if the writer connects funding sources to whether tuition should be free." },
+      { id: "formats", core: true, text: "University courses commonly include lectures, seminars and independent study.", answer: "topic", feedback: "This is about university, but it does not address whether tuition should be free." },
+      { id: "course-choice", core: false, text: "University students often choose courses according to their future career goals.", answer: "topic", feedback: "This is a genuine point about students and education, but it does not yet help the writer judge whether university should be free for everyone." },
     ],
     help: [
       "Complete this sentence: ‘This idea helps me agree or disagree because…’ If you cannot complete it, the connection may be missing.",
@@ -157,14 +157,20 @@ export const task2Content = {
   },
   b2: {
     idea: "Free university education could improve access for students from lower-income families.",
-    prompt: "Which sentences genuinely move this idea forward? Select every continuation that develops it well.",
+    prompt: "What does this sentence do to the idea? Make a judgement, then compare it with the workshop view.",
     shuffle: true,
+    labels: [
+      { id: "why", text: "Explains why or how" },
+      { id: "result", text: "Adds a result" },
+      { id: "repeat", text: "Mostly repeats" },
+      { id: "direction", text: "Starts another direction" },
+    ],
     options: [
-      { id: "barrier", text: "High fees may prevent capable students from applying or attending, even when they meet the academic requirements.", viable: true, feedback: "This explains how cost can restrict access." },
-      { id: "income", text: "Removing tuition costs could therefore make family income less important in deciding who can enter higher education.", viable: true, feedback: "This develops a plausible result of removing the barrier." },
-      { id: "debt", text: "It could also make attendance more practical for students who would otherwise avoid large debts.", viable: true, feedback: "This is another useful way to develop the idea." },
-      { id: "repeat", text: "Therefore, free university would improve access for lower-income students.", viable: false, feedback: "This mainly repeats the idea without showing why or how." },
-      { id: "outcome", text: "Students who attend university may improve their employment opportunities after graduation.", viable: false, feedback: "This could support a different argument about the benefits of university, but it does not explain how free tuition improves access for lower-income students." },
+      { id: "barrier", text: "High fees may prevent capable students from applying or attending, even when they meet the academic requirements.", answer: "why", feedback: "This explains why cost can stop some students. It identifies the barrier behind the original idea." },
+      { id: "income", text: "Removing tuition costs could therefore make family income less important in deciding who can enter higher education.", answer: "result", feedback: "This adds a likely result of removing tuition fees." },
+      { id: "debt", text: "It could also make attendance more practical for students who would otherwise avoid large debts.", answer: "why", feedback: "This gives another reason why fees can affect access: some students may avoid debt." },
+      { id: "repeat", text: "Therefore, free university would improve access for lower-income students.", answer: "repeat", feedback: "This stays relevant, but it mostly says the first idea again without showing why or how." },
+      { id: "outcome", text: "Students who attend university may improve their employment opportunities after graduation.", answer: "direction", feedback: "This starts another possible argument about the benefits of university. It would need a clearer connection to the claim about access." },
     ],
     help: [
       "After the main idea, ask: ‘Why could this happen?’ or ‘What would change because of it?’",

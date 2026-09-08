@@ -312,6 +312,116 @@
   margin-bottom: 0;
 }
 
+.student-plan {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-block: 1.5rem 2rem;
+}
+
+.student-plan > section,
+.introduction-cards > section,
+.writing-sample,
+.optional-bridge {
+  padding: 1.15rem;
+  border-top: 3px solid var(--phase-accent);
+  background: rgba(255, 253, 248, 0.62);
+}
+
+.student-plan h2,
+.introduction-cards h2,
+.writing-sample h2 {
+  margin-bottom: 0.65rem;
+  font-size: 1.1rem;
+}
+
+.student-plan p {
+  margin-block: 0.45rem;
+}
+
+.route-choice,
+.plan-tabs,
+.support-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-block: 1.2rem;
+}
+
+.plan-tabs button,
+.support-choices button {
+  min-height: 3rem;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 700;
+}
+
+.plan-tabs button[aria-pressed="true"],
+.support-choices button[aria-pressed="true"] {
+  border-color: var(--phase-accent);
+  background: color-mix(in srgb, var(--phase-soft) 62%, white);
+  color: var(--phase-strong);
+}
+
+.optional-plan,
+.optional-bridge {
+  margin-top: 1.5rem;
+}
+
+.introduction-cards {
+  display: grid;
+  gap: 1rem;
+  margin-block: 1.5rem 2rem;
+}
+
+.introduction-cards p,
+.writing-sample p {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.08rem;
+  line-height: 1.65;
+}
+
+.word-bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-block: 1rem;
+}
+
+.word-bank span {
+  padding: 0.45rem 0.65rem;
+  border: 1px solid var(--phase-accent);
+  background: color-mix(in srgb, var(--phase-soft) 55%, white);
+}
+
+.introduction-area {
+  min-height: 12rem;
+}
+
+.small-plan {
+  display: grid;
+  gap: 1rem;
+  max-width: 780px;
+}
+
+.small-plan label {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.small-plan textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  resize: vertical;
+}
+
 .task-meta {
   display: flex;
   flex-wrap: wrap;
@@ -716,6 +826,7 @@
   .framework-strip,
   .process-strip,
   .essay-map,
+  .student-plan,
   .lens-buttons {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

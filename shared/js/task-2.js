@@ -1,4 +1,4 @@
-import { task2Content as content } from "../../content/writing/task-2.js?v=accessibility-pass";
+import { task2Content as content } from "../../content/writing/task-2.js?v=workshop-1";
 import { buildTask2AIFeedbackPrompt, buildTask2RevisionAIFeedbackPrompt, copyText } from "./ai-feedback.js";
 import { isValidStoredOrder, shuffleOptionIds } from "./randomise.js";
 import { clearTask2State, loadTask2State, saveTask2State } from "./task-2-storage.js";
@@ -377,6 +377,230 @@ function renderU6(unit) {
   app.innerHTML = `<article>${unitHeader(unit, "In this workshop, we are going to use four clear parts.")}<section class="essay-map" aria-label="Four parts of the essay"><section><strong>Introduction</strong><p>Give the reader some context. If the question asks what you think, make your answer clear.</p></section><section><strong>Main paragraph 1</strong><p>Give one main idea and explain it.</p></section><section><strong>Main paragraph 2</strong><p>Give another main idea and explain it.</p></section><section><strong>Conclusion</strong><p>Remind the reader of your main answer. Do not add a new main idea.</p></section></section><div class="framework-strip" aria-label="What the four parts do"><section><strong>Introduction</strong><span>Shows where we are going.</span></section><section><strong>Main paragraphs</strong><span>Do the main work.</span></section><section><strong>Conclusion</strong><span>Finishes the answer.</span></section></div><p class="choice-note">Two main paragraphs are a useful starting point because they keep your ideas organised, clear and easy to read.</p>${navigationMarkup({ canContinue: true })}</article>`;
 }
 
+function renderQuestionChoice(id, unit, { source, introduction, options, answer, prompt = "What do I have to talk about?", help = [] }) {
+  const saved = getUnitState(id);
+  const selected = saved.choice;
+  const chosen = options.find((option) => option.id === selected);
+  app.innerHTML = `<article>${unitHeader(unit, introduction)}${openingQuestionMarkup(source)}<fieldset><legend class="prompt">${prompt}</legend><div class="choice-list">${orderedOptions(`${id}-options`, options, true).map((option) => choiceMarkup({ option, name: id, checked: selected === option.id })).join("")}</div></fieldset><button class="primary-button" type="button" data-check ${selected ? "" : "disabled"}>Check my answer</button>${saved.checked && chosen ? feedbackMarkup(chosen.id === answer.id ? `Yes. ${answer.feedback}` : answer.feedback, chosen.id === answer.id ? "success" : "reconsider") : ""}${helpMarkup(id, help)}${lexicalBankMarkup(id, source.lexical)}${navigationMarkup({ canContinue: state.completed.includes(id) })}</article>`;
+  document.querySelectorAll(`input[name="${id}"]`).forEach((input) => input.addEventListener("change", () => {
+    setUnitState(id, { choice: input.value, checked: false });
+    render();
+  }));
+  document.querySelector("[data-check]")?.addEventListener("click", () => {
+    const choice = document.querySelector(`input[name="${id}"]:checked`)?.value;
+    if (!choice) return;
+    recordCompletion(id, completionPolicy.afterCheck, { choice, checked: true, diagnosticResult: { preferred: choice === answer.id } });
+    render();
+  });
+  bindHelp(id);
+}
+
+function renderQ3(unit) {
+  const source = content.opening.views;
+  renderQuestionChoice("q3", unit, {
+    source,
+    introduction: "This question asks you to explain two views and give your own opinion. You need to do all three things.",
+    options: [
+      { id: "all", text: "Explain why quiet spaces are useful, explain why sports facilities are useful, and give my opinion." },
+      { id: "one", text: "Choose one view and ignore the other one." },
+      { id: "cost", text: "Explain how much public parks cost." },
+    ],
+    answer: { id: "all", feedback: "Explain both views and make your own opinion clear." },
+    help: ["Count the jobs in the instruction.", "You need to discuss the first view, discuss the second view and give your opinion.", "Do all three jobs: quiet spaces, sports facilities and your own opinion."],
+  });
+}
+
+function renderQ4(unit) {
+  const source = content.opening.advantages;
+  renderQuestionChoice("q4", unit, {
+    source,
+    introduction: "This question asks for two sides of one situation.",
+    options: source.jobs,
+    answer: { id: "sides", feedback: "Talk about the good and bad sides of working from home. The question does not ask whether everyone should do it." },
+    help: ["Look at the two bold words.", "An advantage is a good side. A disadvantage is a bad or difficult side.", "Write about both sides."],
+  });
+}
+
+function renderQ5(unit) {
+  const id = "q5";
+  const source = content.opening.twoQuestions;
+  const saved = getUnitState(id);
+  const selected = saved.selected || [];
+  const preferred = source.required.every((job) => selected.includes(job));
+  app.innerHTML = `<article>${unitHeader(unit, "Sometimes the question asks two separate questions. Answer both.")}${openingQuestionMarkup(source)}<fieldset><legend class="prompt">Choose the two things you have to do.</legend><div class="choice-list">${orderedOptions("q5-options", source.jobs, true).map((option) => choiceMarkup({ option, name: id, type: "checkbox", checked: selected.includes(option.id) })).join("")}</div></fieldset><button class="primary-button" type="button" data-check ${selected.length === 2 ? "" : "disabled"}>Check my answers</button>${saved.checked ? feedbackMarkup(preferred ? "Yes. Explain why people are having children later, then say whether the change is positive or negative." : "There are two questions: explain why people are having children later, and say whether the change is positive or negative.", preferred ? "success" : "reconsider") : ""}${helpMarkup(id, ["Find the two question marks.", "The first asks why. The second asks if the change is positive or negative.", "Answer both questions."])}${lexicalBankMarkup(id, source.lexical)}${navigationMarkup({ canContinue: state.completed.includes(id) })}</article>`;
+  document.querySelectorAll(`input[name="${id}"]`).forEach((input) => input.addEventListener("change", () => {
+    const next = input.checked ? [...selected, input.value] : selected.filter((item) => item !== input.value);
+    setUnitState(id, { selected: [...new Set(next)], checked: false });
+    render();
+  }));
+  document.querySelector("[data-check]")?.addEventListener("click", () => {
+    if (selected.length !== 2) return;
+    recordCompletion(id, completionPolicy.afterCheck, { selected, checked: true, diagnosticResult: { preferred } });
+    render();
+  });
+  bindHelp(id);
+}
+
+function planCardsMarkup(plan, name) {
+  return `<section class="student-plan" aria-label="${name}'s four-part essay plan">${plan.map((part) => `<section><h2>${part.title}</h2>${part.lines.map((line) => `<p>${escapeHTML(line)}</p>`).join("")}</section>`).join("")}</section>`;
+}
+
+function renderN1(unit) {
+  recordCompletion("n1", completionPolicy.onArrival);
+  app.innerHTML = `<article>${unitHeader(unit, "You have now met five common question situations and found the writing job in each one.")}<section class="model-panel"><h2>IELTS calls this Task Response</h2><p>It is about how well you answer the task you were given.</p></section><blockquote class="principle-panel"><p><strong>Before you start writing, ask: What do I have to talk about?</strong></p></blockquote>${navigationMarkup({ canContinue: true })}</article>`;
+}
+
+function renderS1(unit) {
+  recordCompletion("s1", completionPolicy.onArrival);
+  app.innerHTML = `<article>${unitHeader(unit, "Now we know what the question wants. What are we going to write?")}<p>In this workshop, we will use four clear parts. This is a dependable starting point, not the only possible essay structure.</p><section class="essay-map" aria-label="The four parts we will use"><section><strong>Introduction</strong></section><section><strong>Main paragraph 1</strong></section><section><strong>Main paragraph 2</strong></section><section><strong>Conclusion</strong></section></section><blockquote class="principle-panel"><p>Let's look at how some students planned their essays.</p></blockquote>${navigationMarkup({ canContinue: true })}</article>`;
+}
+
+function renderP1(unit) {
+  const id = "p1";
+  const source = content.workshop1.shaima;
+  const saved = getUnitState(id);
+  const selected = source.reactions.find((reaction) => reaction.id === saved.choice);
+  app.innerHTML = `<article>${unitHeader(unit, "Shaima read the question and made a four-part plan before writing.")}${questionMarkup(source.question)}${planCardsMarkup(source.plan, "Shaima")}<fieldset><legend class="prompt">What do you think about Shaima's example from Taqah?</legend><div class="choice-list">${orderedOptions("p1-reactions", source.reactions, true).map((option) => choiceMarkup({ option, name: id, checked: saved.choice === option.id })).join("")}</div></fieldset><button class="primary-button" type="button" data-check ${saved.choice ? "" : "disabled"}>Keep my response</button>${saved.checked && selected ? feedbackMarkup(selected.feedback) : ""}${navigationMarkup({ canContinue: state.completed.includes(id) })}</article>`;
+  document.querySelectorAll(`input[name="${id}"]`).forEach((input) => input.addEventListener("change", () => { setUnitState(id, { choice: input.value, checked: false }); render(); }));
+  document.querySelector("[data-check]")?.addEventListener("click", () => {
+    const choice = document.querySelector(`input[name="${id}"]:checked`)?.value;
+    if (!choice) return;
+    recordCompletion(id, completionPolicy.afterCheck, { choice, checked: true });
+    render();
+  });
+}
+
+function optionalPlanMarkup(name, source, saved) {
+  const selected = source.reactions.find((reaction) => reaction.id === saved.reaction);
+  return `<section class="optional-plan" aria-live="polite"><h2>${name}'s plan</h2>${questionMarkup(source.question)}${planCardsMarkup(source.plan, name)}<fieldset><legend>What do you notice?</legend><div class="choice-list">${orderedOptions(`p2-${name.toLowerCase()}-reactions`, source.reactions, true).map((option) => choiceMarkup({ option, name: `p2-${name.toLowerCase()}`, checked: saved.reaction === option.id })).join("")}</div></fieldset>${selected ? feedbackMarkup(selected.feedback) : ""}</section>`;
+}
+
+function renderP2(unit) {
+  const id = "p2";
+  const saved = getUnitState(id);
+  const active = saved.activePlan;
+  const source = active ? content.workshop1[active] : null;
+  const name = active === "yusuf" ? "Yusuf" : "Mustafa";
+  app.innerHTML = `<article>${unitHeader(unit, "Shaima's plan is enough for the core lesson. You can explore another student's plan or go directly to introductions.")}<div class="route-choice"><button class="secondary-button" type="button" data-plan="yusuf">See another student's plan</button><button class="primary-button" type="button" data-go-introductions>Go on to introductions <span aria-hidden="true">→</span></button></div>${source ? `<div class="plan-tabs" role="group" aria-label="Optional student plans"><button type="button" data-plan="yusuf" aria-pressed="${active === "yusuf"}">Yusuf</button><button type="button" data-plan="mustafa" aria-pressed="${active === "mustafa"}">Mustafa</button></div>${optionalPlanMarkup(name, source, saved)}` : ""}<nav class="unit-navigation" aria-label="Learning-unit navigation"><button class="secondary-button" type="button" data-nav="p1">Back</button><span></span></nav></article>`;
+  document.querySelectorAll("[data-plan]").forEach((button) => button.addEventListener("click", () => { setUnitState(id, { activePlan: button.dataset.plan, reaction: "" }); render(); }));
+  if (active) document.querySelectorAll(`input[name="p2-${active}"]`).forEach((input) => input.addEventListener("change", () => { setUnitState(id, { reaction: input.value }); render(); }));
+  document.querySelector("[data-go-introductions]").addEventListener("click", () => {
+    recordCompletion(id, completionPolicy.optional, { optionalPlansViewed: [...new Set([...(saved.optionalPlansViewed || []), ...(active ? [active] : [])])] });
+    navigateTo("i1");
+  });
+}
+
+function introductionCardsMarkup() {
+  const introductions = content.workshop1.introductions;
+  return `<div class="introduction-cards"><section><h2>Shaima</h2><p>${introductions.shaima}</p></section><section><h2>Yusuf</h2><p>${introductions.yusuf}</p></section><section><h2>Mustafa</h2><p>${introductions.mustafa}</p></section></div>`;
+}
+
+function renderI1(unit) {
+  const id = "i1";
+  const saved = getUnitState(id);
+  const options = [
+    { id: "shaima", text: "Shaima" },
+    { id: "yusuf", text: "Yusuf" },
+    { id: "mustafa", text: "Mustafa" },
+  ];
+  app.innerHTML = `<article>${unitHeader(unit, "You've seen what they planned. Now look at how they started their essays.")}${introductionCardsMarkup()}<fieldset><legend class="prompt">Who says that sports facilities can make exercise accessible to more people?</legend><div class="inline-choices">${orderedOptions("i1-writers", options, true).map((option) => compactChoice({ value: option.id, label: option.text, name: id, checked: saved.choice === option.id })).join("")}</div></fieldset><button class="primary-button" type="button" data-check ${saved.choice ? "" : "disabled"}>Check my answer</button>${saved.checked ? feedbackMarkup(saved.choice === "yusuf" ? "Yes. Yusuf gives that reason in his introduction." : "Look at Yusuf's final words. He says sports facilities can make exercise accessible to more people.", saved.choice === "yusuf" ? "success" : "reconsider") : ""}${navigationMarkup({ canContinue: state.completed.includes(id) })}</article>`;
+  document.querySelectorAll(`input[name="${id}"]`).forEach((input) => input.addEventListener("change", () => { setUnitState(id, { choice: input.value, checked: false }); render(); }));
+  document.querySelector("[data-check]")?.addEventListener("click", () => { recordCompletion(id, completionPolicy.afterCheck, { choice: document.querySelector(`input[name="${id}"]:checked`)?.value, checked: true }); render(); });
+}
+
+function renderI2(unit) {
+  const id = "i2";
+  const saved = getUnitState(id);
+  const options = [
+    { id: "not-asked", text: "His question asks for causes and solutions, not whether he agrees." },
+    { id: "forgot", text: "He forgot to give his opinion." },
+    { id: "never", text: "Task 2 introductions should never say ‘I agree’." },
+  ];
+  app.innerHTML = `<article>${unitHeader(unit, "Read Mustafa's question and introduction together.")}${openingQuestionMarkup(content.opening.problems)}<section class="writing-sample"><h2>Mustafa's introduction</h2><p>${content.workshop1.introductions.mustafa}</p></section><fieldset><legend class="prompt">Mustafa didn't say ‘I agree.’ Why not?</legend><div class="choice-list">${orderedOptions("i2-reasons", options, true).map((option) => choiceMarkup({ option, name: id, checked: saved.choice === option.id })).join("")}</div></fieldset><button class="primary-button" type="button" data-check ${saved.choice ? "" : "disabled"}>Check my answer</button>${saved.checked ? feedbackMarkup(saved.choice === "not-asked" ? "Yes. Mustafa answers the question he was given: causes and solutions." : "His question asks for causes and solutions. It does not ask whether he agrees or disagrees.", saved.choice === "not-asked" ? "success" : "reconsider") : ""}${navigationMarkup({ canContinue: state.completed.includes(id) })}</article>`;
+  document.querySelectorAll(`input[name="${id}"]`).forEach((input) => input.addEventListener("change", () => { setUnitState(id, { choice: input.value, checked: false }); render(); }));
+  document.querySelector("[data-check]")?.addEventListener("click", () => { recordCompletion(id, completionPolicy.afterCheck, { choice: document.querySelector(`input[name="${id}"]:checked`)?.value, checked: true }); render(); });
+}
+
+function supportChoiceMarkup(id, source, saved, draft) {
+  if (!saved.support) return "";
+  if (saved.support === "most") return `<fieldset><legend>Choose one possible introduction.</legend><div class="choice-list">${orderedOptions(`${id}-choices`, source.choices, true).map((option) => choiceMarkup({ option, name: `${id}-choice`, checked: saved.choice === option.id })).join("")}</div></fieldset>`;
+  return `${saved.support === "some" ? `<div class="word-bank" aria-label="Useful words and phrases">${source.words.map((word) => `<span>${word}</span>`).join("")}</div>` : ""}<label class="writing-label" for="${id}-draft">Write the introduction.</label><textarea class="writing-area introduction-area" id="${id}-draft">${escapeHTML(draft)}</textarea>`;
+}
+
+function bindSupportedWriting(id, source, draftName) {
+  document.querySelectorAll("[data-support]").forEach((button) => button.addEventListener("click", () => { setUnitState(id, { support: button.dataset.support }); render(); }));
+  document.querySelectorAll(`input[name="${id}-choice"]`).forEach((input) => input.addEventListener("change", () => {
+    const selected = source.choices.find((choice) => choice.id === input.value);
+    saveDraft(draftName, selected?.text || "");
+    setUnitState(id, { choice: input.value });
+    render();
+  }));
+  const textarea = document.querySelector(`#${id}-draft`);
+  textarea?.addEventListener("input", () => {
+    saveDraft(draftName, textarea.value);
+    document.querySelector("[data-save]").disabled = !textarea.value.trim();
+  });
+}
+
+function renderF1(unit) {
+  const id = "f1";
+  const source = content.workshop1.fatma;
+  const saved = getUnitState(id);
+  const draft = state.drafts.fatmaIntroduction;
+  app.innerHTML = `<article>${unitHeader(unit, "Fatma is ready to write her introduction. Can you help her?")}${questionMarkup(source.question)}<section class="workspace-note"><h2>Fatma's plan</h2>${source.plan.map((line) => `<p>${line}</p>`).join("")}</section><p class="prompt">Choose the support you want.</p><div class="support-choices" role="group" aria-label="Choose writing support"><button type="button" data-support="most" aria-pressed="${saved.support === "most"}">Most help</button><button type="button" data-support="some" aria-pressed="${saved.support === "some"}">Some help</button><button type="button" data-support="independent" aria-pressed="${saved.support === "independent"}">Independent</button></div>${supportChoiceMarkup(id, source, saved, draft)}${saved.support ? `<button class="primary-button" type="button" data-save ${draft.trim() ? "" : "disabled"}>Keep this introduction</button>` : ""}${navigationMarkup({ canContinue: state.completed.includes(id) })}</article>`;
+  bindSupportedWriting(id, source, "fatmaIntroduction");
+  document.querySelector("[data-save]")?.addEventListener("click", () => { if (!state.drafts.fatmaIntroduction.trim()) return; recordCompletion(id, completionPolicy.afterAttempt, { attempted: true }); render(); });
+}
+
+function renderF2(unit) {
+  recordCompletion("f2", completionPolicy.onArrival);
+  app.innerHTML = `<article>${unitHeader(unit, "Compare the two introductions. Fatma's version is one possibility, not the only correct answer.")}<div class="before-after"><section class="version-panel"><h2>Your version</h2><div class="essay-copy">${escapeHTML(state.drafts.fatmaIntroduction)}</div></section><section class="version-panel"><h2>Fatma's version</h2><div class="essay-copy">${content.workshop1.fatma.model}</div></section></div><p class="choice-note">Both introductions should help the reader understand the topic and the direction of the essay.</p>${navigationMarkup({ canContinue: true })}</article>`;
+}
+
+function renderO1(unit) {
+  const id = "o1";
+  const source = content.workshop1.own;
+  const saved = getUnitState(id);
+  const selected = saved.selected || [];
+  const preferred = source.required.every((job) => selected.includes(job));
+  app.innerHTML = `<article>${unitHeader(unit, "Read this new question before you plan or write.")}${questionMarkup(source.question)}<fieldset><legend class="prompt">What do you have to talk about? Choose two.</legend><div class="choice-list">${orderedOptions("o1-jobs", source.jobs, true).map((option) => choiceMarkup({ option, name: id, type: "checkbox", checked: selected.includes(option.id) })).join("")}</div></fieldset><button class="primary-button" type="button" data-check ${selected.length === 2 ? "" : "disabled"}>Check my answers</button>${saved.checked ? feedbackMarkup(preferred ? "Yes. Explain why adults choose online courses and say whether this change is positive or negative." : "The two question marks give you the two jobs: explain why, then make a positive-or-negative judgement.", preferred ? "success" : "reconsider") : ""}${lexicalBankMarkup(id, source.lexical)}${navigationMarkup({ canContinue: state.completed.includes(id) })}</article>`;
+  document.querySelectorAll(`input[name="${id}"]`).forEach((input) => input.addEventListener("change", () => { const next = input.checked ? [...selected, input.value] : selected.filter((item) => item !== input.value); setUnitState(id, { selected: [...new Set(next)], checked: false }); render(); }));
+  document.querySelector("[data-check]")?.addEventListener("click", () => { if (selected.length !== 2) return; recordCompletion(id, completionPolicy.afterCheck, { selected, checked: true, diagnosticResult: { preferred } }); render(); });
+}
+
+function renderO2(unit) {
+  const id = "o2";
+  const plan = state.drafts.workshop1Plan;
+  const ready = plan.position.trim() && plan.body1.trim() && plan.body2.trim();
+  app.innerHTML = `<article>${unitHeader(unit, "Make three short notes. They will stay beside you when you write.")}${questionMarkup(content.workshop1.own.question)}<form id="o2-form" class="small-plan"><label><strong>My answer / position</strong><textarea name="position" rows="3">${escapeHTML(plan.position)}</textarea></label><label><strong>Paragraph 1</strong><textarea name="body1" rows="3">${escapeHTML(plan.body1)}</textarea></label><label><strong>Paragraph 2</strong><textarea name="body2" rows="3">${escapeHTML(plan.body2)}</textarea></label><button class="primary-button" type="submit" ${ready ? "" : "disabled"}>Keep my plan</button></form>${getUnitState(id).saved ? feedbackMarkup("Your plan is saved. Use it to keep the introduction focused.") : ""}${navigationMarkup({ canContinue: state.completed.includes(id) })}</article>`;
+  const form = document.querySelector("#o2-form");
+  form.addEventListener("input", () => { const next = Object.fromEntries(new FormData(form).entries()); savePlan("workshop1Plan", next); form.querySelector('button[type="submit"]').disabled = !(next.position.trim() && next.body1.trim() && next.body2.trim()); });
+  form.addEventListener("submit", (event) => { event.preventDefault(); const next = Object.fromEntries(new FormData(form).entries()); savePlan("workshop1Plan", next); recordCompletion(id, completionPolicy.afterSave, { saved: true }); render(); });
+}
+
+function renderO3(unit) {
+  const id = "o3";
+  const draft = state.drafts.workshop1Introduction;
+  const plan = state.drafts.workshop1Plan;
+  app.innerHTML = `<article>${unitHeader(unit, "Use your answer and two paragraph ideas to show the reader where your essay is going.")}<div class="activity-layout writing-layout"><aside>${questionMarkup(content.workshop1.own.question)}<section class="workspace-note"><h2>Your plan</h2><p><strong>My answer:</strong> ${escapeHTML(plan.position)}</p><p><strong>Paragraph 1:</strong> ${escapeHTML(plan.body1)}</p><p><strong>Paragraph 2:</strong> ${escapeHTML(plan.body2)}</p></section></aside><section class="writing-pane"><label for="o3-draft">Write your introduction.</label><textarea class="writing-area introduction-area" id="o3-draft">${escapeHTML(draft)}</textarea><div class="writing-meta"><span data-word-count>${wordCount(draft)} words</span></div>${helpMarkup(id, ["Start by helping the reader recognise the topic.", "Then make your answer to the question clear.", "Use your two paragraph notes to show the direction of the essay without explaining every detail.", "One possible pattern: introduce the situation, give your answer, then name the two ideas your essay will explain."])}${aiMarkup(id)}<button class="primary-button" type="button" data-save ${draft.trim() ? "" : "disabled"}>Keep my introduction</button></section></div>${getUnitState(id).attempted ? feedbackMarkup("Your introduction is saved. You can revise it, or continue to finish Workshop 1.") : ""}${navigationMarkup({ canContinue: state.completed.includes(id) })}</article>`;
+  const textarea = document.querySelector("#o3-draft");
+  textarea.addEventListener("input", () => { saveDraft("workshop1Introduction", textarea.value); document.querySelector("[data-word-count]").textContent = `${wordCount(textarea.value)} words`; document.querySelector("[data-save]").disabled = !textarea.value.trim(); });
+  document.querySelector("[data-save]").addEventListener("click", () => { if (!textarea.value.trim()) return; saveDraft("workshop1Introduction", textarea.value); recordCompletion(id, completionPolicy.afterAttempt, { attempted: true }); render(); });
+  bindHelp(id);
+  bindAI({ id, textarea, question: content.workshop1.own.question, analysis: `The question asks for reasons why adults choose online study and a judgement about whether this is a positive or negative development. Learner's plan: ${JSON.stringify(plan)}`, feedback: content.ai.introduction });
+}
+
+function renderEnd(unit) {
+  const id = "end";
+  const saved = getUnitState(id);
+  const source = content.workshop1.topicSentence;
+  const draft = state.drafts.topicSentence;
+  recordCompletion(id, completionPolicy.onArrival);
+  app.innerHTML = `<article>${unitHeader(unit, "You've understood the question, made a plan and written an introduction.")}<div class="completion-note"><h2>Workshop 1 complete</h2><p>In the next workshop, we'll build and improve the main paragraphs.</p></div><button class="secondary-button" type="button" data-bridge aria-expanded="${Boolean(saved.bridgeOpen)}">Optional: help Yusuf start a paragraph</button>${saved.bridgeOpen ? `<section class="optional-bridge"><h2>Yusuf needs one sentence to introduce all these ideas. Can you help him?</h2><ul>${source.notes.map((note) => `<li>${note}</li>`).join("")}</ul><div class="support-choices" role="group" aria-label="Choose writing support"><button type="button" data-support="most" aria-pressed="${saved.support === "most"}">Most help</button><button type="button" data-support="some" aria-pressed="${saved.support === "some"}">Some help</button><button type="button" data-support="independent" aria-pressed="${saved.support === "independent"}">Independent</button></div>${supportChoiceMarkup(id, source, saved, draft)}${draft.trim() ? `<section class="writing-sample"><h3>Yusuf's possible version</h3><p>${source.model}</p><p>This first sentence is called a <strong>topic sentence</strong>. It introduces the main idea of the paragraph.</p><p>Next time, we'll look at how to turn an idea like this into a strong paragraph.</p></section>` : ""}</section>` : ""}<nav class="unit-navigation" aria-label="Learning-unit navigation"><button class="secondary-button" type="button" data-nav="o3">Back</button><span></span></nav></article>`;
+  document.querySelector("[data-bridge]").addEventListener("click", () => { setUnitState(id, { bridgeOpen: !saved.bridgeOpen }); render(); });
+  bindSupportedWriting(id, source, "topicSentence");
+}
+
 function renderB1(unit) {
   const id = "b1";
   const source = content.b1;
@@ -739,13 +963,35 @@ function renderC6(unit) {
   document.querySelector("[data-finish]")?.addEventListener("click", () => { setUnitState(id, { finished: true }); completeUnit(id); render(); });
 }
 
-const renderers = { u1: renderU1, u2: renderU2, u3: renderU3, u3p: renderU3P, u4: renderU4, u5: renderU5, u6: renderU6, b1: renderB1, b2: renderB2, b3: renderB3, b4: renderB4, b5: renderB5, b6: renderB6, w1: renderW1, w2: renderW2, w3: renderW3, w4: renderW4, w5: renderW5, w6: renderW6, w7: renderW7, c1: renderC1, c2: renderC2, c3: renderC3, c4: renderC4, c5: renderC5, c6: renderC6 };
+const workshop1Renderers = {
+  u1: renderU1,
+  u2: renderU2,
+  q3: renderQ3,
+  q4: renderQ4,
+  q5: renderQ5,
+  n1: renderN1,
+  s1: renderS1,
+  p1: renderP1,
+  p2: renderP2,
+  i1: renderI1,
+  i2: renderI2,
+  f1: renderF1,
+  f2: renderF2,
+  o1: renderO1,
+  o2: renderO2,
+  o3: renderO3,
+  end: renderEnd,
+};
+
+// Retained for the later Workshop 2 redesign. These are intentionally not in today's learner route.
+const laterTask2Renderers = { u3: renderU3, u3p: renderU3P, u4: renderU4, u5: renderU5, u6: renderU6, b1: renderB1, b2: renderB2, b3: renderB3, b4: renderB4, b5: renderB5, b6: renderB6, w1: renderW1, w2: renderW2, w3: renderW3, w4: renderW4, w5: renderW5, w6: renderW6, w7: renderW7, c1: renderC1, c2: renderC2, c3: renderC3, c4: renderC4, c5: renderC5, c6: renderC6 };
+void laterTask2Renderers;
 
 function render({ focus = false } = {}) {
   const unit = content.units.find((item) => item.id === state.currentUnit) || content.units[0];
   if (state.currentUnit !== unit.id) state.currentUnit = unit.id;
   renderProgress();
-  renderers[unit.id](unit);
+  workshop1Renderers[unit.id](unit);
   bindNavigation();
   if (focus) requestAnimationFrame(() => document.querySelector("#unit-title")?.focus({ preventScroll: true }));
 }

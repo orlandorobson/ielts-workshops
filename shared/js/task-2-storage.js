@@ -1,6 +1,6 @@
 const STORAGE_KEY = "ielts-workshops:writing-task-2:v1";
-const VERSION = 3;
-const SUPPORTED_VERSIONS = new Set([1, 2, VERSION]);
+const VERSION = 4;
+const SUPPORTED_VERSIONS = new Set([1, 2, 3, VERSION]);
 const REDESIGNED_OPENING_IDS = ["u1", "u2", "u3", "u3p", "u4", "u5", "u6"];
 
 const defaultState = () => ({
@@ -21,6 +21,10 @@ const defaultState = () => ({
     transferEssay: "",
     transferOriginal: "",
     transferRevision: "",
+    fatmaIntroduction: "",
+    workshop1Plan: { position: "", body1: "", body2: "" },
+    workshop1Introduction: "",
+    topicSentence: "",
   },
 });
 
@@ -40,6 +44,7 @@ export function loadTask2State() {
         ...(saved.drafts || {}),
         quickPlan: { ...defaults.drafts.quickPlan, ...(saved.drafts?.quickPlan || {}) },
         transferPlan: { ...defaults.drafts.transferPlan, ...(saved.drafts?.transferPlan || {}) },
+        workshop1Plan: { ...defaults.drafts.workshop1Plan, ...(saved.drafts?.workshop1Plan || {}) },
       },
     };
     if (saved.version < VERSION) {

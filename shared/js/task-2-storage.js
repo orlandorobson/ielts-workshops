@@ -24,7 +24,7 @@ const defaultState = () => ({
     fatmaIntroduction: "",
     workshop1Plan: { position: "", body1: "", body2: "" },
     workshop1Introduction: "",
-    topicSentence: "",
+    practiceSessions: [],
   },
 });
 

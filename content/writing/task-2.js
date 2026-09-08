@@ -234,15 +234,41 @@ export const task2Content = {
         { word: "positive", meaning: "good or helpful", arabic: "إيجابي" },
       ],
     },
-    topicSentence: {
-      notes: ["Different people have different exercise needs.", "Children need places to be active.", "Older people may need gentler exercise.", "Some adults want more demanding exercise."],
-      choices: [
-        { id: "main", text: "Public sports facilities should meet the different exercise needs of people in the community." },
-        { id: "list", text: "Children, older people and adults all exercise in different ways at different times." },
-      ],
-      words: ["different people", "different needs", "public facilities", "exercise"],
-      model: "Public sports facilities should meet the different exercise needs of people in the community.",
-    },
+    practiceQuestions: [
+      {
+        id: "city-cars",
+        question: "Some people believe that private cars should be banned from city centres. To what extent do you agree or disagree?",
+        jobs: [
+          { id: "position", text: "Say how much I agree or disagree, then support my answer." },
+          { id: "causes", text: "Explain why people buy private cars." },
+          { id: "views", text: "Describe two views without giving my own position." },
+        ],
+        answer: "position",
+        feedback: "The question asks how much you agree or disagree with banning private cars from city centres.",
+      },
+      {
+        id: "children-advertising",
+        question: "Some people think advertising aimed at children should be banned, while others believe it can be useful. Discuss both views and give your own opinion.",
+        jobs: [
+          { id: "both-position", text: "Explain both views and make my own opinion clear." },
+          { id: "ban-only", text: "Explain only why advertising should be banned." },
+          { id: "problems", text: "List problems without discussing the two views." },
+        ],
+        answer: "both-position",
+        feedback: "The question asks you to discuss both views and give your own opinion.",
+      },
+      {
+        id: "tourism-environment",
+        question: "International tourism can cause damage to natural environments. What problems can this cause, and what solutions can you suggest?",
+        jobs: [
+          { id: "problems-solutions", text: "Explain environmental problems and suggest connected solutions." },
+          { id: "opinion", text: "Say whether all international tourism should stop." },
+          { id: "advantages", text: "Explain only the advantages of international tourism." },
+        ],
+        answer: "problems-solutions",
+        feedback: "The question asks about environmental problems caused by tourism and ways to address them.",
+      },
+    ],
   },
   b1: {
     labels: [

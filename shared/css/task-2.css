@@ -322,7 +322,7 @@
 .student-plan > section,
 .introduction-cards > section,
 .writing-sample,
-.optional-bridge {
+.independent-practice {
   padding: 1.15rem;
   border-top: 3px solid var(--phase-accent);
   background: rgba(255, 253, 248, 0.62);
@@ -367,8 +367,48 @@
 }
 
 .optional-plan,
-.optional-bridge {
+.independent-practice {
   margin-top: 1.5rem;
+}
+
+.independent-practice {
+  padding: clamp(1rem, 3vw, 1.5rem);
+}
+
+.practice-plan {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.practice-plan fieldset,
+.practice-plan > label {
+  display: grid;
+  gap: 0.6rem;
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  background: rgba(255, 253, 248, 0.58);
+}
+
+.practice-plan legend,
+.practice-plan strong {
+  color: var(--phase-strong);
+  font-weight: 800;
+}
+
+.practice-plan textarea {
+  width: 100%;
+  padding: 0.7rem;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  resize: vertical;
+}
+
+.practice-plan .full-width {
+  grid-column: 1 / -1;
 }
 
 .introduction-cards {
@@ -849,6 +889,7 @@
   .framework-strip,
   .process-strip,
   .plan-form,
+  .practice-plan,
   .lens-buttons,
   .essay-map,
   .final-process {

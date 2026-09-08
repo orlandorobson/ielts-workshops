@@ -590,15 +590,87 @@ function renderO3(unit) {
   bindAI({ id, textarea, question: content.workshop1.own.question, analysis: `The question asks for reasons why adults choose online study and a judgement about whether this is a positive or negative development. Learner's plan: ${JSON.stringify(plan)}`, feedback: content.ai.introduction });
 }
 
+function getPracticeSession(saved = getUnitState("end")) {
+  return (state.drafts.practiceSessions || []).find((session) => session.id === saved.activePracticeId);
+}
+
+function savePracticeSession(id, patch) {
+  state.drafts.practiceSessions = (state.drafts.practiceSessions || []).map((session) => session.id === id ? { ...session, ...patch } : session);
+  saveTask2State(state);
+}
+
+function startPractice() {
+  const sessions = state.drafts.practiceSessions || [];
+  const previousQuestion = sessions[sessions.length - 1]?.questionId;
+  const available = content.workshop1.practiceQuestions.filter((question) => question.id !== previousQuestion);
+  const questionId = shuffleOptionIds(available.map((question) => question.id))[0];
+  const session = {
+    id: `practice-${sessions.length + 1}`,
+    questionId,
+    phase: "understand",
+    jobChoice: "",
+    jobChecked: false,
+    plan: { introduction: "", body1: "", body1Notes: "", body2: "", body2Notes: "", conclusion: "" },
+    introduction: "",
+    complete: false,
+  };
+  state.drafts.practiceSessions = [...sessions, session];
+  state.units.end = { ...getUnitState("end"), activePracticeId: session.id, finished: false };
+  saveTask2State(state);
+  render();
+}
+
+function practicePlanReady(plan) {
+  return [plan.introduction, plan.body1, plan.body2, plan.conclusion].every((value) => value.trim());
+}
+
+function practiceMarkup(session, question) {
+  if (session.phase === "understand") {
+    const selected = question.jobs.find((job) => job.id === session.jobChoice);
+    return `<section class="independent-practice"><p class="eyebrow">Independent practice · Step 1 of 3</p><h2>What do I have to do?</h2>${questionMarkup(question.question, { transfer: true })}<fieldset><legend class="prompt">What does this question ask you to talk about?</legend><div class="choice-list">${orderedOptions(`${session.id}-jobs`, question.jobs, true).map((option) => choiceMarkup({ option, name: `${session.id}-job`, checked: session.jobChoice === option.id })).join("")}</div></fieldset><button class="primary-button" type="button" data-practice-check ${session.jobChoice ? "" : "disabled"}>Check my answer</button>${session.jobChecked && selected ? feedbackMarkup(selected.id === question.answer ? `Yes. ${question.feedback}` : question.feedback, selected.id === question.answer ? "success" : "reconsider") : ""}${session.jobChecked ? `<button class="secondary-button" type="button" data-practice-next="plan">Make my plan</button>` : ""}</section>`;
+  }
+  if (session.phase === "plan") {
+    const plan = session.plan;
+    return `<section class="independent-practice"><p class="eyebrow">Independent practice · Step 2 of 3</p><h2>Make my plan</h2>${questionMarkup(question.question, { transfer: true })}<form id="practice-plan" class="practice-plan"><label class="full-width"><strong>Introduction</strong><span>What will your introduction make clear?</span><textarea name="introduction" rows="3">${escapeHTML(plan.introduction)}</textarea></label><fieldset><legend>Main paragraph 1</legend><label><strong>Main idea</strong><textarea name="body1" rows="3">${escapeHTML(plan.body1)}</textarea></label><label><strong>Optional notes, example or explanation</strong><textarea name="body1Notes" rows="3">${escapeHTML(plan.body1Notes)}</textarea></label></fieldset><fieldset><legend>Main paragraph 2</legend><label><strong>Main idea</strong><textarea name="body2" rows="3">${escapeHTML(plan.body2)}</textarea></label><label><strong>Optional notes, example or explanation</strong><textarea name="body2Notes" rows="3">${escapeHTML(plan.body2Notes)}</textarea></label></fieldset><label class="full-width"><strong>Conclusion</strong><span>How will you finish the answer?</span><textarea name="conclusion" rows="3">${escapeHTML(plan.conclusion)}</textarea></label><button class="primary-button full-width" type="submit" ${practicePlanReady(plan) ? "" : "disabled"}>Keep my plan</button></form></section>`;
+  }
+  return `<section class="independent-practice"><p class="eyebrow">Independent practice · Step 3 of 3</p><h2>Write my introduction</h2><div class="activity-layout writing-layout"><aside>${questionMarkup(question.question, { transfer: true })}<section class="workspace-note"><h3>My plan</h3><p><strong>Introduction:</strong> ${escapeHTML(session.plan.introduction)}</p><p><strong>Main paragraph 1:</strong> ${escapeHTML(session.plan.body1)}</p><p><strong>Main paragraph 2:</strong> ${escapeHTML(session.plan.body2)}</p><p><strong>Conclusion:</strong> ${escapeHTML(session.plan.conclusion)}</p></section></aside><section class="writing-pane"><label for="practice-introduction">Write your introduction.</label><textarea class="writing-area introduction-area" id="practice-introduction">${escapeHTML(session.introduction)}</textarea><div class="writing-meta"><span data-word-count>${wordCount(session.introduction)} words</span></div>${helpMarkup(`${session.id}-help`, ["Read your first plan note. What should the reader understand at the start?", "Make your answer clear if the question asks what you think.", "Use your two main-paragraph ideas to show where the essay will go."])}${aiMarkup(`${session.id}-ai`)}<button class="primary-button" type="button" data-practice-save ${session.introduction.trim() ? "" : "disabled"}>Keep my introduction</button></section></div></section>`;
+}
+
+function bindPractice(session, question) {
+  if (session.phase === "understand") {
+    document.querySelectorAll(`input[name="${session.id}-job"]`).forEach((input) => input.addEventListener("change", () => { savePracticeSession(session.id, { jobChoice: input.value, jobChecked: false }); render(); }));
+    document.querySelector("[data-practice-check]")?.addEventListener("click", () => { savePracticeSession(session.id, { jobChecked: true }); render(); });
+    document.querySelector("[data-practice-next]")?.addEventListener("click", () => { savePracticeSession(session.id, { phase: "plan" }); render(); });
+    return;
+  }
+  if (session.phase === "plan") {
+    const form = document.querySelector("#practice-plan");
+    form.addEventListener("input", () => {
+      const plan = Object.fromEntries(new FormData(form).entries());
+      savePracticeSession(session.id, { plan });
+      form.querySelector('button[type="submit"]').disabled = !practicePlanReady(plan);
+    });
+    form.addEventListener("submit", (event) => { event.preventDefault(); const plan = Object.fromEntries(new FormData(form).entries()); if (!practicePlanReady(plan)) return; savePracticeSession(session.id, { plan, phase: "write" }); render(); });
+    return;
+  }
+  const textarea = document.querySelector("#practice-introduction");
+  textarea.addEventListener("input", () => { savePracticeSession(session.id, { introduction: textarea.value }); document.querySelector("[data-word-count]").textContent = `${wordCount(textarea.value)} words`; document.querySelector("[data-practice-save]").disabled = !textarea.value.trim(); });
+  document.querySelector("[data-practice-save]").addEventListener("click", () => { if (!textarea.value.trim()) return; savePracticeSession(session.id, { introduction: textarea.value, complete: true, phase: "complete" }); setUnitState("end", { activePracticeId: "" }); render(); });
+  bindHelp(`${session.id}-help`);
+  bindAI({ id: `${session.id}-ai`, textarea, question: question.question, analysis: `Independent introduction practice. Learner's own plan: ${JSON.stringify(session.plan)}`, feedback: content.ai.introduction });
+}
+
 function renderEnd(unit) {
   const id = "end";
   const saved = getUnitState(id);
-  const source = content.workshop1.topicSentence;
-  const draft = state.drafts.topicSentence;
+  const session = getPracticeSession(saved);
+  const question = session ? content.workshop1.practiceQuestions.find((item) => item.id === session.questionId) : null;
   recordCompletion(id, completionPolicy.onArrival);
-  app.innerHTML = `<article>${unitHeader(unit, "You've understood the question, made a plan and written an introduction.")}<div class="completion-note"><h2>Workshop 1 complete</h2><p>In the next workshop, we'll build and improve the main paragraphs.</p></div><button class="secondary-button" type="button" data-bridge aria-expanded="${Boolean(saved.bridgeOpen)}">Optional: help Yusuf start a paragraph</button>${saved.bridgeOpen ? `<section class="optional-bridge"><h2>Yusuf needs one sentence to introduce all these ideas. Can you help him?</h2><ul>${source.notes.map((note) => `<li>${note}</li>`).join("")}</ul><div class="support-choices" role="group" aria-label="Choose writing support"><button type="button" data-support="most" aria-pressed="${saved.support === "most"}">Most help</button><button type="button" data-support="some" aria-pressed="${saved.support === "some"}">Some help</button><button type="button" data-support="independent" aria-pressed="${saved.support === "independent"}">Independent</button></div>${supportChoiceMarkup(id, source, saved, draft)}${draft.trim() ? `<section class="writing-sample"><h3>Yusuf's possible version</h3><p>${source.model}</p><p>This first sentence is called a <strong>topic sentence</strong>. It introduces the main idea of the paragraph.</p><p>Next time, we'll look at how to turn an idea like this into a strong paragraph.</p></section>` : ""}</section>` : ""}<nav class="unit-navigation" aria-label="Learning-unit navigation"><button class="secondary-button" type="button" data-nav="o3">Back</button><span></span></nav></article>`;
-  document.querySelector("[data-bridge]").addEventListener("click", () => { setUnitState(id, { bridgeOpen: !saved.bridgeOpen }); render(); });
-  bindSupportedWriting(id, source, "topicSentence");
+  app.innerHTML = `<article>${unitHeader(unit, "You've practised three important steps: understand the question, plan your answer and write your introduction.")}<div class="completion-note"><h2>Workshop 1 complete</h2><p>You've practised three important steps:</p><ul><li>Understand the question.</li><li>Plan your answer.</li><li>Write your introduction.</li></ul><p>You can practise again with another question, or finish here.</p><p>Next time, we'll start building the main paragraphs.</p></div>${session && !session.complete ? `${practiceMarkup(session, question)}<div class="route-choice"><button class="secondary-button" type="button" data-leave-practice>Back to workshop end</button><button class="primary-button" type="button" data-finish>Finish workshop</button></div>` : `<div class="route-choice"><button class="secondary-button" type="button" data-practise>${(state.drafts.practiceSessions || []).length ? "Practise again" : "Practise with another question"}</button><button class="primary-button" type="button" data-finish ${saved.finished ? "disabled" : ""}>${saved.finished ? "Workshop finished" : "Finish workshop"}</button></div>${saved.finished ? feedbackMarkup("Workshop finished. Your writing is saved on this device.") : ""}`}<nav class="unit-navigation" aria-label="Learning-unit navigation"><button class="secondary-button" type="button" data-nav="o3">Back</button><span></span></nav></article>`;
+  document.querySelector("[data-practise]")?.addEventListener("click", startPractice);
+  document.querySelector("[data-leave-practice]")?.addEventListener("click", () => { setUnitState(id, { activePracticeId: "" }); render(); });
+  document.querySelector("[data-finish]")?.addEventListener("click", () => { setUnitState(id, { finished: true, activePracticeId: "" }); render(); });
+  if (session && !session.complete) bindPractice(session, question);
 }
 
 function renderB1(unit) {

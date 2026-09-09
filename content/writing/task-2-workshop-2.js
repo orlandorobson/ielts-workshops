@@ -1,0 +1,106 @@
+export const task2Workshop2Content = {
+  id: "writing-task-2-workshop-2-v1",
+  title: "IELTS Writing Task 2 · Workshop 2",
+  sections: [
+    { id: "yusuf", label: "Build with Yusuf", shortLabel: "Yusuf" },
+    { id: "shaima", label: "Connect with Shaima", shortLabel: "Shaima" },
+    { id: "mine", label: "Build my paragraphs", shortLabel: "My paragraphs" },
+    { id: "finish", label: "Finish the essay", shortLabel: "Conclusion" },
+  ],
+  units: [
+    { id: "y1", section: "yusuf", phase: "build", label: "Organise Yusuf's ideas", eyebrow: "Look at Yusuf's ideas" },
+    { id: "y2", section: "yusuf", phase: "build", label: "Help Yusuf start his paragraph", eyebrow: "Find the big idea" },
+    { id: "y3", section: "yusuf", phase: "build", label: "Help Yusuf develop it", eyebrow: "Build the same paragraph" },
+    { id: "s1", section: "shaima", phase: "build", label: "Help Shaima", eyebrow: "Connect idea and example" },
+    { id: "m1", section: "mine", phase: "plan", label: "Build my paragraphs", eyebrow: "Return to your plan" },
+    { id: "m2", section: "mine", phase: "write", label: "Write Paragraph 1", eyebrow: "Your main writing task" },
+    { id: "f1", section: "finish", phase: "finish", label: "Help Mustafa finish his essay", eyebrow: "Return to Mustafa" },
+    { id: "f2", section: "finish", phase: "finish", label: "Write my conclusion", eyebrow: "Finish your essay" },
+    { id: "end", section: "finish", phase: "finish", label: "Workshop 2 complete", eyebrow: "Paragraphs and conclusion" },
+  ],
+  yusuf: {
+    question: "Some people think public parks should mainly provide quiet natural spaces, while others think they should include more sports facilities. Discuss both views and give your own opinion.",
+    position: "Yusuf supports developing more sports facilities, while keeping parks pleasant public spaces.",
+    notes: [
+      { id: "gym-cost", text: "Gym membership can be expensive.", preferredGroup: "access" },
+      { id: "public-place", text: "Public facilities give more people somewhere to exercise.", preferredGroup: "access" },
+      { id: "cost-barrier", text: "Cost should not prevent people from being active.", preferredGroup: "access" },
+      { id: "many-users", text: "Children, older people and regular exercisers may use parks differently.", preferredGroup: "needs" },
+      { id: "different-areas", text: "Different areas can support quiet activity and active sports.", preferredGroup: "needs" },
+      { id: "equipment", text: "A range of simple equipment can meet different needs.", preferredGroup: "needs" },
+    ],
+    groups: [
+      { id: "access", label: "Access to exercise" },
+      { id: "needs", label: "Different needs" },
+    ],
+    bigIdeas: [
+      { id: "access", text: "Sports facilities in public parks can make exercise accessible to more people.", note: "This brings Yusuf's notes about cost and public access together clearly." },
+      { id: "cost", text: "Gym membership is sometimes expensive.", note: "This is a useful detail. Yusuf still needs to show what it tells us about public parks and access." },
+      { id: "parks", text: "Public parks can contain different facilities.", note: "This is relevant, but it is broad. Yusuf's notes can make a clearer point about access to exercise." },
+    ],
+    topicSentences: [
+      { id: "clear", text: "Providing sports facilities in public parks can make exercise accessible to people who cannot afford a gym.", note: "This gives the reader Yusuf's big idea and connects public facilities, cost and access." },
+      { id: "plausible", text: "Sports facilities are an important addition to public parks.", note: "This can start the paragraph. Yusuf will need to explain which benefit matters and why." },
+    ],
+    usefulWords: ["public facilities", "access to exercise", "cannot afford", "available to everyone"],
+    incomplete: "Providing sports facilities in public parks can make exercise accessible to people who cannot afford a gym. Public sports facilities are good for access.",
+    argumentReactions: [
+      { id: "not-yet", text: "Not yet. The second sentence mostly repeats the idea.", note: "That is the key gap. We still need to understand how public facilities remove a barrier." },
+      { id: "partly", text: "Partly. I understand the main idea, but I want to know why public facilities change access.", note: "Yes. The direction is clear, but the connection needs explaining." },
+      { id: "enough", text: "Yes. Repeating ‘access’ explains the whole argument.", note: "The paragraph stays on topic, but repeating the word does not yet show how access improves." },
+    ],
+    explanations: [
+      { id: "cost-link", text: "Because park facilities are available without a membership fee, cost is less likely to stop people from exercising.", note: "This explains the connection between public facilities and access." },
+      { id: "repeat", text: "This means public sports facilities can provide better access to sport.", note: "This remains relevant, but it mostly repeats the big idea." },
+      { id: "new-direction", text: "Professional sports teams should also receive more public money.", note: "This starts a different argument and does not explain Yusuf's point about access." },
+    ],
+    example: "For example, a parent who cannot pay for a gym could use a free exercise area while their children play nearby.",
+    exampleReactions: [
+      { id: "concrete", text: "It is useful because it makes Yusuf's idea concrete.", note: "Yes. It shows how public access could help one believable user." },
+      { id: "already-clear", text: "The explanation may already be clear without this example.", note: "That is reasonable. An example is helpful only when it adds something useful." },
+      { id: "another", text: "Another relevant example could work too.", note: "Yes. This is one possible example, not the only correct one." },
+    ],
+    completedParagraph: "Providing sports facilities in public parks can make exercise accessible to people who cannot afford a gym. Because park facilities are available without a membership fee, cost is less likely to stop people from exercising. For example, a parent who cannot pay for a gym could use a free exercise area while their children play nearby. In this way, parks can give more members of the community a practical place to be active.",
+  },
+  shaima: {
+    question: "Some people believe that university education should be free for everyone. To what extent do you agree or disagree?",
+    mainIdea: "Free university can increase opportunities for students from lower-income families.",
+    example: "A farming family I know in Taqah could not easily pay university fees. Their son studied engineering at UTAS and later got a job with a renewable-energy company.",
+    help: [
+      "What could stop a capable student from a lower-income family entering university?",
+      "Think about the financial barrier. What changes if the student does not have to pay tuition fees?",
+      "Useful words: high fees · prevent · financial barrier · make study possible",
+      "High fees can prevent capable students from entering university. Removing this financial barrier can make study possible for students from lower-income families.",
+    ],
+    comparison: "High fees can prevent capable students from entering university even when they have the ability to succeed. Removing this financial barrier can therefore make study possible for students from lower-income families. Shaima's Taqah example shows what this opportunity could mean for one student.",
+  },
+  mustafa: {
+    question: "In many countries, increasing numbers of adults and children are becoming obese. What are the main causes of this problem, and what solutions can you suggest?",
+    answer: "Mustafa explains that changes in diet and lower physical activity are important causes. He suggests healthier food choices and safer, easier ways to be active.",
+    conclusions: [
+      { id: "closes", text: "In conclusion, obesity has several connected causes, so improving both food choices and everyday opportunities for physical activity can help address the problem.", category: "closes", feedback: "This closes Mustafa's answer by returning to his causes and connected solutions." },
+      { id: "mechanical", text: "In conclusion, the causes are changes in diet and lower physical activity, and the solutions are healthier food choices and safer places to exercise.", category: "repeats", feedback: "This fits Mustafa's answer, but it repeats his plan very mechanically. A small change could make the ending feel more complete." },
+      { id: "new", text: "In conclusion, governments should also introduce a heavy new tax on every company that sells fast food.", category: "new", feedback: "This introduces a new main solution that Mustafa did not develop in his essay." },
+    ],
+    categories: [
+      { id: "closes", text: "Closes the answer clearly" },
+      { id: "repeats", text: "Fits, but repeats mechanically" },
+      { id: "new", text: "Starts a new main argument" },
+    ],
+    possibleImprovement: "In conclusion, obesity does not have one simple cause, so healthier food choices and more opportunities for everyday activity need to work together.",
+  },
+  aiFeedback: {
+    stage: "one Task 2 main paragraph",
+    taught: [
+      "The paragraph should have one clear big idea that helps answer the question.",
+      "The learner should explain the connection so the reader can follow the argument.",
+      "A relevant example or other support may help, but an example is not compulsory.",
+    ],
+    criteria: ["a clear main idea", "an understandable explanation", "relevant support where used", "repetition or a missing connection", "clear language"],
+    exclusions: [
+      "Do not score or evaluate the whole essay.",
+      "Do not require Paragraph 2, a conclusion, a statistic, an example, difficult vocabulary or a special formula.",
+      "Do not replace the learner's idea with a different argument.",
+    ],
+  },
+};

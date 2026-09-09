@@ -42,6 +42,17 @@
   --phase-soft: #dce5e0;
 }
 
+.task-2-workshop-2[data-phase="finish"] {
+  --phase-bg: #f2edf2;
+  --phase-accent: #796b7d;
+  --phase-strong: #5f5264;
+  --phase-soft: #e5dce6;
+}
+
+.task-2-workshop-2 .journey-nav ol {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .task-2-workshop .site-header,
 .task-2-workshop .journey-nav,
 .task-2-workshop .site-footer {
@@ -337,6 +348,201 @@
 
 .student-plan p {
   margin-block: 0.45rem;
+}
+
+.idea-grouping,
+.conclusion-list,
+.two-paragraph-plans {
+  display: grid;
+  gap: 1rem;
+  margin-block: 1.5rem;
+}
+
+.idea-grouping,
+.two-paragraph-plans {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.note-card,
+.paragraph-plan,
+.note-cluster,
+.step-panel,
+.comparison-panel,
+.fallback-panel,
+.writing-plan,
+.optional-writing,
+.source-summary {
+  padding: 1rem;
+  border-top: 3px solid var(--phase-accent);
+  background: rgba(255, 253, 248, 0.62);
+}
+
+.note-card {
+  display: grid;
+  gap: 0.75rem;
+  align-content: space-between;
+}
+
+.note-card span {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.08rem;
+  line-height: 1.55;
+}
+
+.note-card select,
+.paragraph-plan textarea,
+.compact-area {
+  width: 100%;
+  padding: 0.7rem;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+}
+
+.note-cluster {
+  max-width: 780px;
+  margin-bottom: 2rem;
+}
+
+.note-cluster p {
+  margin-block: 0.5rem;
+}
+
+.supported-writing,
+.step-panel,
+.comparison-panel,
+.optional-writing,
+.fallback-panel,
+.source-summary {
+  margin-block: 1.5rem;
+}
+
+.supported-writing {
+  max-width: 780px;
+}
+
+.supported-writing > h2,
+.fallback-panel > h2,
+.writing-plan > h2,
+.strategy-note > h2 {
+  font-size: 1.15rem;
+}
+
+.paragraph-plan {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.paragraph-plan legend {
+  padding-inline: 0.4rem;
+  color: var(--phase-strong);
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.paragraph-plan label {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.paragraph-plan strong span,
+.writing-pane .prompt span {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.paragraph-plan textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+
+.connection-sequence {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 1rem;
+  align-items: center;
+  margin-block: 2rem;
+}
+
+.connection-sequence section {
+  min-height: 11rem;
+  padding: 1rem;
+  border-top: 3px solid var(--phase-accent);
+  background: rgba(255, 253, 248, 0.62);
+}
+
+.connection-sequence .missing-link {
+  border-style: dashed;
+}
+
+.connection-sequence > span {
+  color: var(--phase-strong);
+  font-size: 1.5rem;
+}
+
+.source-summary dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0;
+}
+
+.source-summary dl > div {
+  min-width: 0;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--line);
+}
+
+.source-summary dl > .full-width {
+  grid-column: 1 / -1;
+}
+
+.source-summary dt {
+  color: var(--phase-strong);
+  font-weight: 800;
+}
+
+.source-summary dd {
+  margin: 0.35rem 0 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.writing-plan p {
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.writing-plan details {
+  margin-top: 1.2rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--line);
+}
+
+.writing-plan summary {
+  color: var(--phase-strong);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.reflection-prompts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  margin-block: 1.5rem;
+  color: var(--phase-strong);
+}
+
+.button-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0.65rem 1rem;
+  color: white !important;
+  text-decoration: none;
 }
 
 .route-choice,
@@ -882,6 +1088,15 @@
   .task-2-workshop .writing-meta [data-word-requirement] {
     text-align: left;
   }
+
+  .connection-sequence {
+    grid-template-columns: 1fr;
+  }
+
+  .connection-sequence > span {
+    transform: rotate(90deg);
+    text-align: center;
+  }
 }
 
 @media (max-width: 540px) {
@@ -894,6 +1109,16 @@
   .essay-map,
   .final-process {
     grid-template-columns: 1fr;
+  }
+
+  .idea-grouping,
+  .two-paragraph-plans,
+  .source-summary dl {
+    grid-template-columns: 1fr;
+  }
+
+  .source-summary dl > .full-width {
+    grid-column: auto;
   }
 
   .pattern-button,

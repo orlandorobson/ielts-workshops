@@ -222,7 +222,7 @@ function renderY2(unit) {
   const topicChoices = orderedOptions("y2-topic-choices", content.yusuf.topicSentences);
   const selectedBigIdea = content.yusuf.bigIdeas.find((item) => item.id === saved.bigIdea);
   const selectedTopic = content.yusuf.topicSentences.find((item) => item.id === saved.topicChoice);
-  const ready = Boolean(saved.bigIdea && hasText(topicResponse(saved)));
+  const ready = hasText(topicResponse(saved));
   app.innerHTML = `<article>${unitHeader(unit, "Take Yusuf's first group. Help him tell the reader what the paragraph is about.")}
     ${questionMarkup(content.yusuf.question, "Yusuf's question")}
     <section class="note-cluster"><h2>Access to exercise</h2>${content.yusuf.notes.filter((note) => note.preferredGroup === "access").map((note) => `<p>${note.text}</p>`).join("")}</section>
@@ -253,11 +253,11 @@ function renderY2(unit) {
   const textarea = document.querySelector("#topic-sentence");
   textarea?.addEventListener("input", () => {
     setUnitState(id, { topicSentence: textarea.value, checked: false });
-    document.querySelector("[data-compare]").disabled = !(getUnitState(id).bigIdea && hasText(textarea.value));
+    document.querySelector("[data-compare]").disabled = !hasText(textarea.value);
   });
   document.querySelector("[data-compare]")?.addEventListener("click", () => {
     const current = { supportMode: "independent", ...getUnitState(id) };
-    if (!current.bigIdea || !hasText(topicResponse(current))) return;
+    if (!hasText(topicResponse(current))) return;
     completeUnit(id, { checked: true });
     render();
   });

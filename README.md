@@ -21,3 +21,23 @@ Then open one of:
 - `http://localhost:8000/writing/task-1/academic/`
 - `http://localhost:8000/writing/task-1/general/`
 - `http://localhost:8000/writing/task-2/`
+
+## Speaking — Day 1
+
+Open `http://localhost:8000/speaking/day-1/` for the mobile-first Speaking workshop.
+It uses the shared base styles, with its own rendering and styles in `speaking/day-1/`.
+Scripts, performance notes, quiz answers and palette actions are in `content/speaking/day-1.js`.
+All twelve MP3s in `speaking/audio/` are wired through relative paths in
+`content/speaking/audio-library.js`. Audio 1 has one player with all questions visible;
+Audio 2 has three independent attempt players. The official summary follows Audio 1.
+Students use their phone’s voice recorder. Progress, choices and completion are saved locally
+under `ielts-speaking-day-1-v1`; the workshop still works if storage is unavailable.
+
+Day 1 also includes small-change noticing, repair help, phrase-based language practice,
+optional observation missions, real-detail practice and an optional three-attempt bank.
+These are defined in `content/speaking/notice-and-practise.js` and rendered by
+`speaking/day-1/notice-and-practise.js`. Yusuf’s three attempts form Audio 2.
+`audio-component.js` supplies native controls, accessible labels, single-active playback
+and 0.8×/1× controls for the two shadowing models. `sound-and-language.js` adds staged
+shadowing, phrase practice, personal transfer and the final reflection. No Day 2 is built.
+Developer TODOs mark research references awaiting verification. Audio 7–10 display the exact supplied spoken transcripts.

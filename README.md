@@ -39,7 +39,7 @@ These are defined in `content/speaking/notice-and-practise.js` and rendered by
 `speaking/day-1/notice-and-practise.js`. Yusuf’s three attempts form Audio 2.
 `audio-component.js` supplies native controls, accessible labels, single-active playback
 and 0.8×/1× controls for the two shadowing models. `sound-and-language.js` adds staged
-shadowing, phrase practice, personal transfer and the final reflection. No Day 2 is built.
+shadowing, phrase practice, personal transfer and the final reflection. Day 2 has a separate local build described below.
 Developer TODOs mark research references awaiting verification. Audio 7–10 display the exact supplied spoken transcripts.
 
 ### Temporary classroom release control
@@ -56,3 +56,17 @@ stage, release codes and all-access code. Day 1 config is in
 `ielts-speaking-day-1-releases-v1`. Do not reuse this key for Day 2.
 Reset removes only this day's progress/release keys, leaving other workshops untouched.
 If browser storage is unavailable, releases last only while the page remains open.
+
+## Speaking — Day 2
+
+Preview `/speaking/day-2/` and `/speaking/day-2/teacher-control/` on the local static server.
+All six stages are implemented (33 screens). Stages 5–6 add contrasting long-turn scripts,
+a teacher-read examiner simulation, exact transcript excerpts and a timed two-attempt practice
+cycle. Maryam, Khalid and Salim use audio-11, audio-12 and audio-13 with supplied spoken
+transcripts. No browser TTS or microphone recording is used. Each timer has an always-available Continue route.
+
+Day 2 keeps separate progress/release keys and codes in `speaking/day-2/release-config.js`.
+Existing notes and choices are preserved. New stages need their own release or all-access.
+See `docs/speaking/day-2-session-audit.md` for the integrated lesson audit, timing estimate
+and audio-production notes. Procedure verification and the research TODO remain in
+`docs/speaking/day-2-verification.md`. The student route is `/speaking/day-2/` and the teacher route is `/speaking/day-2/teacher-control/`.

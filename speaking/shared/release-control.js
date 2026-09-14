@@ -1,7 +1,7 @@
 // Reusable static-day release state. Each day supplies its own labels, codes and keys.
 export function createReleaseControl(config) {
   let memory={released:[config.defaultUnlockedStage],completed:[]};
-  const ids=config.stages.map(s=>s.id);
+  const ids=config.stages.filter(s=>s.available!==false).map(s=>s.id);
   function read(){
     try {const saved=JSON.parse(localStorage.getItem(config.storageKey));
       if(saved)memory={released:[...new Set([config.defaultUnlockedStage,...(Array.isArray(saved.released)?saved.released:[])].filter(id=>ids.includes(id)))],completed:(Array.isArray(saved.completed)?saved.completed:[]).filter(id=>ids.includes(id))};
@@ -14,7 +14,7 @@ export function createReleaseControl(config) {
   function applyCode(code){
     const text=code.trim();
     if(text===config.allAccessCode){unlockAll();return {valid:true,all:true};}
-    const stage=config.stages.find(s=>s.code===text||s.throughCode===text);
+    const stage=config.stages.find(s=>s.available!==false&&(s.code===text||s.throughCode===text));
     if(!stage)return {valid:false};
     open(stage.id,stage.throughCode===text);return {valid:true,stage};
   }
@@ -34,11 +34,11 @@ export function installStudentRelease({control,app,progress,onJump,onRefresh}) {
     const d=control.read();
     nav.innerHTML=`<summary>Day stages · ${config.stages.indexOf(stage)+1} of ${config.stages.length}</summary><nav aria-label="Day stages">${config.stages.map((s,i)=>{
       const locked=!d.released.includes(s.id),current=s.id===stage.id,done=d.completed.includes(s.id);
-      const status=locked?'Locked':current?'Current':done?'Completed':'Available';
+      const status=s.available===false?'Not yet built':locked?'Locked':current?'Current':done?'Completed':'Available';
       return `<button data-release-jump="${s.id}" ${current?'aria-current="step"':''}><span aria-hidden="true">${locked?'🔒':current?'●':done?'✓':'○'}</span> ${i+1}. ${escape(s.label)}<small>${status}</small></button>`;
     }).join('')}</nav>`;
   }
-  function locked(stage){return `<section class="release-lock"><p class="eyebrow">🔒 Stage ${config.stages.indexOf(stage)+1}</p><h1>${escape(stage.label)}</h1><p>Your teacher will release this section when the class is ready.</p><form data-release-form><label for="teacher-code">Enter teacher code</label><input id="teacher-code" data-release-code inputmode="numeric" autocomplete="off" maxlength="4" pattern="[0-9]{4}" type="text"><button type="submit" class="primary">Unlock</button><p role="status" data-release-message></p></form><button data-release-return>Back to an open stage</button></section>`;}
+  function locked(stage){if(stage.available===false)return `<section class="release-lock"><p class="eyebrow">🔒 Not yet built</p><h1>${escape(stage.label)}</h1><p>This section is not ready yet.</p><button data-release-return>Back to an open stage</button></section>`;return `<section class="release-lock"><p class="eyebrow">🔒 Stage ${config.stages.indexOf(stage)+1}</p><h1>${escape(stage.label)}</h1><p>Your teacher will release this section when the class is ready.</p><form data-release-form><label for="teacher-code">Enter teacher code</label><input id="teacher-code" data-release-code inputmode="numeric" autocomplete="off" maxlength="4" pattern="[0-9]{4}" type="text"><button type="submit" class="primary">Unlock</button><p role="status" data-release-message></p></form><button data-release-return>Back to an open stage</button></section>`;}
   nav.addEventListener('click',e=>{const b=e.target.closest('[data-release-jump]');if(b)onJump(config.stages.find(s=>s.id===b.dataset.releaseJump).firstScreen);});
   app.addEventListener('submit',e=>{
     if(!e.target.matches('[data-release-form]'))return;e.preventDefault();

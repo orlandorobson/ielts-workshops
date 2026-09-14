@@ -41,3 +41,18 @@ These are defined in `content/speaking/notice-and-practise.js` and rendered by
 and 0.8×/1× controls for the two shadowing models. `sound-and-language.js` adds staged
 shadowing, phrase practice, personal transfer and the final reflection. No Day 2 is built.
 Developer TODOs mark research references awaiting verification. Audio 7–10 display the exact supplied spoken transcripts.
+
+### Temporary classroom release control
+
+Stage 1 opens by default. Each later stage needs a teacher release code on each student
+browser/device. The unlinked `speaking/day-1/teacher-control/` route shows single-stage,
+through-stage and all-access codes, and offers local demonstrations and a confirmed reset.
+This is static classroom pacing, not authentication or remote synchronisation.
+
+`speaking/shared/release-control.js` and its CSS are reusable. Each day supplies a config
+with its own storage key, progress keys, stage IDs/labels/screen starts, default unlocked
+stage, release codes and all-access code. Day 1 config is in
+`speaking/day-1/release-config.js`; release state persists under
+`ielts-speaking-day-1-releases-v1`. Do not reuse this key for Day 2.
+Reset removes only this day's progress/release keys, leaving other workshops untouched.
+If browser storage is unavailable, releases last only while the page remains open.

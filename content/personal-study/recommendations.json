@@ -1,0 +1,404 @@
+[
+  {
+    "id": "kelly",
+    "title": "How AI unleashed — not replaced — my creativity",
+    "who": "Kelly A. Boesch · TED",
+    "url": "https://www.ted.com/talks/kelly_a_boesch_how_ai_unleashed_not_replaced_my_creativity",
+    "topics": [
+      "ai",
+      "stories"
+    ],
+    "why": "A short, visual and playful exploration of AI and human creativity.",
+    "notice": "What makes you want to keep watching?",
+    "featured": true,
+    "themes": "AI · creativity · art · technology",
+    "image": "images/image-4-kelly-boesch.png",
+    "alt": "Illustration of Kelly Boesch surrounded by flowers and imagined worlds.",
+    "relatedIds": [
+      "eagleman",
+      "w3ct6xl4",
+      "story"
+    ]
+  },
+  {
+    "id": "eagleman",
+    "title": "Can we create new senses for humans?",
+    "who": "David Eagleman · TED",
+    "url": "https://www.ted.com/talks/david_eagleman_can_we_create_new_senses_for_humans",
+    "topics": [
+      "science",
+      "ai"
+    ],
+    "why": "What if your brain could learn an entirely new sense?",
+    "notice": "Find one moment where a difficult idea suddenly feels easy to understand. What did he do?",
+    "featured": true,
+    "themes": "brain · senses · technology · future",
+    "image": "images/image-2-david-eagleman.png",
+    "alt": "Illustration of David Eagleman beside a brain receiving sensory signals.",
+    "relatedIds": [
+      "whales",
+      "explain",
+      "kelly"
+    ]
+  },
+  {
+    "id": "p0cxvmk1",
+    "title": "Ibn Battuta",
+    "who": "You’re Dead to Me · BBC",
+    "url": "https://www.bbc.co.uk/programmes/p0cxvmk1",
+    "topics": [
+      "history",
+      "podcasts"
+    ],
+    "why": "A traveller, a vast world, and encounters across cultures.",
+    "notice": "What detail makes a faraway place feel real?",
+    "group": "history",
+    "follow": "What did you learn? What surprised you? What would you tell someone else about this episode?",
+    "image": "images/image-5-ibn-battuta.png",
+    "alt": "Illustration of travellers looking over a river and city.",
+    "themes": "travel · discovery · medieval Islamic world",
+    "relatedIds": [
+      "p0fgksc7",
+      "p07r6hjz",
+      "p07nwybz"
+    ]
+  },
+  {
+    "id": "p08qg3xl",
+    "title": "Genghis Khan",
+    "who": "You’re Dead to Me · BBC",
+    "url": "https://www.bbc.co.uk/programmes/p08qg3xl",
+    "topics": [
+      "history",
+      "podcasts"
+    ],
+    "why": "The story behind a name almost everyone recognises.",
+    "notice": "How do the guests make a complicated history easier to follow?",
+    "group": "history",
+    "follow": "What did you learn? What surprised you? What would you tell someone else about this episode?",
+    "themes": "empire · leadership · conquest",
+    "relatedIds": [
+      "p07r6hjz",
+      "p09tvhv8",
+      "p07nwybz"
+    ]
+  },
+  {
+    "id": "p07r6hjz",
+    "title": "Saladin",
+    "who": "You’re Dead to Me · BBC",
+    "url": "https://www.bbc.co.uk/programmes/p07r6hjz",
+    "topics": [
+      "history",
+      "podcasts"
+    ],
+    "why": "Why does a leader’s reputation last for centuries?",
+    "notice": "How does a question open up a different view of the same person?",
+    "group": "history",
+    "follow": "What did you learn? What surprised you? What would you tell someone else about this episode?",
+    "themes": "leadership · reputation · conflict · history",
+    "relatedIds": [
+      "p08qg3xl",
+      "p0fgksc7",
+      "p09tvhv8"
+    ]
+  },
+  {
+    "id": "p0fgksc7",
+    "title": "Al Andalus",
+    "who": "You’re Dead to Me · BBC",
+    "url": "https://www.bbc.co.uk/programmes/p0fgksc7",
+    "topics": [
+      "history",
+      "podcasts"
+    ],
+    "why": "Explore a meeting place of cultures in medieval Iberia.",
+    "notice": "Which example helps you picture a culture rather than just remember a date?",
+    "group": "history",
+    "follow": "What did you learn? What surprised you? What would you tell someone else about this episode?",
+    "themes": "culture · society · history · Islamic Spain",
+    "relatedIds": [
+      "p0cxvmk1",
+      "p07nwybz",
+      "p07r6hjz"
+    ]
+  },
+  {
+    "id": "p07nwybz",
+    "title": "Mansa Musa",
+    "who": "You’re Dead to Me · BBC",
+    "url": "https://www.bbc.co.uk/programmes/p07nwybz",
+    "topics": [
+      "history",
+      "podcasts"
+    ],
+    "why": "What would you do with extraordinary wealth?",
+    "notice": "How do the speakers make the scale of wealth understandable?",
+    "group": "history",
+    "follow": "What did you learn? What surprised you? What would you tell someone else about this episode?",
+    "themes": "wealth · trade · power · West Africa",
+    "relatedIds": [
+      "w3ct9bc3",
+      "p0cxvmk1",
+      "w3ct6xl8"
+    ]
+  },
+  {
+    "id": "p09tvhv8",
+    "title": "Ramesses the Great",
+    "who": "You’re Dead to Me · BBC",
+    "url": "https://www.bbc.co.uk/programmes/p09tvhv8",
+    "topics": [
+      "history",
+      "podcasts"
+    ],
+    "why": "What makes a ruler remembered as “great”?",
+    "notice": "Where does a concrete detail bring the ruler to life?",
+    "group": "history",
+    "follow": "What did you learn? What surprised you? What would you tell someone else about this episode?",
+    "themes": "Egypt · leadership · reputation · ancient history",
+    "relatedIds": [
+      "p07r6hjz",
+      "p07nwybz",
+      "w3ct9bc3"
+    ]
+  },
+  {
+    "id": "w3ct9bc3",
+    "title": "Cristiano Ronaldo: Football's first billionaire player",
+    "who": "Good Bad Billionaire · BBC",
+    "url": "https://www.bbc.co.uk/programmes/w3ct9bc3",
+    "topics": [
+      "business",
+      "podcasts"
+    ],
+    "why": "You know the footballer. Explore the business behind the fame.",
+    "notice": "How do the hosts connect sporting success with business?",
+    "group": "business",
+    "follow": "Did anything challenge what you thought you knew? If you like, explain one interesting idea to someone in 30 seconds.",
+    "image": "images/image-3-cristiano.png",
+    "alt": "Illustration of Cristiano Ronaldo with a city skyline behind him.",
+    "themes": "football · success · money · celebrity · business",
+    "relatedIds": [
+      "w3ct6xl3",
+      "w3ct6xl8",
+      "food"
+    ]
+  },
+  {
+    "id": "w3ct6xl3",
+    "title": "Zhang Yiming: TikTok’s tech boss",
+    "who": "Good Bad Billionaire · BBC",
+    "url": "https://www.bbc.co.uk/programmes/w3ct6xl3",
+    "topics": [
+      "business",
+      "podcasts",
+      "ai"
+    ],
+    "why": "How does an app become part of everyday life?",
+    "notice": "Which example explains how the business grew?",
+    "group": "business",
+    "follow": "Did anything challenge what you thought you knew? If you like, explain one interesting idea to someone in 30 seconds.",
+    "themes": "TikTok · technology · business",
+    "relatedIds": [
+      "w3ct9bc3",
+      "w3ct6xkx",
+      "kelly"
+    ]
+  },
+  {
+    "id": "w3ct6xkx",
+    "title": "Sergey Brin: Googling billions",
+    "who": "Good Bad Billionaire · BBC",
+    "url": "https://www.bbc.co.uk/programmes/w3ct6xkx",
+    "topics": [
+      "business",
+      "podcasts",
+      "ai"
+    ],
+    "why": "The story behind a search engine you may use every day.",
+    "notice": "How is a technical idea made understandable?",
+    "group": "business",
+    "follow": "Did anything challenge what you thought you knew? If you like, explain one interesting idea to someone in 30 seconds.",
+    "themes": "Google · technology · ideas · business",
+    "relatedIds": [
+      "w3ct6xl4",
+      "w3ct6xl3",
+      "explain"
+    ]
+  },
+  {
+    "id": "w3ct6xl8",
+    "title": "Jack Ma: China's ecommerce CEO",
+    "who": "Good Bad Billionaire · BBC",
+    "url": "https://www.bbc.co.uk/programmes/w3ct6xl8",
+    "topics": [
+      "business",
+      "podcasts"
+    ],
+    "why": "From teaching to Alibaba: a route into online business.",
+    "notice": "Which event makes the business story easier to understand?",
+    "group": "business",
+    "follow": "Did anything challenge what you thought you knew? If you like, explain one interesting idea to someone in 30 seconds.",
+    "themes": "Alibaba · trade · business",
+    "relatedIds": [
+      "w3ct9bc3",
+      "w3ct6xkx",
+      "p07nwybz"
+    ]
+  },
+  {
+    "id": "w3ct6xl4",
+    "title": "Sam Altman: ChatGPT and the AI revolution",
+    "who": "Good Bad Billionaire · BBC",
+    "url": "https://www.bbc.co.uk/programmes/w3ct6xl4",
+    "topics": [
+      "business",
+      "podcasts",
+      "ai"
+    ],
+    "why": "Explore the person behind OpenAI through this 2024 account.",
+    "notice": "Where do the hosts distinguish ambition from results?",
+    "group": "business",
+    "follow": "Did anything challenge what you thought you knew? If you like, explain one interesting idea to someone in 30 seconds.",
+    "themes": "ChatGPT · AI · technology · business",
+    "relatedIds": [
+      "kelly",
+      "w3ct6xkx",
+      "intelligence"
+    ]
+  },
+  {
+    "id": "whales",
+    "title": "Why you should care about whale poo",
+    "who": "Asha de Vos · TED",
+    "url": "https://www.ted.com/talks/asha_de_vos_why_you_should_care_about_whale_poo",
+    "topics": [
+      "ocean",
+      "science"
+    ],
+    "why": "An unexpected way to think about a healthy ocean. If you live near the sea in Dhofar, bring that curiosity to a wider ocean story—not a study of Dhofar itself.",
+    "notice": "How does she make an apparently strange or funny subject become important?",
+    "themes": "oceans · environment · animals · science",
+    "relatedIds": [
+      "eagleman",
+      "food",
+      "explain"
+    ]
+  },
+  {
+    "id": "food",
+    "title": "The Secrets of Food Marketing",
+    "who": "eTalks · Catsnake / Compassion in World Farming",
+    "url": "https://www.youtube.com/watch?v=mKTORFmMycQ",
+    "topics": [
+      "stories",
+      "business"
+    ],
+    "why": "A challenging subject, delivered with remarkable composure. Notice how a speaker can actively construct a professional presence.",
+    "notice": "How does the delivery hold your attention when the subject becomes uncomfortable?",
+    "context": "A campaign film about factory farming. Catsnake’s production credits identify actress Kate Miles; this is a performed presentation, not an independent expert interview.",
+    "source": "https://vimeo.com/126483718",
+    "alternate": "https://vimeo.com/126483718",
+    "relatedIds": [
+      "whales",
+      "w3ct9bc3",
+      "present"
+    ]
+  },
+  {
+    "id": "intelligence",
+    "title": "The Intelligence",
+    "who": "The Economist · podcast programme",
+    "url": "https://podcasts.apple.com/us/podcast/the-intelligence-from-the-economist/id1449631195",
+    "topics": [
+      "podcasts",
+      "stories",
+      "business"
+    ],
+    "why": "Try one current story that interests you. The interviews offer a chance to hear professional conversation, not just a prepared speech.",
+    "notice": "Listen to a question that clearly grows from the previous answer. What made it sound genuinely interested?",
+    "context": "Choose a weekday episode or a preview. Availability can vary; some content may require a subscription.",
+    "relatedIds": [
+      "p07r6hjz",
+      "w3ct6xl4",
+      "meaning"
+    ]
+  },
+  {
+    "id": "explain",
+    "title": "How to explain something complicated",
+    "who": "TED-Ed · Public Speaking 101",
+    "url": "https://ed.ted.com/lessons/the-best-way-to-explain-complex-ideas",
+    "topics": [
+      "speaker",
+      "stories"
+    ],
+    "why": "Try a fresh approach to making a difficult idea understandable.",
+    "notice": "What helps the listener take the next step?",
+    "group": "speaker",
+    "diagnosis": "I struggle to explain complicated ideas",
+    "relatedIds": [
+      "eagleman",
+      "whales",
+      "intelligence"
+    ]
+  },
+  {
+    "id": "story",
+    "title": "4 ways to tell a great story",
+    "who": "TED-Ed · Public Speaking 101",
+    "url": "https://www.ted.com/talks/ted_ed_4_ways_to_tell_a_great_story",
+    "topics": [
+      "speaker",
+      "stories"
+    ],
+    "why": "Explore ways to give a story a direction.",
+    "notice": "What makes you want to hear what happens next?",
+    "group": "speaker",
+    "diagnosis": "My stories don’t go anywhere",
+    "relatedIds": [
+      "p0cxvmk1",
+      "kelly",
+      "p09tvhv8"
+    ]
+  },
+  {
+    "id": "meaning",
+    "title": "How to speak with meaning",
+    "who": "TED-Ed · Public Speaking 101",
+    "url": "https://www.ted.com/talks/ted_ed_how_to_speak_with_meaning",
+    "topics": [
+      "speaker",
+      "stories"
+    ],
+    "why": "Explore choices in delivery while keeping your own voice.",
+    "notice": "What changes when the speaker changes emphasis or pace?",
+    "group": "speaker",
+    "diagnosis": "I want more control over how I sound",
+    "relatedIds": [
+      "food",
+      "intelligence",
+      "present"
+    ]
+  },
+  {
+    "id": "present",
+    "title": "What’s the best way to give a presentation?",
+    "who": "TED-Ed · Public Speaking 101",
+    "url": "https://www.ted.com/talks/ted_ed_what_s_the_best_way_to_give_a_presentation",
+    "topics": [
+      "speaker",
+      "stories"
+    ],
+    "why": "Consider how to help an audience follow your idea.",
+    "notice": "Which choice could help your own audience?",
+    "group": "speaker",
+    "diagnosis": "I want to become a stronger presenter",
+    "relatedIds": [
+      "kelly",
+      "food",
+      "explain"
+    ]
+  }
+]

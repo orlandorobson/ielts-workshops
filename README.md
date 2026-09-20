@@ -70,3 +70,23 @@ Existing notes and choices are preserved. New stages need their own release or a
 See `docs/speaking/day-2-session-audit.md` for the integrated lesson audit, timing estimate
 and audio-production notes. Procedure verification and the research TODO remain in
 `docs/speaking/day-2-verification.md`. The student route is `/speaking/day-2/` and the teacher route is `/speaking/day-2/teacher-control/`.
+
+## Listening — Day 1 (local draft)
+
+Preview `http://localhost:8000/listening/day-1/`. The static page uses the shared base
+styles and local progress, without audio, images or stage locking. The supplied
+Mirbat, Gym and Data Analytics sections are implemented. Precision, Hotel and Numbers now use the supplied original source material.
+Only Audio 1.1–1.3 answer keys remain pending. Hotel now uses consecutive 1–9
+numbering, and Gym activities use the definitive transcript.
+See `docs/listening/day-1-verification.md` for the source gaps and local checks.
+
+Listening Day 1 answer feedback is now teacher-released. Open
+`http://localhost:8000/listening/day-1/teacher-control/` to release individual
+activities or all answers, then share the displayed code with students. Students
+enter it in “Teacher answer release”. Navigation, answer entry, speaking practice
+and instruction examples remain freely available. This reuses the Speaking code
+engine with separate Listening state; it is not a remote broadcast or authentication.
+
+The Spelling Challenge now includes the exact 20 authored four-option sets,
+including the duplicate “beggining”. Both attempts independently shuffle questions
+and options, retain local progress, and show scores only after teacher release.

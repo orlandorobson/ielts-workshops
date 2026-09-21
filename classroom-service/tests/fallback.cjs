@@ -1,0 +1,11 @@
+const {chromium}=require('playwright');const assert=require('node:assert/strict');
+(async()=>{const browser=await chromium.launch({channel:'chrome',headless:true});try{
+const context=await browser.newContext();const page=await context.newPage();const api=process.env.CLASSROOM_API||'http://127.0.0.1:8787',workshop='listening-day-1';await page.routeWebSocket(api.replace(/^http/,'ws')+'/**',socket=>socket.close());
+const session=await(await context.request.post(api+'/v1/classes',{data:{workshop}})).json();await page.goto(process.env.STUDENT_URL||'http://127.0.0.1:8000/listening/day-1/');await page.locator('#class-code').fill(session.code);await page.locator('#class-connect-form button').click();await page.getByText('Connected ✓',{exact:true}).waitFor({timeout:12000});await page.locator('#l14-0').fill('keep me');
+let reads=0;page.on('request',r=>{if(r.url().startsWith(api)&&r.method()==='GET')reads++;});const start=Date.now();await context.request.post(api+`/v1/classes/${session.code}/release?workshop=${workshop}`,{headers:{Authorization:'Bearer '+session.teacherToken},data:{activity:'l14'}});await page.locator('[data-answer-check=l14]').waitFor({state:'visible',timeout:8000});const delay=Date.now()-start;assert.equal(await page.locator('#l14-0').inputValue(),'keep me');assert.ok(reads<=2);
+// Simulate backend unavailable after a previously released activity. Existing
+// work and released checking remain available; unreleased answers stay guarded.
+await page.route(api+'/**',route=>route.abort());await page.waitForTimeout(5500);assert.equal(await page.locator('#l14-0').inputValue(),'keep me');assert.equal(await page.locator('[data-answer-check=l14]').isVisible(),true);assert.equal(await page.locator('[data-answer-check=l15]').isVisible(),false);await page.locator('#l15-0').fill('still working');
+await page.unroute(api+'/**');await page.evaluate(()=>dispatchEvent(new Event('online')));await page.getByText('Connected ✓',{exact:true}).waitFor({timeout:12000});assert.equal(await page.locator('#l15-0').inputValue(),'still working');
+console.log(JSON.stringify({fallbackPassed:true,releaseDelayMs:delay,polls:reads,unavailableServicePreservesWork:true}));
+}finally{await browser.close();}})();

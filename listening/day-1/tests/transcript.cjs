@@ -1,3 +1,4 @@
+const {release}=require('./classroom-helper.cjs');
 const {chromium}=require('playwright');const assert=require('node:assert/strict');
 const exact=['How can I help you?','I’m calling about your gym in Downtown LA.','I was just looking at the website and, uh, wanted to check a couple of things.','Yeah, sure. No worries.','Okay. So, uh, I saw there are 2 different membership options?','Actually, before I go on, there’s also an annual fee that applies to all memberships.','Yeah. So, um, the other option is the black card, which is around… let me check, 25 dollars a month','Okay. I see.','Right. Okay. Yeah, I think I’ll go with the black card.'];
 (async()=>{const browser=await chromium.launch({headless:true,channel:'chrome'});try{const page=await browser.newPage({reducedMotion:'reduce'});await page.goto('http://127.0.0.1:8000/listening/day-1/');
@@ -6,7 +7,7 @@ assert.equal(await page.locator('#noticing-form fieldset').count(),9);assert.equ
 assert.deepEqual(await page.locator('#noticing-form input[value="0"]+span').allTextContents(),exact);
 assert.equal(await page.locator('#noticing-form [name=phrase6][value="1"]+span').textContent(),'The Black Card membership costs… uh… just a minute… 25 dollars per month.');
 await page.locator('#noticing-form input[value="0"]').evaluateAll(els=>els.forEach(e=>e.click()));await page.locator('#noticing-form').evaluate(f=>f.requestSubmit());assert.equal(await page.locator('#noticing-form .result').textContent(),'');
-await page.locator('#answer-release-form').evaluate(f=>{f.querySelector('input').value='642917';f.requestSubmit();});await page.locator('[data-answer-check=l16b]').click();assert.match(await page.locator('#noticing-form .result').textContent(),/9 \/ 9 correct/);
+await release(page,'l16b');await page.locator('[data-answer-check=l16b]').click();assert.match(await page.locator('#noticing-form .result').textContent(),/9 \/ 9 correct/);
 assert.equal(await page.locator('.speak-item').count(),9);for(const button of await page.locator('.reveal').all())await button.click();assert.equal(await page.locator('#spoken-6').textContent(),exact[6]);assert.equal(await page.locator('#spoken-8').textContent(),'Yeah, I think I’ll go with the black card.');
-await page.reload();assert.match(await page.locator('#noticing-form .result').textContent(),/9 \/ 9 correct/);
+await page.reload();await page.getByText('Connected ✓',{exact:true}).waitFor();assert.match(await page.locator('#noticing-form .result').textContent(),/9 \/ 9 correct/);
 console.log('Definitive transcript, 9-item scoring, speaking models, old-state migration and Hotel answer preservation passed.');}finally{await browser.close();}})();

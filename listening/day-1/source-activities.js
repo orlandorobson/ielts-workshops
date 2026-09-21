@@ -12,6 +12,7 @@ export function sourceActivity(id,state,{heading=true}={}){
  }).join('')}${activity.pending?'<p class="pending">Answer key pending. You can enter and save your answers; checking is not available yet.</p>':`<div class="actions">${checkingControl(id)}</div>`}<p class="result" role="status"></p></form>`;
 }
 export function mountSourceActivities(state,save){
+ const restorers=[];
  document.querySelectorAll('[data-source-activity]').forEach(form=>{
  const id=form.dataset.sourceActivity,activity=sourceActivities.find(a=>a.id===id);
  const answers=()=>activity.questions.map(q=>form.elements[`source-${id}-${q.number}`].value);
@@ -21,6 +22,7 @@ export function mountSourceActivities(state,save){
  form.querySelector('.result').textContent=`${score} / ${activity.questions.length} correct`;state[id]={answers:values,checked:true};save();}
  form.addEventListener('submit',event=>{event.preventDefault();check();});
  form.addEventListener('input',()=>{state[id]={answers:answers(),checked:false};form.querySelectorAll('.feedback,.result').forEach(el=>{el.textContent='';el.classList.remove('correct');});save();});
+ restorers.push(()=>{if(state[id]?.checked)check();});
  if(state[id]?.checked)check();
- });syncCheckingControls();
+ });syncCheckingControls();return ()=>restorers.forEach(restore=>restore());
 }

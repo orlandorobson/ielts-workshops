@@ -1,0 +1,24 @@
+import {finalActivities} from './final-activities.js';
+// Worksheet pp. 7–9. Keys 2.1–2.6 supplied explicitly by the workshop author.
+const choices=rows=>rows.map((options,i)=>({number:i+1,options:options.map((text,j)=>({value:'ABC'[j],text}))}));
+const letters=texts=>texts.map((text,i)=>({value:'ABCDEFGHI'[i],text}));
+export const activities=[
+{id:'l21',audio:'2.1',title:'What is the speaker doing?',instruction:'In each extract, what is the speaker doing? Choose A, B or C.',questions:choices([
+['Giving a warning','Starting the talk','Finishing the talk'],['Giving an example','Summarising','Starting a new section'],['Giving a recommendation','Giving a warning','Moving to a new section'],['Finishing the talk','Giving a restriction','Adding a new point'],['Introducing a contrast','Giving a recommendation','Giving an example'],['Giving a warning','Summarising','Adding a new point'],['Giving an example','Starting a topic','Giving a restriction'],['Moving to a new section','Giving an example','Giving a recommendation'],['Explaining something differently','Finishing a talk','Giving a warning'],['Starting a topic','Finishing the talk','Moving to the final section'],['Giving a restriction','Summarising','Adding a new point']]),answers:[...'BCCCBACBACB'],reflection:'You don’t need every word. Listen for clues that tell you what the speaker is doing.'},
+{id:'l22',audio:'2.2',title:'Follow a location',instruction:'You will hear 3 map descriptions. Match audios 1–3 with location A in each picture.',map:'map-audio2.2.png',mapCaption:'Maps 1, 2 and 3, from left to right.',questions:[1,2,3].map(number=>({number,label:`Extract ${number}`,options:[1,2,3].map(n=>({value:String(n),text:`Map ${n}`}))})),answers:['2','1','3']},
+{id:'l23',audio:'2.3',title:'Keep track of where you are',instruction:'You will hear 3 map descriptions. Match audios 4–6 with location A in each picture.',principle:'Don’t wait for the answer. Keep track of where you are.',map:'map-audio2.3.png',mapCaption:'Maps 4, 5 and 6, from left to right.',questions:[4,5,6].map(number=>({number,label:`Extract ${number}`,options:[4,5,6].map(n=>({value:String(n),text:`Map ${n}`}))})),answers:['6','5','4']},
+{id:'l24',audio:'2.4',title:'Where are you now?',instruction:'Answer the questions.',questions:['Where’s the library?','Where’s the cafe?','Where’s the library?','Where’s students services?'].map((label,i)=>({number:i+1,label,map:`map-audio2.4${'abcd'[i]}.png`,options:[...'ABC'].map(value=>({value,text:`Location ${value}`}))})),answers:[...'CABC']},
+{id:'l25',audio:'2.5',title:'Follow the route',instruction:'Match the numbers 11–16 with the letters A–H from the table below.',map:'map-audio2.5.png',options:letters(['Picnic area','Take away food','Main square','Coffee shop','Information','Fruit stalls','Crafts section','Car park']),questions:[11,12,13,14,15,16].map(number=>({number,type:'select'})),answers:[...'EDCBAG']},
+{id:'l26',audio:'2.6',title:'Around the campus',instruction:'Match numbers 17–22 with letters A–I below.',map:'map-audio2.6.png',options:letters(['Car park','Refreshments','Leisure complex','Teaching block','Learning resources','Student support','Garden area','Copy centre','Visitors centre']),questions:[17,18,19,20,21,22].map(number=>({number,type:'select'})),answers:[...'EBCIDF']},
+{id:'l27',audio:'2.7',title:'What happens next?',instruction:'Follow the sequence.',questions:[
+{number:1,label:'Order the actions below by writing A, B, C',parts:['Receive ID card','Complete registration','Attend induction'],type:'order',options:[...'ABC']},
+{number:2,label:'What happens second?',options:letters(['Explore independently','Join a guided tour','Collect a map'])},
+{number:3,label:'Complete the missing information:',before:'1. Register online',inputLabel:'2.',after:'3. Attend workshop · 4. Receive certificate',type:'text'},
+{number:4,label:'How do visitors register now?',type:'text'},
+{number:5,label:'Order the steps',parts:['Go to exhibition hall','Presentation of introduction','Pick up visitor pass','View displays'],type:'order'}],answers:[['C','A','B'],'B','pay course fee','online',['2','1','3','4']],reflection:'Listen for the relationship between events — what happens first, next and after that.'},
+{id:'l28',audio:'2.8',title:'Advice, requirements and restrictions',instruction:'In each extract, what is the speaker doing? Write A, B or C in each box.',questions:Array.from({length:12},(_,i)=>({number:i+1,options:letters(['Giving a recommendation','Giving a requirement','Giving a restriction'])})),answers:[...'BACBCAACBBCA'],
+// Final teacher-verified recording order, never shuffled independently of audio.
+audioConfiguration:{status:'definitive-transcript-stored',transcript:'source/transcripts/audio-2.8.txt',order:[1,2,3,4,5,6,7,8,9,10,11,12]}}
+];
+
+activities.push(...finalActivities);

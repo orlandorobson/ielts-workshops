@@ -18,3 +18,5 @@ button,.button{min-height:46px;display:inline-flex;justify-content:center;align-
 .answer-release-panel{border-block:1px solid var(--line);padding:12px 0;margin-bottom:24px}.answer-release-panel input{max-width:100%;width:160px;min-height:46px;padding:10px;border:1px solid var(--line)}
 
 .precision-part{padding-block:28px;border-bottom:1px solid var(--line);scroll-margin-top:20px}.precision-part>h3{font-size:1.2rem}.paired-options{grid-template-columns:repeat(2,minmax(0,1fr))}.source-activity{margin-bottom:24px}
+
+.classroom-connection{border-block:1px solid var(--line);padding:16px 0;margin-bottom:24px}.classroom-connection label{font-weight:650}.classroom-connection input{max-width:100%;width:150px;min-height:46px;padding:10px;border:1px solid var(--line);text-transform:uppercase;letter-spacing:.12em}.connection-summary{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}.classroom-connection p:empty{display:none}.classroom-connection #class-status{font-size:.9rem;margin:10px 0 0}.classroom-code{font-size:2rem;letter-spacing:.16em;font-weight:650}

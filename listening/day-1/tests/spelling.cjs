@@ -1,3 +1,4 @@
+const {release}=require('./classroom-helper.cjs');
 const {chromium}=require('playwright');const assert=require('node:assert/strict');
 (async()=>{const browser=await chromium.launch({headless:true,channel:'chrome'});try{
 const page=await browser.newPage({reducedMotion:'reduce'});const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('http://127.0.0.1:8000/listening/day-1/');await page.waitForSelector('[data-spelling="2"]');
@@ -12,10 +13,10 @@ async function choose(attempt,correct){const s=(await saved())['spell'+attempt];
 await choose(1,true);assert.equal(await page.locator('[data-spelling="2"] input:checked').count(),0);
 await page.locator('[data-spelling="1"]').evaluate(f=>f.requestSubmit());assert.equal(await page.locator('[data-spelling="1"] .result').textContent(),'');assert.equal((await saved()).spell1.score,undefined);
 await page.reload();assert.deepEqual((await saved()).spell1.items,initial.spell1.items);assert.equal(await page.locator('[data-spelling="1"] input:checked').count(),20);
-await page.locator('#answer-release-form').evaluate(f=>{f.querySelector('input').value='381642';f.requestSubmit();});await page.locator('[data-answer-check=spell1]').click();assert.equal((await saved()).spell1.score,20);assert.equal((await saved()).spell1.results.filter(r=>r.correct).length,20);
+await release(page,'spell1');await page.locator('[data-answer-check=spell1]').click();assert.equal((await saved()).spell1.score,20);assert.equal((await saved()).spell1.results.filter(r=>r.correct).length,20);
 await choose(2,false);await page.locator('[data-spelling="2"]').evaluate(f=>f.requestSubmit());assert.equal(await page.locator('[data-spelling="2"] .result').textContent(),'');
-await page.locator('#answer-release-form').evaluate(f=>{f.querySelector('input').value='275438';f.requestSubmit();});await page.locator('[data-answer-check=spell2]').click();assert.deepEqual(await page.locator('[data-spelling="2"] .result p').allTextContents(),['First attempt: 20 / 20','This attempt: 0 / 20','The score is information. Look at which words are becoming easier and which still need practice.']);
-await page.reload();assert.equal((await saved()).spell2.score,0);assert.match(await page.locator('[data-spelling="2"] .result').textContent(),/First attempt: 20 \/ 20/);
+await release(page,'spell2');await page.locator('[data-answer-check=spell2]').click();assert.deepEqual(await page.locator('[data-spelling="2"] .result p').allTextContents(),['First attempt: 20 / 20','This attempt: 0 / 20','The score is information. Look at which words are becoming easier and which still need practice.']);
+await page.reload();await page.getByText('Connected ✓',{exact:true}).waitFor();assert.equal((await saved()).spell2.score,0);assert.match(await page.locator('[data-spelling="2"] .result').textContent(),/First attempt: 20 \/ 20/);
 // Editing clears stale scores without revealing item correctness.
 const second=(await saved()).spell2.items[0];await page.locator(`[data-spelling="2"] input[name=word0][value="${second.options.indexOf(second.target)}"]`).check();assert.equal(await page.locator('[data-spelling="2"] .result').textContent(),'');await page.locator('[data-answer-check=spell2]').click();assert.equal((await saved()).spell2.score,1);
 for(const width of [360,390,430,1280]){await page.setViewportSize({width,height:900});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);}

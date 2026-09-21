@@ -177,3 +177,22 @@ one natural way, with open Show one way / Try again controls and no scoring.
 
 `tests/transcript.cjs` verifies exact text, item 7 alternative, nine-item grading,
 pre-release blocking, speaking models, state migration and saved Hotel answers.
+
+## 2026-09-21 — Shared classroom replacement (local only)
+
+The earlier static-code release sections above describe the published historical
+implementation, not cross-device broadcast. They are superseded in the working
+copy by the shared Worker/SQLite Durable Object connection. See
+`classroom-service/README.md` for architecture, privacy, quota calculations, owner
+login steps and independent-client evidence. The new backend is not deployed and
+the repository has not been committed/pushed/published. Original lesson content
+and Speaking files remain unchanged.
+
+### Deployed backend verification — 2026-09-21
+
+Cloudflare Worker version `67e86d2a-fdcb-45f0-a83a-f6626c6b8884` is deployed.
+The real-service three-isolated-client acceptance test passed (274 ms push), as did
+blocked-WebSocket polling/outage recovery (4,971 ms). Public-code write denial,
+eight-hour lifetime, credential-free public reads and responsive widths verified.
+See `classroom-service/README.md` for the complete evidence and physical-phone
+preview links. No frontend commit, push or publication occurred.

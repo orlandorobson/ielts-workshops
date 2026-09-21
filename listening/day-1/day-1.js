@@ -1,3 +1,4 @@
+import {mountStudentConnection} from '../../shared/classroom/client.js';
 import {sourceActivity,mountSourceActivities} from './source-activities.js';
 import {answerRelease,answerReleaseConfig,checkingControl,syncCheckingControls} from './answer-release.js';
 import {tasks,instruction,phrases,speaking,spellingWords,validSpellingItems,shuffle,mark} from '../../content/listening/day-1.js';
@@ -28,7 +29,7 @@ activities.innerHTML=shell('precision','Precision','Small details matter',['l11'
  shell('l17','Listening 1.7','A London conversation',`<div class="notice"><h3>Check the instruction</h3><p>Write <strong>ONE WORD AND/OR A NUMBER</strong> for each answer.</p><p>Tap each example to check what is allowed.</p><div class="examples">${[['library','✓ — one word'],['£45','✓ — a number'],['12 March','✓ — a number + a word'],['on the 12th of March','✕ — too many words']].map(([a,b])=>`<details><summary>${a}</summary><p>${b}</p></details>`).join('')}</div><p>Always check how many words and numbers you are allowed to write.</p></div><br>${inputTask(tasks[3])}`)+
  shell('l18','Listening 1.8','Hotel',sourceActivity('l18',state,{heading:false}))+
  shell('l19','Listening 1.9','Numbers',sourceActivity('l19',state,{heading:false}));
-mountSourceActivities(state,save);
+const restoreSourceFeedback=mountSourceActivities(state,save);
 function followup(id,results){if(id==='l14')return `${results[1].correction?`<fieldset class="notice"><legend>What happened?</legend>${['I stopped listening after 10:00.','I didn’t notice the correction.','I noticed the correction but missed the new time.','Something else.'].map((t,i)=>`<label class="option"><input type="radio" name="reason" value="${i}" ${state.reason===String(i)?'checked':''}><span>${t}</span></label>`).join('')}</fieldset>`:''}<p class="notice">Keep listening. Information can change.</p>`;
  if(id==='l15')return `<div class="notice"><h3>Listen to the whole idea</h3><p>The trip is suitable for beginners. Is that the whole message?</p><p>No. The speaker adds that beginners need to be comfortable in the water. Notice <strong>but</strong>.</p><p>The trip normally takes two hours. Is that always true?</p><p>No. It can sometimes be shorter depending on conditions. Notice <strong>although</strong>.</p><p>Sometimes the first idea is true — but it isn’t the whole message.</p></div>`;
  if(id==='l16a')return '<p class="notice">The annual fee comes up during one membership option, but it applies to <strong>all</strong> memberships.</p>';
@@ -44,11 +45,12 @@ activities.addEventListener('change',e=>{if(e.target.name==='reason'){state.reas
 document.querySelectorAll('.reveal').forEach(button=>button.addEventListener('click',()=>{const phrase=document.getElementById(button.getAttribute('aria-controls'));phrase.hidden=!phrase.hidden;button.setAttribute('aria-expanded',String(!phrase.hidden));button.textContent=phrase.hidden?'SHOW ONE WAY':'TRY AGAIN';}));
 function newNoticing(){state.noticing={version:2,orders:phrases.map(p=>p?shuffle([0,1]):null),choices:{},checked:false};save();}
 if(state.noticing?.version!==2||!Array.isArray(state.noticing?.orders)||state.noticing.orders.length!==9||state.noticing.orders.some(o=>!Array.isArray(o)||o.length!==2))newNoticing();
+let restoreNoticingFeedback=()=>{};
 function renderNoticing(){const n=state.noticing;document.querySelector('#noticing').innerHTML=`<form id="noticing-form">${phrases.map((p,i)=>p?`<fieldset class="choice-item"><legend>${i+1}. Which sentence?</legend><div class="options">${n.orders[i].map(v=>`<label class="option"><input type="radio" name="phrase${i}" value="${v}" ${String(n.choices[i])===String(v)?'checked':''}><span>${p[v]}</span></label>`).join('')}</div><p class="feedback" id="phrase-feedback-${i}"></p></fieldset>`:pending('7 · Awaiting the exact wording from the recording transcript.')).join('')}<div class="actions">${checkingControl('l16b')}<button type="button" class="secondary" id="new-noticing">New attempt</button></div><div class="result" role="status"></div></form>`;
  const form=document.querySelector('#noticing-form');
  function show(){if(!answerRelease.isOpen('l16b'))return;let score=0;phrases.forEach((p,i)=>{if(!p)return;const correct=String(n.choices[i])==='0';if(correct)score++;const el=document.getElementById('phrase-feedback-'+i);el.textContent=(correct?'Correct. ':'You heard: ')+p[0];el.classList.toggle('correct',correct);});form.querySelector('.result').innerHTML=`<p>${score} / ${phrases.length} correct</p><p>You probably knew many of these words already. Notice how people put them together in conversation.</p>`;}
  form.addEventListener('change',e=>{n.choices[e.target.name.replace('phrase','')]=e.target.value;n.checked=false;form.querySelectorAll('.feedback').forEach(el=>el.textContent='');form.querySelector('.result').textContent='';save();});
- form.addEventListener('submit',e=>{e.preventDefault();if(!answerRelease.isOpen('l16b'))return;n.checked=true;show();save();});document.querySelector('#new-noticing').addEventListener('click',()=>{newNoticing();renderNoticing();document.querySelector('#noticing-form input').focus();});if(n.checked)show();syncCheckingControls(form);
+ form.addEventListener('submit',e=>{e.preventDefault();if(!answerRelease.isOpen('l16b'))return;n.checked=true;show();save();});document.querySelector('#new-noticing').addEventListener('click',()=>{newNoticing();renderNoticing();document.querySelector('#noticing-form input').focus();});restoreNoticingFeedback=()=>{if(n.checked)show();};if(n.checked)show();syncCheckingControls(form);
 }
 renderNoticing();
 const spellingResults=[];
@@ -69,13 +71,8 @@ document.querySelectorAll('[data-spelling]').forEach(form=>{
 const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){document.querySelectorAll('#navigation a').forEach(a=>{if(a.hash==='#'+entry.target.id)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');});}});},{rootMargin:'-10% 0px -65% 0px'});document.querySelectorAll('.activity').forEach(s=>observer.observe(s));
 save();
 
-// One code entry for the whole page. It never controls activity access.
-const releasePanel=document.createElement('details');
-releasePanel.className='answer-release-panel';
-releasePanel.innerHTML=`<summary>Teacher answer release</summary><form id="answer-release-form"><label for="answer-release-code">Enter the code your teacher shares</label><div class="actions"><input id="answer-release-code" type="text" inputmode="numeric" autocomplete="off" maxlength="6" pattern="[0-9]{6}" required><button>Apply code</button></div><p role="status" id="answer-release-status"></p></form>`;
-document.querySelector('.draft-note').before(releasePanel);
-releasePanel.querySelector('form').addEventListener('submit',event=>{event.preventDefault();const result=answerRelease.applyCode(document.querySelector('#answer-release-code').value);document.querySelector('#answer-release-status').textContent=result.valid?(result.all?'Answer checking is available for all activities.':`Answer checking is available for ${result.stage.label}.`):'That code did not work. Check with your teacher.';syncCheckingControls();if(result.valid)document.querySelector('#answer-release-code').value='';});
-function refreshAnswerRelease(){answerRelease.refresh();syncCheckingControls();document.querySelectorAll('[data-task],#noticing-form,[data-spelling],[data-source-activity]').forEach(form=>{const id=form.dataset.sourceActivity||form.dataset.task||(form.dataset.spelling?'spell'+form.dataset.spelling:'l16b');if(answerRelease.isOpen(id))return;form.querySelectorAll('.feedback,.result,.followup').forEach(el=>el.replaceChildren());form.querySelectorAll('[aria-invalid]').forEach(el=>el.removeAttribute('aria-invalid'));});}
-window.addEventListener('storage',event=>{if(event.key===answerReleaseConfig.storageKey||event.key===null)refreshAnswerRelease();});
-window.addEventListener('pageshow',refreshAnswerRelease);
+// Shared classroom state controls feedback only; inputs are never re-rendered.
+function refreshAnswerRelease(){syncCheckingControls();document.querySelectorAll('[data-task],#noticing-form,[data-spelling],[data-source-activity]').forEach(form=>{const id=form.dataset.sourceActivity||form.dataset.task||(form.dataset.spelling?'spell'+form.dataset.spelling:'l16b');if(answerRelease.isOpen(id))return;form.querySelectorAll('.feedback,.result,.followup').forEach(el=>el.replaceChildren());form.querySelectorAll('[aria-invalid]').forEach(el=>el.removeAttribute('aria-invalid'));});document.querySelectorAll('[data-task]').forEach(form=>{if(state[form.dataset.task]?.checked)checkTask(form);});restoreSourceFeedback();restoreNoticingFeedback();spellingResults.forEach(render=>render());}
+answerRelease.subscribe(refreshAnswerRelease);
+mountStudentConnection(answerRelease,document.querySelector('.draft-note'));
 syncCheckingControls();

@@ -90,3 +90,19 @@ engine with separate Listening state; it is not a remote broadcast or authentica
 The Spelling Challenge now includes the exact 20 authored four-option sets,
 including the duplicate “beggining”. Both attempts independently shuffle questions
 and options, retain local progress, and show scores only after teacher release.
+
+### Shared classroom release — Listening Days 1 and 2
+
+Both listening workshops use the same Cloudflare Worker and SQLite-backed Durable
+Object service. Students join with a six-character class code; a separate teacher
+token controls answer release. Student answers and scores stay in their browser.
+Sessions expire after eight hours. Navigation and answering stay open throughout.
+
+- [Listening Day 2](listening/day-2/)
+- [Day 2 teacher control](listening/day-2/teacher-control/)
+- [Architecture and local tests](classroom-service/README.md)
+- [Day 2 content verification](docs/listening/day-2-verification.md)
+
+Day 2 is content-complete, with all ten activities and their authoritative keys.
+The final production smoke test uses independent browser contexts; a teacher-led
+physical-phone check remains the last manual classroom check.

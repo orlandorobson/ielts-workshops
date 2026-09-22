@@ -1,5 +1,6 @@
 // Shared protocol registry. Add workshop IDs here when later workshops are integrated.
 export const workshops = {
+ 'listening-day-3': [{'id': 'checkpoint1', 'label': 'checkpoint1'}, {'id': 'checkpoint2', 'label': 'checkpoint2'}, {'id': 'l31', 'label': 'l31'}, {'id': 'vocabulary31', 'label': 'vocabulary31'}, {'id': 'say34', 'label': 'say34'}, {'id': 'l32', 'label': 'l32'}, {'id': 'l33', 'label': 'l33'}, {'id': 'conversation33', 'label': 'conversation33'}, {'id': 'l34', 'label': 'l34'}, {'id': 'language34', 'label': 'language34'}],
  'listening-day-2': [
   {id:'l21',label:'2.1 · What is the speaker doing?'},
   {id:'l22',label:'2.2 · Follow a location'},

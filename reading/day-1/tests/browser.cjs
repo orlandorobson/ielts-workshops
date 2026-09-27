@@ -79,6 +79,9 @@ const key='ielts-reading-day-1-v1';
  for(const [n,id,meanings] of [[6,'llm-words',C.vocabulary.llm.map(x=>x[1])],[8,'signals',['CAUSE','CHOICE / ALTERNATIVE','RESULT','CONTRAST']]]){
   await step(n);for(const [i,m]of meanings.entries()){assert.deepEqual(await page.locator(`#${id}-${i} option[value]:not([value=""])`).evaluateAll(els=>els.map(e=>Number(e.value))),O.matching[id]);await page.locator(`#${id}-${i}`).selectOption({label:m});}await page.reload();for(const[i,m]of meanings.entries())assert.equal(await page.locator(`#${id}-${i} option:checked`).innerText(),m);
  }
+ // Neutral task titles do not pre-answer the LLM heading or Mohammed concept checks.
+ await step(7);assert.equal(await page.locator('h1').innerText(),'Large Language Model');
+ await step(12);assert.equal(await page.locator('h1').innerText(),'What is each paragraph doing?');assert(!await page.locator('#topic-function').isVisible());await page.locator('[data-reveal=topic-function]').click();assert.match(await page.locator('#topic-function').innerText(),/Topic ≠ function/);
  // Original v1 values remain attached to their original meanings after reordering.
  const legacy={step:14,answers:{q215:[0,1,2,3,4,5],'heading-bedouin-0':[3],'llm-words-0':[8]},checked:{q215:true,'heading-bedouin-0':true},notes:{reflection:'Keep this note'},visited:[0,14]};
  await page.evaluate(({key,legacy})=>localStorage.setItem(key,JSON.stringify(legacy)),{key,legacy});await page.reload();

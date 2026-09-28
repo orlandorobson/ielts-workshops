@@ -7,19 +7,20 @@ const key='ielts-reading-day-1-v1';
  const browser=await chromium.launch({channel:'chrome',headless:true});
  const errors=[], failures=[];
  const context=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce'});
+ await context.addInitScript(()=>{const seed=sessionStorage.getItem('reading-test-seed');if(seed){localStorage.setItem('ielts-reading-day-1-v1',seed);sessionStorage.removeItem('reading-test-seed');}});
  const page=await context.newPage();
  page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});page.on('response',r=>{if(r.status()>=400)failures.push(r.url())});
  await page.goto(base);
  const C=await page.evaluate(async()=>(await import('./content.js')).lesson);
  const O=await page.evaluate(async()=>{const m=await import('./answer-order.js');return {fixed:m.fixedOrders,headings:m.headingOrders,matching:m.matchingOrders}});
  const titles=await page.evaluate(async()=>(await import('./day-1.js')).screens.map(s=>s.title));
- assert.equal(titles.length,27);assert(titles.indexOf('Mohammed from Sohar')<titles.indexOf('The Transformation of Bedouin Life in the Modern Arabian Peninsula'));
- async function step(n,p=page){await p.evaluate(({key,n})=>{const s=JSON.parse(localStorage.getItem(key)||'{}');s.step=n;s.views={};localStorage.setItem(key,JSON.stringify(s))},{key,n});await p.reload();await p.locator('h1').waitFor();}
+ assert.equal(titles.length,41);assert(titles.indexOf('Mohammed from Sohar')<titles.indexOf('The Transformation of Bedouin Life in the Modern Arabian Peninsula'));
+ async function step(n,p=page){await p.evaluate(({key,n})=>{const s=JSON.parse(localStorage.getItem(key)||'{}');s.step=n>=22?n+14:n;s.sequenceVersion=2;s.views={};sessionStorage.setItem('reading-test-seed',JSON.stringify(s))},{key,n});await p.reload();await p.locator('h1').waitFor();}
  async function overflow(){assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),await page.locator('h1').innerText());}
  // Every step can be reached with no answers, including phone-sized layouts.
  for(const width of [1440,1280,768,390,360,320]){
   await page.setViewportSize({width,height:900});await step(0);
-  for(let n=0;n<27;n++){assert.equal(await page.locator('h1').innerText(),titles[n]);await overflow();if(n<26){assert(await page.locator('#next').isEnabled());await page.locator('#next').click();}}
+  for(let n=0;n<41;n++){assert.equal(await page.locator('h1').innerText(),titles[n]);await overflow();if(n<40){assert(await page.locator('#next').isEnabled());await page.locator('#next').click();}}
  }
  await page.setViewportSize({width:1440,height:1000});
  // All source concept/vocabulary questions: wrong answer, source-correct answer, feedback, retry.
@@ -84,7 +85,7 @@ const key='ielts-reading-day-1-v1';
  await step(12);assert.equal(await page.locator('h1').innerText(),'What is each paragraph doing?');assert(!await page.locator('#topic-function').isVisible());await page.locator('[data-reveal=topic-function]').click();assert.match(await page.locator('#topic-function').innerText(),/Topic ≠ function/);
  // Original v1 values remain attached to their original meanings after reordering.
  const legacy={step:14,answers:{q215:[0,1,2,3,4,5],'heading-bedouin-0':[3],'llm-words-0':[8]},checked:{q215:true,'heading-bedouin-0':true},notes:{reflection:'Keep this note'},visited:[0,14]};
- await page.evaluate(({key,legacy})=>localStorage.setItem(key,JSON.stringify(legacy)),{key,legacy});await page.reload();
+ await page.evaluate(({key,legacy})=>sessionStorage.setItem('reading-test-seed',JSON.stringify(legacy)),{key,legacy});await page.reload();
  const countryOrder=await page.locator('[name=q215]').evaluateAll(els=>els.map(e=>Number(e.value)));
  assert(await page.evaluate(async()=>{const m=await import('./answer-order.js');return m.isMixedCountryOrder(JSON.parse(localStorage.getItem('ielts-reading-day-1-v1')).optionOrders.q215)}));
  assert.deepEqual((await page.locator('[name=q215]:checked + span').allInnerTexts()).sort(),['Saudi Arabia','Yemen','Oman','United Arab Emirates','Qatar','Kuwait'].sort());assert.match(await page.locator('#feedback-q215').innerText(),/That fits/);
@@ -110,9 +111,9 @@ const key='ielts-reading-day-1-v1';
  // Keyboard-only interaction and focus after navigation.
  await step(1);await page.locator('[name=q25][value="1"]').focus();await page.keyboard.press('Space');await page.locator('[data-check=q25]').focus();await page.keyboard.press('Enter');assert.match(await page.locator('#feedback-q25').innerText(),/That fits/);await page.locator('#next').focus();await page.keyboard.press('Enter');assert(await page.locator('#main').evaluate(e=>e===document.activeElement));
  // Corrupt and blocked storage must not block a full journey.
- for(const saved of ['broken-json','{"step":-999,"answers":null,"paragraphs":[],"visited":"bad"}','{"step":9999,"answers":{"q25":"bad"},"notes":[],"reveals":null}']){await page.evaluate(({key,saved})=>localStorage.setItem(key,saved),{key,saved});await page.reload();assert(await page.locator('h1').isVisible());assert(await page.locator('#navigation button').count()===9);}
- const blocked=await browser.newContext({viewport:{width:390,height:844}});await blocked.addInitScript(()=>{Object.defineProperty(window,'localStorage',{get(){throw new Error('Storage blocked')}})});const bp=await blocked.newPage();bp.on('pageerror',e=>errors.push(e.message));await bp.goto(base);for(let i=0;i<26;i++)await bp.locator('#next').click();assert.equal(await bp.locator('h1').innerText(),titles[26]);assert.match(await bp.locator('#storage-note').innerText(),/Saving is unavailable/);
- await page.goto(base+'teacher-control/');assert.equal(await page.locator('section').count(),8);await overflow();
+ for(const saved of ['broken-json','{"step":-999,"answers":null,"paragraphs":[],"visited":"bad"}','{"step":9999,"answers":{"q25":"bad"},"notes":[],"reveals":null}']){await page.evaluate(({key,saved})=>sessionStorage.setItem('reading-test-seed',saved),{key,saved});await page.reload();assert(await page.locator('h1').isVisible());assert(await page.locator('#navigation button').count()===11);}
+ const blocked=await browser.newContext({viewport:{width:390,height:844}});await blocked.addInitScript(()=>{Object.defineProperty(window,'localStorage',{get(){throw new Error('Storage blocked')}})});const bp=await blocked.newPage();bp.on('pageerror',e=>errors.push(e.message));await bp.goto(base);for(let i=0;i<40;i++)await bp.locator('#next').click();assert.equal(await bp.locator('h1').innerText(),titles[40]);assert.match(await bp.locator('#storage-note').innerText(),/Saving is unavailable/);
+ await page.goto(base+'teacher-control/');assert.equal(await page.locator('section').count(),10);await overflow();
  assert.deepEqual(errors,[]);assert.deepEqual(failures,[]);await browser.close();
- console.log('PASS: 27-step blank progression at six widths; all 32 source questions and heading keys; exact passages; wrong/blank/retry feedback; mobile paragraph comparison; vocabulary; repair tools; fading maps; keyboard; saved/legacy/corrupt/blocked storage; balanced option values, country persistence, true/false and argument keys, matching pools, explicit model access; teacher guide; no runtime/HTTP errors.');
+ console.log('PASS: 41-step blank progression at six widths; all 32 source questions and heading keys; exact passages; wrong/blank/retry feedback; mobile paragraph comparison; vocabulary; repair tools; fading maps; keyboard; saved/legacy/corrupt/blocked storage; balanced option values, country persistence, true/false and argument keys, matching pools, explicit model access; teacher guide; no runtime/HTTP errors.');
 })().catch(e=>{console.error(e);process.exit(1)});

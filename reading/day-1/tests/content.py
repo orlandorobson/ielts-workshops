@@ -5,7 +5,7 @@ root = Path(__file__).resolve().parents[1]
 raw = (root/'content.js').read_text()
 c = json.loads(raw[raw.index('{'):raw.rindex(';')])
 ns = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
-with zipfile.ZipFile(next((root/'source').glob('*.docx'))) as z:
+with zipfile.ZipFile(root/'source/IELTS_Reading_Day_1_Seeing_What_the_Text_Is_Doing.docx') as z:
     xml = ET.fromstring(z.read('word/document.xml'))
     source = [''.join(t.text or '' for t in p.findall('.//w:t', ns)) for p in xml.findall('.//w:p', ns)]
 assert c['source'] == source, 'Complete source extraction changed'

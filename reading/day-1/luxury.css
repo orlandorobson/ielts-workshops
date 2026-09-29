@@ -1,0 +1,5 @@
+/* The appended activities reuse the established comparison layout. */
+.luxury .l-endings{padding-left:1.7rem}.luxury .l-endings li{padding:.5rem 0;line-height:1.6}
+.luxury .c-mobile-tabs button[aria-pressed=false]{background:var(--surface);color:var(--accent-dark)}
+.luxury .l-nuance-claim{min-height:8rem}.luxury .tool-actions{display:flex;flex-wrap:wrap;gap:.6rem}
+.luxury textarea{width:100%}

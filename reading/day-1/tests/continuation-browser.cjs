@@ -10,7 +10,7 @@ const key='ielts-reading-day-1-v1';
  page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});page.on('response',r=>{if(r.status()>=400)failed.push(r.url())});
  await page.goto(base);
  const meta=await page.evaluate(async()=>{const a=await import('./day-1.js'),b=await import('./continuation.js'),c=await import('./continuation-content.js');return {titles:a.screens.map(s=>s.title),stages:b.continuationStages.map(s=>({id:s.id,index:a.screens.findIndex(x=>x.id===s.id)})),tasks:b.tasks,content:c.continuation}});
- assert.equal(meta.titles.length,41);assert.equal(meta.stages.length,14);assert.deepEqual(meta.stages.map(s=>s.index),Array.from({length:14},(_,i)=>22+i));
+ assert.equal(meta.titles.length,49);assert.equal(meta.stages.length,14);assert.deepEqual(meta.stages.map(s=>s.index),Array.from({length:14},(_,i)=>22+i));
  assert.equal(meta.titles[21],'Three tools you can use when reading stalls');assert.equal(meta.titles[36],'You Are What You Eat—Or Are You?');
  const start=async(id,extra={})=>{const n=typeof id==='number'?id:meta.stages.find(s=>s.id===id).index;await page.evaluate(({key,n,extra})=>{const s=JSON.parse(localStorage.getItem(key)||'{}');sessionStorage.setItem('reading-test-seed',JSON.stringify({...s,sequenceVersion:2,step:n,...extra}));},{key,n,extra});await page.reload();await page.locator('h1').waitFor();};
  const showTask=async()=>{if(await page.locator('.c-mobile-tabs').isVisible())await page.locator('[data-c-pane=task]').click();};
@@ -76,6 +76,6 @@ const key='ielts-reading-day-1-v1';
  // Malformed nested state recovers; denied localStorage never prevents the continuation.
  await start('ev-summary',{continuation:{answers:[],checked:null,panes:[],progress:{'ev-unpack':-9},positions:{bad:'bad'},marked:[]}});await page.locator('[data-c-check]').click();assert(await page.locator('#next').isEnabled());
  const denied=await browser.newContext({viewport:{width:390,height:844}});await denied.addInitScript(()=>Object.defineProperty(window,'localStorage',{get(){throw Error('Blocked')}}));const dp=await denied.newPage();dp.on('pageerror',e=>errors.push(e.message));await dp.goto(base);await dp.locator('#menu summary').click();await dp.locator('[data-jump="22"]').click();for(let i=22;i<36;i++)await dp.locator('#next').click();assert.equal(await dp.locator('h1').innerText(),meta.titles[36]);assert.match(await dp.locator('#storage-note').innerText(),/Saving is unavailable/);
- await page.goto(base+'teacher-control/');assert.equal(await page.locator('section').count(),10);assert.match(await page.locator('#guide').innerText(),/Steps 23–29/i);assert.match(await page.locator('#guide').innerText(),/Steps 30–36/i);
+ await page.goto(base+'teacher-control/');assert.equal(await page.locator('section').count(),12);assert.match(await page.locator('#guide').innerText(),/Steps 23–29/i);assert.match(await page.locator('#guide').innerText(),/Steps 30–36/i);
  assert.deepEqual(errors,[]);assert.deepEqual(failed,[]);await browser.close();console.log('PASS: 14 added stages / 8 complete tasks / 39 keys; 6 viewport widths; one check per set; exact passages; support and vocabulary; duplicates; retrieval equivalents; old/new state, two-pane position recovery, keyboard, no bottlenecks or console errors.');
 })().catch(e=>{console.error(e);process.exit(1)});

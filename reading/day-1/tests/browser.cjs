@@ -14,13 +14,13 @@ const key='ielts-reading-day-1-v1';
  const C=await page.evaluate(async()=>(await import('./content.js')).lesson);
  const O=await page.evaluate(async()=>{const m=await import('./answer-order.js');return {fixed:m.fixedOrders,headings:m.headingOrders,matching:m.matchingOrders}});
  const titles=await page.evaluate(async()=>(await import('./day-1.js')).screens.map(s=>s.title));
- assert.equal(titles.length,41);assert(titles.indexOf('Mohammed from Sohar')<titles.indexOf('The Transformation of Bedouin Life in the Modern Arabian Peninsula'));
+ assert.equal(titles.length,49);assert(titles.indexOf('Mohammed from Sohar')<titles.indexOf('The Transformation of Bedouin Life in the Modern Arabian Peninsula'));
  async function step(n,p=page){await p.evaluate(({key,n})=>{const s=JSON.parse(localStorage.getItem(key)||'{}');s.step=n>=22?n+14:n;s.sequenceVersion=2;s.views={};sessionStorage.setItem('reading-test-seed',JSON.stringify(s))},{key,n});await p.reload();await p.locator('h1').waitFor();}
  async function overflow(){assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),await page.locator('h1').innerText());}
  // Every step can be reached with no answers, including phone-sized layouts.
  for(const width of [1440,1280,768,390,360,320]){
   await page.setViewportSize({width,height:900});await step(0);
-  for(let n=0;n<41;n++){assert.equal(await page.locator('h1').innerText(),titles[n]);await overflow();if(n<40){assert(await page.locator('#next').isEnabled());await page.locator('#next').click();}}
+  for(let n=0;n<49;n++){assert.equal(await page.locator('h1').innerText(),titles[n]);await overflow();if(n<48){assert(await page.locator('#next').isEnabled());await page.locator('#next').click();}}
  }
  await page.setViewportSize({width:1440,height:1000});
  // All source concept/vocabulary questions: wrong answer, source-correct answer, feedback, retry.
@@ -107,13 +107,13 @@ const key='ielts-reading-day-1-v1';
  }
  await page.setViewportSize({width:1440,height:1000});await step(16);await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:'/tmp/reading-desktop.png',fullPage:true});await step(19);await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:'/tmp/reading-nouns.png',fullPage:true});
  // Navigation remains available when crossing the responsive breakpoint.
- await page.setViewportSize({width:390,height:844});assert(!await page.locator('#menu').evaluate(e=>e.open));await page.setViewportSize({width:1440,height:1000});await page.locator('#navigation button').first().waitFor({state:'visible'});
+ await page.setViewportSize({width:390,height:844});await page.waitForFunction(()=>!document.getElementById('menu').open);assert(!await page.locator('#menu').evaluate(e=>e.open));await page.setViewportSize({width:1440,height:1000});await page.locator('#navigation button').first().waitFor({state:'visible'});
  // Keyboard-only interaction and focus after navigation.
  await step(1);await page.locator('[name=q25][value="1"]').focus();await page.keyboard.press('Space');await page.locator('[data-check=q25]').focus();await page.keyboard.press('Enter');assert.match(await page.locator('#feedback-q25').innerText(),/That fits/);await page.locator('#next').focus();await page.keyboard.press('Enter');assert(await page.locator('#main').evaluate(e=>e===document.activeElement));
  // Corrupt and blocked storage must not block a full journey.
- for(const saved of ['broken-json','{"step":-999,"answers":null,"paragraphs":[],"visited":"bad"}','{"step":9999,"answers":{"q25":"bad"},"notes":[],"reveals":null}']){await page.evaluate(({key,saved})=>sessionStorage.setItem('reading-test-seed',saved),{key,saved});await page.reload();assert(await page.locator('h1').isVisible());assert(await page.locator('#navigation button').count()===11);}
- const blocked=await browser.newContext({viewport:{width:390,height:844}});await blocked.addInitScript(()=>{Object.defineProperty(window,'localStorage',{get(){throw new Error('Storage blocked')}})});const bp=await blocked.newPage();bp.on('pageerror',e=>errors.push(e.message));await bp.goto(base);for(let i=0;i<40;i++)await bp.locator('#next').click();assert.equal(await bp.locator('h1').innerText(),titles[40]);assert.match(await bp.locator('#storage-note').innerText(),/Saving is unavailable/);
- await page.goto(base+'teacher-control/');assert.equal(await page.locator('section').count(),10);await overflow();
+ for(const saved of ['broken-json','{"step":-999,"answers":null,"paragraphs":[],"visited":"bad"}','{"step":9999,"answers":{"q25":"bad"},"notes":[],"reveals":null}']){await page.evaluate(({key,saved})=>sessionStorage.setItem('reading-test-seed',saved),{key,saved});await page.reload();assert(await page.locator('h1').isVisible());assert(await page.locator('#navigation button').count()===13);}
+ const blocked=await browser.newContext({viewport:{width:390,height:844}});await blocked.addInitScript(()=>{Object.defineProperty(window,'localStorage',{get(){throw new Error('Storage blocked')}})});const bp=await blocked.newPage();bp.on('pageerror',e=>errors.push(e.message));await bp.goto(base);for(let i=0;i<48;i++)await bp.locator('#next').click();assert.equal(await bp.locator('h1').innerText(),titles[48]);assert.match(await bp.locator('#storage-note').innerText(),/Saving is unavailable/);
+ await page.goto(base+'teacher-control/');assert.equal(await page.locator('section').count(),12);await overflow();
  assert.deepEqual(errors,[]);assert.deepEqual(failures,[]);await browser.close();
- console.log('PASS: 41-step blank progression at six widths; all 32 source questions and heading keys; exact passages; wrong/blank/retry feedback; mobile paragraph comparison; vocabulary; repair tools; fading maps; keyboard; saved/legacy/corrupt/blocked storage; balanced option values, country persistence, true/false and argument keys, matching pools, explicit model access; teacher guide; no runtime/HTTP errors.');
+ console.log('PASS: 49-step blank progression at six widths; all 32 source questions and heading keys; exact passages; wrong/blank/retry feedback; mobile paragraph comparison; vocabulary; repair tools; fading maps; keyboard; saved/legacy/corrupt/blocked storage; balanced option values, country persistence, true/false and argument keys, matching pools, explicit model access; teacher guide; no runtime/HTTP errors.');
 })().catch(e=>{console.error(e);process.exit(1)});

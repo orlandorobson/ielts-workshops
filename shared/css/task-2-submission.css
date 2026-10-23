@@ -1,0 +1,54 @@
+.task-2-submission #submission {
+  width: min(100% - 2rem, 52rem);
+  margin-inline: auto;
+  padding-block: clamp(2rem, 6vw, 4rem);
+}
+
+.submission-introduction,
+#submission-fields > section,
+.commitments {
+  margin-bottom: 2.5rem;
+}
+
+.task-2-submission h1 { max-width: 22ch; }
+.task-2-submission h2 { font-size: clamp(1.4rem, 3vw, 1.8rem); }
+.instructions { padding-left: 1.5rem; }
+.instructions li + li { margin-top: 0.75rem; }
+
+.task-2-submission select,
+.student-details input,
+#actual-minutes {
+  font: inherit;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.65rem;
+  min-height: 2.75rem;
+  max-width: 100%;
+}
+
+.task-2-submission select { width: 100%; }
+.student-details label { display: block; margin-bottom: 0.4rem; }
+.student-details input { display: block; width: 100%; margin-bottom: 1rem; }
+#actual-minutes { width: 7rem; margin-block: 0.25rem; }
+#actual-minutes:disabled { background: var(--surface-quiet); }
+.timing-note { margin-top: 1rem; }
+
+.submission-question {
+  padding: 1.25rem;
+  border-left: 4px solid var(--accent);
+  background: var(--surface);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.15rem;
+}
+.submission-question p:last-child { margin-bottom: 0; font-weight: 700; }
+#word-count { margin: 0.5rem 0 0; }
+#word-guidance { color: var(--muted); }
+#submission-status,
+#submission-confirmation {
+  padding: 1.25rem;
+  background: var(--surface-quiet);
+  border-left: 4px solid var(--accent);
+}
+#submission-status[data-error="true"] { border-color: var(--attention); }

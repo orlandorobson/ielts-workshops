@@ -897,7 +897,7 @@ export const lesson = {
     },
     "215": {
       "id": "q215",
-      "prompt": "Choose the countries in the Arabian Peninsula:",
+      "prompt": "Choose the SIX countries in the Arabian Peninsula.",
       "options": [
         "Saudi Arabia",
         "Yemen",

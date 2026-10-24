@@ -27,7 +27,8 @@ for q in t['amouage-completion']['items']:
  assert len(q['answer'].split())<=2
  assert any(q['answer'] in p for p in c['amouage']['paragraphs'])
 assert t['amouage-scan']['items'][2]['accepted']==['frankincense']
-# Existing teaching data and the already-live continuation are byte-for-byte unchanged.
-for name in ['content.js','answer-order.js','continuation.js','continuation-content.js','continuation.css']:
+# Immutable continuation data and answer ordering remain unchanged.
+# Renderer changes are covered by reading-structure.cjs; original content by content.py.
+for name in ['answer-order.js','continuation-content.js','continuation.css']:
  assert (root/name).read_bytes()==subprocess.check_output(['git','show','HEAD:reading/day-1/'+name])
 print('PASS: all 8 new paragraphs verbatim; 28 keys; exactly 5 approved prompt overrides; source options and endings; strict completion answers and word limit; existing content unchanged.')

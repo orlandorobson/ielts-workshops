@@ -1,0 +1,40 @@
+/* Approved shared Reading workspace; existing pane padding stays intact. */
+body.workspace-prototype{height:100dvh;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.workspace-prototype .topbar{flex:none}
+.workspace-prototype .layout{flex:1;min-height:0;width:100%;display:flex;flex-direction:column}
+.workspace-prototype #main{width:100%;flex:1;min-height:0;display:flex;flex-direction:column}
+.workspace-prototype #app{flex:1;min-height:0;display:flex;flex-direction:column}
+.workspace-prototype .step-nav{flex:none;margin-top:0}
+.reading-workspace{flex:1;min-height:0;display:flex;flex-direction:column}
+.reading-workspace .workspace-controls{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.5rem;flex:none}
+.reading-workspace .workspace-font-controls{display:flex;gap:.4rem;margin-left:auto}
+.reading-workspace .workspace-font-controls button{min-width:46px}
+.reading-workspace .workspace-font-controls button[aria-pressed=true]{background:var(--accent);color:white}
+.reading-workspace .c-mobile-tabs{display:flex;position:static;flex:1;gap:.5rem}
+.reading-workspace .c-mobile-tabs button{flex:1}
+.reading-workspace .c-workbench{flex:1;min-height:0;display:block}
+.reading-workspace .c-workbench>.c-pane{height:100%;min-height:0;max-height:none;overflow-y:auto;overflow-wrap:break-word;overscroll-behavior:contain}
+.reading-workspace .c-workbench[data-c-view=passage]>.c-task-pane{display:none}
+.reading-workspace .c-workbench[data-c-view=task]>.c-passage-pane{display:none}
+.reading-workspace .c-desktop-hint{display:none}
+.reading-workspace .c-phone-hint{display:block}
+.reading-workspace .c-pane .passage{font-size:18px;line-height:1.6;max-width:none}
+.reading-workspace[data-passage-size="16"] .c-pane .passage{font-size:16px;line-height:1.55}
+.reading-workspace[data-passage-size="21"] .c-pane .passage{font-size:21px;line-height:1.65}
+@media(min-width:1024px){
+ .reading-workspace .c-mobile-tabs{display:none}
+ .reading-workspace .c-workbench{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+ .reading-workspace .c-workbench>.c-pane{display:block!important}
+ .reading-workspace .c-desktop-hint{display:block}
+ .reading-workspace .c-phone-hint{display:none}
+}
+@media(min-width:1200px){.reading-workspace .c-workbench{grid-template-columns:minmax(0,55fr) minmax(0,45fr)}}
+@media print{body.workspace-prototype{height:auto;overflow:visible;display:block}.workspace-prototype .layout,.workspace-prototype #main,.workspace-prototype #app,.reading-workspace{display:block}.reading-workspace .workspace-controls{display:none}.reading-workspace .c-workbench>.c-pane{height:auto;overflow:visible;display:block!important}}
+
+.topbar{flex-wrap:wrap;align-items:center}
+.reading-task-navigation{display:flex;align-items:center;gap:.5rem;min-width:0}
+.reading-task-navigation label{white-space:nowrap}
+.reading-task-navigation select{width:clamp(190px,24vw,280px);min-width:0;max-width:100%;font-size:.9rem;padding:.4rem;min-height:46px}
+.reading-workspace .paragraph-task + .paragraph-task{margin-top:2rem}
+.reading-workspace .c-mobile-tabs button[aria-pressed=false]{background:var(--surface);color:var(--accent-dark)}
+@media(max-width:600px){.reading-task-navigation{order:1;width:100%}.reading-task-navigation select{flex:1;width:0}}

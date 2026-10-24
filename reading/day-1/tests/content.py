@@ -19,7 +19,12 @@ for name, headings in c['headings'].items():
         assert f'{chr(65+i)}. {text}' in source, (name, text)
 assert c['keys'] == {'flexible':[1], 'trees':[0], 'llm':[0], 'curitiba':[1,2], 'bedouin':[3,7,0,1], 'food':[1,2,6,4,0]}
 for q in c['questions'].values():
-    start = source.index(q['prompt'])
+    # Exact, separately approved instruction replacement; source snapshot stays verbatim.
+    if q['id']=='q215':
+        assert q['prompt']=='Choose the SIX countries in the Arabian Peninsula.'
+        start=source.index('Choose the countries in the Arabian Peninsula:')
+    else:
+        start = source.index(q['prompt'])
     rows = source[start+1:start+1+len(q['options'])]
     assert q['correct'] == [i for i,t in enumerate(rows) if '✓' in t], q['id']
     assert q['correct'] and len(q['options'])>=2

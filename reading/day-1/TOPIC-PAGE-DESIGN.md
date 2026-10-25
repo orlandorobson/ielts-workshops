@@ -1,5 +1,7 @@
 # Approved direction: Reading topic pages
 
+For the current local consolidation, see the 2026-10-25 update at the end of this note.
+
 Decision record, 2026-10-24. This document records future work; it does not implement the consolidation or the Food prototype.
 
 ## Hierarchy and scope
@@ -116,3 +118,32 @@ Test and review Food before propagating the consolidation model to other topics.
 Retain the implemented 11-item Reading task dropdown as interim navigation, the shared ReadingWorkspace on all 31 passage-dependent screens, and Back/Continue. Do not roll back this working functionality. Preserve Mohammed → Food → Bedouin.
 
 The interim dropdown is not the final navigation design. Future consolidation should reuse the shared workspace rather than remove and rebuild it. Test and publish the current 49-screen implementation; do not consolidate pages during this pass. The next development step remains the consolidated Food topic-page prototype.
+
+## Local structural consolidation — 2026-10-25
+
+This decision supersedes the earlier Food-only prototype next step. The local implementation now consolidates all 49 source screen definitions into the eleven topic destinations above. The dropdown remains interim navigation. It selects topics; Previous topic / Next topic move between them. Introduction is embedded before Flexible Working; reflection follows Digital Football, before Ferrari. There is no separate introduction or reflection destination.
+
+Each topic owns one instance of the existing ReadingWorkspace. Preparation can precede it, related activities coexist vertically inside its questions pane, and synthesis/reflection can follow it. The document scrolls naturally; the workspace is bounded to 80svh (minimum 320px), with independent pane scrolling. No activity completion unlocks a later activity. Existing progressive teaching support remains inside its own activity.
+
+Logical answers retain their original storage identities. Repeated vocabulary controls have activity-specific radio names, feedback IDs and check state; repeated EV summary controls share their answer value while retaining distinct radio groups. Refreshing an activity does not rebuild its siblings or the workspace. Version 4 maps the old zero-based screen location to a topic and retains answers, notes, reveal states and option ordering in the existing storage key.
+
+### Next pass: pedagogical language (documentation only)
+
+The reading texts can be hard, but the pedagogy and structure of the workshop should be crystal clear.
+
+Titles label the learning clearly. Instructions tell the student what to do.
+
+The next pass will simplify titles, instructions, explanations, feedback, paragraph-structure explanations and student-facing terminology. Paragraph feedback should connect directly to actual sentences in the text:
+
+What does this paragraph do?
+
+1. It starts with the common idea.
+   → show the actual sentence(s) doing this job.
+2. Then it gives a problem with that idea.
+   → show the actual sentence(s) doing this job.
+3. Finally, it gives a different explanation.
+   → show the actual sentence(s) doing this job.
+
+Where useful, show the relationship as: common idea → problem → different explanation.
+
+This language work has not been implemented in the structural consolidation. Existing detailed explanations and feedback remain intact.

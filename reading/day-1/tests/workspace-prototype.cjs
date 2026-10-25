@@ -8,7 +8,7 @@ const base=process.env.READING_PREVIEW_URL||'http://localhost:8001/reading/day-1
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
  await page.goto(base);
  const start=async(step=47)=>{await page.evaluate(step=>sessionStorage.setItem('workspace-test-seed',JSON.stringify({sequenceVersion:3,step})),step);await page.reload();await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));};
- const pane=k=>page.locator(`[data-l-scroll="${k}"]`);
+ const pane=k=>page.locator(k==='passage'?'.c-passage-pane':'.c-task-pane');
  const scroll=async(k,n)=>{await pane(k).evaluate((e,n)=>{e.scrollTop=n;e.dispatchEvent(new Event('scroll'))},n);return pane(k).evaluate(e=>e.scrollTop);};
  const pos=k=>pane(k).evaluate(e=>e.scrollTop);
  const near=(a,b)=>assert(Math.abs(a-b)<3,`${a} != ${b}`);
@@ -26,26 +26,25 @@ const base=process.env.READING_PREVIEW_URL||'http://localhost:8001/reading/day-1
    const font=await page.locator('.passage').first().evaluate(e=>[parseFloat(getComputedStyle(e).fontSize),parseFloat(getComputedStyle(e).lineHeight)]);
    assert.equal(font[0],size);near(font[1],line);assert.equal(await page.locator('.c-task-pane label').first().evaluate(e=>getComputedStyle(e).fontSize),uiFont);
    assert.equal(await page.locator('.c-pane:visible').count(),width<1024?1:2);
-   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth&&document.documentElement.scrollHeight<=innerHeight));
+   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
    assert(await page.locator('.c-pane:visible').evaluateAll(es=>es.every(e=>e.scrollWidth<=e.clientWidth+1)));
   }
   const p=await scroll('passage',250);await taskView();const q=await scroll('task',200);
   if(width<1024){await page.locator('[data-workspace-pane=passage]').click();near(await pos('passage'),p);await page.locator('[data-workspace-pane=task]').click();near(await pos('task'),q);}else{near(await pos('passage'),p);await scroll('passage',350);near(await pos('task'),q);}
-  await page.locator('[data-l-check]').click();assert.match(await page.locator('.c-check-notice').innerText(),/Attempt all/);
+  await page.locator('[data-l-check=amouage-completion]').click();assert.match(await page.locator('[data-l-form=amouage-completion] .c-check-notice').innerText(),/Attempt all/);
   for(const [i,item]of task.items.entries())await page.locator(`#amouage-completion-${i}`).fill(item.answer);
-  await page.locator('[data-l-check]').click();assert.match(await page.locator('.c-result-summary').innerText(),/^6 \/ 6/);
-  await page.locator('#amouage-completion-1').fill('identity');await page.locator('[data-l-check]').click();assert.match(await page.locator('.c-result-summary').innerText(),/^5 \/ 6/);
-  await page.reload();await taskView();assert.equal(await page.locator('#amouage-completion-1').inputValue(),'identity');assert.equal(await page.locator('.reading-workspace').getAttribute('data-passage-size'),'21');assert.match(await page.locator('.c-result-summary').innerText(),/^5 \/ 6/);
+  await page.locator('[data-l-check=amouage-completion]').click();assert.match(await page.locator('#results-amouage-completion .c-result-summary').innerText(),/^6 \/ 6/);
+  await page.locator('#amouage-completion-1').fill('identity');await page.locator('[data-l-check=amouage-completion]').click();assert.match(await page.locator('#results-amouage-completion .c-result-summary').innerText(),/^5 \/ 6/);
+  await page.reload();await taskView();assert.equal(await page.locator('#amouage-completion-1').inputValue(),'identity');assert.equal(await page.locator('.reading-workspace').getAttribute('data-passage-size'),'21');assert.match(await page.locator('#results-amouage-completion .c-result-summary').innerText(),/^5 \/ 6/);
   await scroll('task',0);if(width===390||width===844||width===1200)await page.screenshot({path:`/tmp/reading-workspace-${width}.png`});
-  await page.locator('#next').click();assert.equal(await page.locator('.reading-workspace').count(),1);assert.equal(await page.locator('.luxury').getAttribute('data-l-screen'),'amouage-endings');await page.locator('#back').click();assert.equal(await page.locator('.reading-workspace').getAttribute('data-passage-size'),'21');
+  assert(await page.locator('#next').isHidden());await page.locator('#back').click();await page.locator('#next').click();assert.equal(await page.locator('.reading-workspace').getAttribute('data-passage-size'),'21');
   console.log('PASS',width,height,JSON.stringify(geometry));
  }
  // Exercise both boundary transitions with answers and independent positions retained.
  await page.setViewportSize({width:1023,height:800});await start();const p=await scroll('passage',300);await taskView();await scroll('task',200);await page.locator('#amouage-completion-0').fill('discerning clientele');
  for(const width of [1024,1023,1024,1199,1200,1199,1200]){await page.setViewportSize({width,height:800});await page.waitForTimeout(180);assert.equal(await page.locator('.c-pane:visible').count(),width<1024?1:2);assert.equal(await page.locator('#amouage-completion-0').inputValue(),'discerning clientele');if(width===1024)near(await pos('passage'),p);}
- // Back/Continue traverse all 49 steps and preserve the underlying visited state.
- const workspaceSteps=[3,5,8,10,11,13,15,16,17,21,22,25,28,29,30,31,32,33,35,36,37,38,39,40,42,43,45,46,47,48,49];
- await start(0);for(let i=0;i<49;i++){assert.equal(await page.locator('.reading-workspace').count(),workspaceSteps.includes(i+1)?1:0);if(i<48)await page.locator('#next').click();}assert.equal(await page.evaluate(()=>new Set(JSON.parse(localStorage.getItem('ielts-reading-day-1-v2')).visited).size),49);
- const blocked=await browser.newContext();await blocked.addInitScript(()=>{for(const k of ['localStorage','sessionStorage'])Object.defineProperty(window,k,{get(){throw Error('Blocked')}})});const bp=await blocked.newPage();bp.on('pageerror',e=>errors.push(e.message));await bp.goto(base);for(let i=0;i<47;i++)await bp.locator('#next').click();await bp.locator('button[data-passage-size="21"]').click();await bp.locator('#next').click();await bp.locator('#back').click();assert.equal(await bp.locator('.reading-workspace').getAttribute('data-passage-size'),'21');
- assert.deepEqual(errors,[]);await browser.close();console.log('PASS: all benchmarks, three sizes, checking, saved answers, scroll restoration, boundaries, all 49 steps, blocked storage, no console/runtime errors');
+ // Topic-level navigation preserves visited state.
+ await start(0);for(let i=0;i<11;i++){assert.equal(await page.locator('.reading-workspace').count(),1);if(i<10)await page.locator('#next').click();}assert.equal(await page.evaluate(()=>new Set(JSON.parse(localStorage.getItem('ielts-reading-day-1-v2')).visited).size),11);
+ const blocked=await browser.newContext();await blocked.addInitScript(()=>{for(const k of ['localStorage','sessionStorage'])Object.defineProperty(window,k,{get(){throw Error('Blocked')}})});const bp=await blocked.newPage();bp.on('pageerror',e=>errors.push(e.message));await bp.goto(base);for(let i=0;i<9;i++)await bp.locator('#next').click();await bp.locator('button[data-passage-size="21"]').click();await bp.locator('#next').click();await bp.locator('#back').click();assert.equal(await bp.locator('.reading-workspace').getAttribute('data-passage-size'),'21');
+ assert.deepEqual(errors,[]);await browser.close();console.log('PASS: all benchmarks, three sizes, checking, saved answers, scroll restoration, boundaries, all 11 topics, blocked storage, no console/runtime errors');
 })().catch(e=>{console.error(e);process.exit(1)});

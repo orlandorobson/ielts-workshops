@@ -1,11 +1,8 @@
 /* Approved shared Reading workspace; existing pane padding stays intact. */
-body.workspace-prototype{height:100dvh;min-height:0;display:flex;flex-direction:column;overflow:hidden}
-.workspace-prototype .topbar{flex:none}
-.workspace-prototype .layout{flex:1;min-height:0;width:100%;display:flex;flex-direction:column}
-.workspace-prototype #main{width:100%;flex:1;min-height:0;display:flex;flex-direction:column}
-.workspace-prototype #app{flex:1;min-height:0;display:flex;flex-direction:column}
-.workspace-prototype .step-nav{flex:none;margin-top:0}
-.reading-workspace{flex:1;min-height:0;display:flex;flex-direction:column}
+/* The topic scrolls as a document; only its shared passage/activity region is bounded. */
+.workspace-prototype #main{width:100%}
+.reading-workspace{height:80svh;min-height:320px;display:flex;flex-direction:column;margin-block:2rem}
+.topic-activity + .topic-activity{margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid var(--line)}
 .reading-workspace .workspace-controls{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.5rem;flex:none}
 .reading-workspace .workspace-font-controls{display:flex;gap:.4rem;margin-left:auto}
 .reading-workspace .workspace-font-controls button{min-width:46px}

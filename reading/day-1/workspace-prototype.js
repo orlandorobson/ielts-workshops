@@ -1,7 +1,7 @@
 // Shared behaviour for the approved Reading workspace; teaching data stays in its renderer.
 const FONT_KEY='ielts-reading-workspace-passage-size';
 const sizes=[16,18,21];
-let size=18,heading=null,app,save,S,timer;
+let size=18,app,save,S,timer;
 try{const saved=Number(sessionStorage.getItem(FONT_KEY));if(sizes.includes(saved))size=saved;}catch{}
 const identity=root=>root?.dataset.readingScreen||root?.dataset.cScreen||root?.dataset.lScreen;
 const panes=root=>root.querySelectorAll('.c-workbench > .c-pane');
@@ -33,13 +33,9 @@ export function rememberWorkspace(){
 export function syncWorkspace(root){
  const active=!!root?.querySelector('.c-workbench');
  document.body.classList.toggle('workspace-prototype',active);
- if(!active){heading=null;return;}
+ if(!active)return;
  if(root.classList.contains('reading-workspace'))return;
  root.classList.add('reading-workspace');root.dataset.passageSize=String(size);
- const title=app.querySelector(':scope > h1'),eyebrow=app.querySelector(':scope > .eyebrow');
- if(title){heading=document.createElement('div');heading.className='workspace-heading';if(eyebrow)heading.append(eyebrow);heading.append(title);}
- // Keep the existing title in the scrollable questions area, including after checking.
- const task=root.querySelector('.c-task-pane');if(heading)task.prepend(heading);
  const passage=root.querySelector('.c-passage-pane');
  root.querySelectorAll(':scope > .c-desktop-hint, :scope > .c-phone-hint').forEach(h=>passage.insertBefore(h,passage.firstChild));
  const controls=document.createElement('div');controls.className='workspace-controls';

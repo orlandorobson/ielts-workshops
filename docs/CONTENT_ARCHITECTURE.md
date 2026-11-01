@@ -1489,18 +1489,20 @@ Do not simply make self-study longer.
 
 Each additional branch should answer a plausible learner need.
 
-## Optional post-core Academic workspace
+## IELTS Academic Writing Task 1 workshop endpoint
 
-After the complete Brookfield core route, provide a clearly secondary **More practice** workspace. It must not delay or invalidate core completion, and it should be reachable through one high-level optional route rather than placing every practice activity in the main navigation.
+The complete workshop route ends at **Details**. It does not continue into a
+separate More Practice curriculum section. Details contains compact,
+independent production for numerical data, maps and processes before a
+quiet completion state.
 
-Reuse the existing canonical visual set:
+The wider learning flow is:
 
-- bar chart, pie chart and table: inspect the task, write an introduction, write an overview, make a grouping plan, and write at least one detail paragraph;
-- maps and process: inspect the task, write an introduction and write an overview only at this stage.
+**WORKSHOP → AUTHENTIC WRITING → SUBMISSION → FEEDBACK → TARGETED RETURN**
 
-The workspace should use reduced scaffolding while retaining optional progressive help and task-specific AI feedback for genuine free writing. Examples must remain hidden until the learner has attempted the relevant writing or plan. Choice, writing, revision, help level and the current step should persist independently for each visual.
-
-No Brookfield facts, expectations or language should leak into these new contexts. AI prompts and teaching examples must derive from the selected canonical visual. Maps and processes will later receive full detail-writing branches; the initial optional workspace does not pretend that introduction-and-overview practice completes those teaching sequences.
+Old More Practice storage may be retained as non-rendered legacy state so
+that learner writing is not destructively deleted. Old practice hashes
+should resolve to Details rather than becoming dead routes.
 
 
 # 32. AI Feedback and Revision

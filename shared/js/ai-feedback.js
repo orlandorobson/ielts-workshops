@@ -27,28 +27,29 @@ function formatSeriesContext(data) {
 
 export function formatAcademicVisualContext(visual) {
   const data = visual.data;
+  const kind = data.kind || visual.visualKind;
   let information;
 
-  if (data.kind === "line") {
+  if (kind === "line") {
     information = `Unit: ${data.unit}\n${formatSeriesContext(data)}`;
-  } else if (data.kind === "bar") {
-    information = `Unit: ${data.unit}\n${data.series
+  } else if (kind === "bar") {
+    information = `Unit: ${data.unit || visual.axisLabel}\n${data.series
       .map((series) => `${series.label}: ${data.categories.map((category, index) => `${category}=${series.values[index]}`).join(", ")}`)
       .join("\n")}`;
-  } else if (data.kind === "pie") {
-    information = `Unit: ${data.unit}\n${data.periods
+  } else if (kind === "pie") {
+    information = `${data.unit ? `Unit: ${data.unit}\n` : ""}${data.periods
       .map((period) => `${period.label}: ${data.categories.map((category, index) => `${category}=${period.values[index]}%`).join(", ")}`)
       .join("\n")}`;
-  } else if (data.kind === "table") {
-    information = `${data.unit}\n${data.columns.join(" | ")}\n${data.rows.map((row) => row.join(" | ")).join("\n")}`;
-  } else if (data.kind === "maps") {
+  } else if (kind === "table") {
+    information = `${data.unit ? `${data.unit}\n` : ""}${data.columns.join(" | ")}\n${data.rows.map((row) => row.join(" | ")).join("\n")}${data.note ? `\nNote: ${data.note}` : ""}`;
+  } else if (kind === "maps") {
     information = data.periods
       .map((period) => `${period.label}: west=${period.west}; east=${period.east}; centre=${period.centre}; unchanged=${period.fixed}`)
       .join("\n");
-  } else if (data.kind === "process") {
+  } else if (kind === "process") {
     information = `Stages in order: ${data.stages.map((stage, index) => `${index + 1}. ${stage}`).join(" → ")}`;
   } else {
-    throw new Error(`Unsupported Academic visual kind: ${data.kind}`);
+    throw new Error(`Unsupported Academic visual kind: ${kind}`);
   }
 
   return `IELTS task: Academic Writing Task 1\nVisual form: ${visual.label}\nTask statement: ${visual.taskStatement}\nTask instruction: ${visual.taskInstruction}\nVisual information:\n${information}`;

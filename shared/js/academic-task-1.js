@@ -393,6 +393,7 @@ function renderA0(unit) {
             <p>${selectedTask.taskStatement}</p>
           </div>
           <div class="explorer-visual-host" data-explorer-task="${selectedTask.id}"></div>
+          <p><a class="primary-button" href="../../task-2/submit/?task=academic-task-1&amp;question=${selectedTask.id}">Submit an answer to this task</a></p>
           <div class="visual-orientation">
             <section>
               <h3>What does this show?</h3>
@@ -2210,7 +2211,7 @@ function renderD1(unit) {
     <div class="completion-note details-completion"><h2>Academic Task 1 ✓</h2><p>You can now plan and write an Academic Task 1 response.</p></div>
     <nav class="unit-navigation" aria-label="Learning-unit navigation">
       <button class="secondary-button" type="button" data-nav="c1">Back to Overview</button>
-      <!-- Add the verified Academic Task 1 submission action here when its destination exists. -->
+      <a class="primary-button" href="../../task-2/submit/?task=academic-task-1&amp;question=${source.write.taskId}">Submit a complete Academic Task 1 answer</a>
     </nav>
   </article>`;
 

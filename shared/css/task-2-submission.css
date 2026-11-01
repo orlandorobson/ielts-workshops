@@ -52,3 +52,18 @@
   border-left: 4px solid var(--accent);
 }
 #submission-status[data-error="true"] { border-color: var(--attention); }
+
+.task-tabs { display: flex; gap: .5rem; margin-bottom: 2rem; }
+.task-tabs button { flex: 1; padding: .8rem; min-height: 3rem; border: 2px solid var(--line); border-radius: var(--radius); background: var(--surface); color: var(--ink); font: inherit; cursor: pointer; }
+.task-tabs [aria-selected="true"] { border-color: var(--accent); font-weight: 700; box-shadow: inset 0 -4px var(--accent); }
+.task-tabs button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.submission-question p { white-space: pre-line; }
+.submission-question .explorer-visual-host { font-family: var(--font-body, sans-serif); font-size: 1rem; margin-top: 1.5rem; }
+.submission-question .explorer-visual-host svg { width: 100%; height: auto; }
+@media (max-width: 480px) {
+  .task-tabs { gap: .25rem; }
+  .task-tabs button { padding: .6rem .25rem; font-size: .9rem; }
+  .submission-question { padding: .75rem; }
+  .submission-question .explorer-visual-host { overflow-x: auto; }
+  .submission-question .explorer-visual-host > * { min-width: 620px; }
+}

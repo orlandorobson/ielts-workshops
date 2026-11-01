@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Submit your IELTS Writing Task 2 response for detailed practice feedback." />
-    <title>IELTS Writing Task 2 Feedback — IELTS Workshops</title>
+    <meta name="description" content="Submit your IELTS Writing response for detailed practice feedback." />
+    <title>IELTS Writing Submissions Portal — IELTS Workshops</title>
     <link rel="stylesheet" href="../../../shared/css/base.css" />
     <link rel="stylesheet" href="../../../shared/css/workshop.css" />
     <link rel="stylesheet" href="../../../shared/css/task-2-submission.css" />
@@ -12,17 +12,23 @@
   <body class="task-2-submission">
     <a class="skip-link" href="#submission">Skip to the submission form</a>
     <header class="site-header">
-      <a class="site-name" href="../"><span>IELTS Workshops</span><small>Writing Task 2</small></a>
+      <a class="site-name" href="../"><span>IELTS Workshops</span><small>Writing submissions</small></a>
     </header>
     <main id="submission" tabindex="-1">
       <header class="submission-introduction">
-        <h1>IELTS Writing Task 2 Feedback</h1>
-        <p class="lead">Get detailed feedback on your IELTS Writing Task 2 response, including an estimated IELTS level, important corrections, recurring problems and practical advice to help you improve.</p>
+        <h1>IELTS Writing Submissions Portal</h1>
+        <p class="lead">Get detailed feedback on your IELTS Writing response, including an estimated IELTS level, important corrections, recurring problems and practical advice to help you improve.</p>
       </header>
       <noscript><p>This submission form needs JavaScript enabled to display your selected question and confirm submission.</p></noscript>
-      <form id="submission-form" name="IELTS Writing Task 2 Feedback" action="https://formspree.io/f/maeewrvy" method="POST">
+      <div class="task-tabs" role="tablist" aria-label="Writing task">
+        <button id="tab-academic-task-1" type="button" role="tab" aria-controls="writing-panel" aria-selected="false" tabindex="-1" data-task="academic-task-1">Academic Task 1</button>
+        <button id="tab-general-task-1" type="button" role="tab" aria-controls="writing-panel" aria-selected="false" tabindex="-1" data-task="general-task-1">General Training Task 1</button>
+        <button id="tab-task-2" type="button" role="tab" aria-controls="writing-panel" aria-selected="true" data-task="task-2">Task 2</button>
+      </div>
+      <div id="writing-panel" role="tabpanel" aria-labelledby="tab-task-2">
+      <form id="submission-form" name="IELTS Writing Submissions Portal" action="https://formspree.io/f/maeewrvy" method="POST">
         <fieldset id="submission-fields" disabled>
-          <legend class="visually-hidden">IELTS Writing Task 2 Feedback submission</legend>
+          <legend class="visually-hidden">IELTS Writing Submissions Portal submission</legend>
           <section>
             <h2>Before you start</h2>
             <p>This premium service is currently available only to current and recent IELTS preparation students at <strong>Polyglot Salalah</strong>.</p>
@@ -37,27 +43,27 @@
           <fieldset class="choice-list commitments">
             <legend class="visually-hidden">Commitments before writing</legend>
             <label class="choice"><input type="checkbox" name="independent_writing_confirmed" value="Confirmed" required /><span><strong>I will write this answer myself without using AI, help from another person, spell checkers, grammar checkers or other correction tools.</strong></span></label>
-            <label class="choice"><input type="checkbox" name="forty_minute_attempt_confirmed" value="Confirmed" required /><span><strong>I will do my best to complete the task within 40 minutes.</strong></span></label>
+            <label class="choice"><input type="checkbox" id="time-commitment" name="forty_minute_attempt_confirmed" value="Confirmed" required /><span><strong>I will do my best to complete the task within <span data-time-limit>40</span> minutes.</strong></span></label>
           </fieldset>
           <section>
             <h2>How to complete your writing</h2>
             <ol class="instructions">
               <li><strong>Choose a question</strong> by clicking on it in the question menu.</li>
               <li>You can write your answer directly in the box below, or write it in a document on your computer and then <strong>copy and paste your answer into the box</strong>.</li>
-              <li><strong>Start a 40-minute timer on your phone as soon as you start writing.</strong> Try to finish within 40 minutes. Don't worry if you go over the time — this will help you develop a better sense of the time available in the IELTS test.</li>
-              <li>Write at least <strong>250 words</strong>.</li>
+              <li><strong>Start a <span data-time-limit>40</span>-minute timer on your phone as soon as you start writing.</strong> Try to finish within <span data-time-limit>40</span> minutes. Don't worry if you go over the time — this will help you develop a better sense of the time available in the IELTS test.</li>
+              <li>Write at least <strong><span data-min-words>250</span> words</strong>.</li>
             </ol>
           </section>
           <section>
-            <h2><label for="question-id">Choose your Task 2 question</label></h2>
+            <h2><label for="question-id">Choose your <span id="task-label">Task 2</span> question</label></h2>
             <select id="question-id" name="question_id" required><option value="">Choose a question</option></select>
           </section>
-          <section id="selected-question" class="submission-question" aria-label="Selected Task 2 question" aria-live="polite" hidden></section>
+          <section id="selected-question" class="submission-question" aria-label="Selected writing question" aria-live="polite" hidden></section>
           <section class="answer-section">
             <h2><label for="student-response">Your answer</label></h2>
             <textarea id="student-response" class="writing-area" name="student_response" rows="18" spellcheck="false" autocorrect="off" autocomplete="off" aria-describedby="word-count word-guidance" required></textarea>
-            <p id="word-count">Word count: <strong id="count">0</strong> / 250</p>
-            <p id="word-guidance"><em>You must write at least 250 words.</em></p>
+            <p id="word-count">Word count: <strong id="count">0</strong> / <span data-min-words>250</span></p>
+            <p id="word-guidance"><em>You must write at least <span data-min-words>250</span> words.</em></p>
           </section>
           <section class="student-details">
             <h2>Your details</h2>
@@ -72,18 +78,23 @@
             <p>Please tell us what actually happened:</p>
             <fieldset class="choice-list">
               <legend class="visually-hidden">Actual completion time</legend>
-              <label class="choice"><input type="radio" name="completion_time_status" value="Within 40 minutes" required /><span><strong>I finished within 40 minutes.</strong></span></label>
+              <label class="choice"><input type="radio" name="completion_time_status" id="within-time" value="Within 40 minutes" required /><span><strong>I finished within <span data-time-limit>40</span> minutes.</strong></span></label>
               <div class="choice time-choice">
                 <input id="over-time" type="radio" name="completion_time_status" value="Longer than 40 minutes" required />
-                <span><label for="over-time"><strong>It took me longer than 40 minutes.</strong></label> <label for="actual-minutes"><strong>I finished in</strong></label> <input id="actual-minutes" name="actual_minutes" type="number" step="any" aria-label="Actual completion time in minutes" disabled /> <strong>minutes.</strong></span>
+                <span><label for="over-time"><strong>It took me longer than <span data-time-limit>40</span> minutes.</strong></label> <label for="actual-minutes"><strong>I finished in</strong></label> <input id="actual-minutes" name="actual_minutes" type="number" step="any" aria-label="Actual completion time in minutes" disabled /> <strong>minutes.</strong></span>
               </div>
             </fieldset>
-            <p class="timing-note">You can still submit your writing if you took longer than 40 minutes or wrote fewer than 250 words. This will be considered as part of your feedback and can help identify practical ways to improve.</p>
+            <p class="timing-note">You can still submit your writing if you took longer than <span data-time-limit>40</span> minutes or wrote fewer than <span data-min-words>250</span> words. This will be considered as part of your feedback and can help identify practical ways to improve.</p>
           </section>
           <section>
             <h2>Before you submit</h2>
             <p>Check that your complete answer is in the writing box and that your contact details are correct.</p>
             <p>Once you submit your writing, <strong>you cannot change your answer</strong>.</p>
+            <input type="hidden" name="task_type" />
+            <input type="hidden" name="expected_minutes" />
+            <input type="hidden" name="time_limit_exceeded" />
+            <input type="hidden" name="overrun_minutes" />
+            <input type="hidden" name="question_visual_data" />
             <input type="hidden" name="question_title" />
             <input type="hidden" name="question_text" />
             <input type="hidden" name="word_count" />
@@ -92,16 +103,18 @@
           </section>
         </fieldset>
       </form>
+      </div>
+      <p id="draft-status" role="status"></p>
       <p id="submission-status" role="status" tabindex="-1" hidden></p>
       <section id="submission-confirmation" tabindex="-1" hidden>
         <h2>Your writing has been submitted</h2>
-        <p>Thank you. Your IELTS Writing Task 2 response has been received.</p>
+        <p>Thank you. Your IELTS Writing response has been received.</p>
         <p>Your writing will be reviewed and your feedback will be sent to the WhatsApp number you provided.</p>
         <p>Your feedback will include an estimated IELTS level, important corrections, recurring language problems and practical advice to help you improve.</p>
         <p>This is practice feedback and is <strong>not an official IELTS result</strong>.</p>
       </section>
     </main>
-    <footer class="site-footer"><p>IELTS Workshops · Writing Task 2 Feedback</p></footer>
+    <footer class="site-footer"><p>IELTS Workshops · IELTS Writing Submissions Portal</p></footer>
     <script type="module" src="../../../shared/js/task-2-submission.js"></script>
   </body>
 </html>

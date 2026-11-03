@@ -1,0 +1,10 @@
+.conclusion-stage { margin:2.5rem 0; scroll-margin-top:1rem; }
+.conclusion-stage h3 { font-size:1.45rem; }
+.conclusion-stage .intro-demonstration { margin:1.5rem 0; }
+.conclusion-vote { margin:1.7rem 0; }
+.conclusion-feedback:not(:empty) { border-left:3px solid var(--accent); padding:.6rem .9rem; margin:1rem 0; }
+.conclusion-writing-layout { display:grid; grid-template-columns:minmax(0,.85fr) minmax(0,1.4fr); gap:1.5rem; }
+.conclusion-reminder { border-left:3px solid var(--accent); padding-left:1rem; }
+.conclusion-stage label { display:block; margin-bottom:.5rem; }
+#conclusion { min-height:12rem; }
+@media(max-width:650px) { .conclusion-writing-layout { grid-template-columns:1fr; } }

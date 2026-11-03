@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {paragraphContent} from '../content/writing/task-2-paragraphs.js';
+import {mergeContinuousChanges} from '../shared/js/task-2-continuous-storage.js';
+const models=readFileSync(new URL('../content/writing/task-2-canonical/task-2-complete-learner-model-bank.md',import.meta.url),'utf8');
+assert(models.includes(paragraphContent.provenance['WT2-P-VOTE-02'].unchangedSentence));
+const original={paragraph1:'Earlier first paragraph',paragraph2:'Earlier second paragraph',introduction:'Newer introduction',history:{legacy:'Original record'}};
+const current={...original,paragraph1:'Local edit',paragraph2:'Stale second paragraph',introduction:'Stale introduction'};
+let merged=mergeContinuousChanges(current,original,new Set(['paragraph1']),original.introduction,{paragraph1:original.paragraph1});
+assert.equal(merged.paragraph1,'Local edit');assert.equal(merged.paragraph2,original.paragraph2);assert.equal(merged.introduction,original.introduction);assert.equal(merged.paragraph1History,undefined);
+merged=mergeContinuousChanges(current,{...original,paragraph1:'Edit in another screen'},new Set(['paragraph1']),original.introduction,{paragraph1:original.paragraph1});
+assert.equal(merged.paragraph1,'Local edit');assert.equal(merged.paragraph1History[0].text,'Edit in another screen');assert.deepEqual(merged.history,original.history);
+merged=mergeContinuousChanges({...current,paragraph2:'New second paragraph'},original,new Set(['paragraph2']),original.introduction,{paragraph2:'Older baseline'});
+assert.equal(merged.paragraph1,original.paragraph1);assert.equal(merged.paragraph2History[0].text,original.paragraph2);
+console.log('PASS: preserved fictional-model sentence, independent paragraph saves, newer introduction/other paragraph preserved, conflicting paragraph versions retained.');

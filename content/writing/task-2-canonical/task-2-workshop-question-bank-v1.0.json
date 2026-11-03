@@ -1,0 +1,87 @@
+{
+  "bank_id": "ielts-task-2-workshop",
+  "version": "1.0",
+  "review_date": "2026-11-02",
+  "status": "user_approved_wording_frozen_for_initial_development_and_pilot",
+  "official_ielts_approval": false,
+  "instructions": {
+    "recommended_minutes": 40,
+    "minimum_words": 250,
+    "support": "Support your answer with reasons and relevant examples, drawing on what you know or have experienced. Write a connected essay in full sentences."
+  },
+  "questions": [
+    {
+      "id": "WT2-W01",
+      "title": "Agreement: public-library spending",
+      "version": "1.0",
+      "status": "user_approved_editorial_pass_for_pilot",
+      "role": "core",
+      "prompt": "Some people believe that public libraries should spend more money on printed books than on digital resources.\n\nTo what extent do you agree or disagree?"
+    },
+    {
+      "id": "WT2-W02",
+      "title": "Both views and opinion: public parks",
+      "version": "1.0",
+      "status": "user_approved_editorial_pass_for_pilot",
+      "role": "core",
+      "prompt": "Some people think public parks should mainly provide quiet natural spaces, while others think they should include more sports facilities.\n\nDiscuss both views and give your own opinion."
+    },
+    {
+      "id": "WT2-W03",
+      "title": "Advantages and disadvantages: cashless payments",
+      "version": "1.0",
+      "status": "user_approved_editorial_pass_for_pilot",
+      "role": "core",
+      "prompt": "In some countries, people are increasingly using cards and mobile phones instead of cash to pay for goods and services.\n\nWhat are the advantages and disadvantages of this development?"
+    },
+    {
+      "id": "WT2-W04",
+      "title": "Outweigh judgement: free museum entry",
+      "version": "1.0",
+      "status": "user_approved_editorial_pass_for_pilot",
+      "role": "core",
+      "prompt": "Some museums allow visitors to enter free of charge rather than charging an admission fee.\n\nDo the advantages of this approach outweigh the disadvantages?"
+    },
+    {
+      "id": "WT2-W05",
+      "title": "Problems and solutions: tourism in small communities",
+      "version": "1.0",
+      "status": "user_approved_editorial_pass_for_pilot",
+      "role": "core",
+      "prompt": "Large numbers of tourists visit some small towns and villages.\n\nWhat problems can this cause for local residents, and what measures could be taken to address these problems?"
+    },
+    {
+      "id": "WT2-W06",
+      "title": "Mixed reasons and evaluation: adult online courses",
+      "version": "1.0",
+      "status": "user_approved_editorial_pass_for_pilot",
+      "role": "core",
+      "prompt": "More adults are choosing to study courses online instead of attending classes in person.\n\nWhy is this happening? Is this a positive or negative development?"
+    },
+    {
+      "id": "WT2-W07",
+      "title": "Causes and solutions: city noise",
+      "version": "1.0",
+      "status": "user_approved_editorial_pass_for_pilot",
+      "role": "additional_variant",
+      "prompt": "Many people living in cities experience high levels of noise in their daily lives.\n\nWhat are the main causes of this problem, and what could be done to reduce it?"
+    },
+    {
+      "id": "WT2-W08",
+      "title": "Causes and effects: shared family meals",
+      "version": "1.0",
+      "status": "user_approved_editorial_pass_for_pilot",
+      "role": "additional_variant",
+      "prompt": "In many countries, family members are eating meals together less often than in the past.\n\nWhy is this happening, and what effects can it have on family life?"
+    },
+    {
+      "id": "WT2-W09",
+      "title": "Positive or negative development: online performances",
+      "version": "1.0",
+      "status": "user_approved_editorial_pass_for_pilot",
+      "role": "additional_variant",
+      "prompt": "An increasing number of people choose to watch concerts and plays online rather than attend performances in person.\n\nIs this a positive or negative development?"
+    }
+  ],
+  "approval_date": "2026-11-02"
+}

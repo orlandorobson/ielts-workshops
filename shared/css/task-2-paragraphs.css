@@ -1,0 +1,11 @@
+.paragraph-stage { margin:2.5rem 0; scroll-margin-top:1rem; }
+.paragraph-stage h3 { font-size:1.45rem; }
+.paragraph-example { max-width:70ch; padding-left:1rem; border-left:3px solid var(--accent); }
+.paragraph-judgement { margin:1.5rem 0; }
+.paragraph-feedback:not(:empty) { border-left:3px solid var(--accent); padding:.6rem .9rem; margin:1rem 0; }
+.paragraph-writing-layout { display:grid; grid-template-columns:minmax(0,.85fr) minmax(0,1.4fr); gap:1.5rem; }
+.paragraph-plan-reminder { border-left:3px solid var(--accent); padding-left:1rem; }
+.paragraph-stage label { display:block; margin-bottom:.5rem; }
+#paragraph1,#paragraph2 { min-height:16rem; }
+#paragraph-spicy summary { gap:.7rem; }
+@media(max-width:650px) { .paragraph-writing-layout { grid-template-columns:1fr; } }

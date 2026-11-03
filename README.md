@@ -6,9 +6,9 @@ The Academic Writing Task 1 workshop at `writing/task-1/academic/` covers visual
 
 The General Training Writing Task 1 core workshop at `writing/task-1/general/` develops communication literacy through WHO / WHY / WHAT, tone, bullet-point development, opening/body/closing writing, complete-letter construction, BTP self-checking, diagnosis and revision.
 
-The shared Academic and General Training Writing Task 2 v0.1 workshop at `writing/task-2/` takes learners through understanding the question, building reasoning, organising and writing a complete essay, diagnosing and revising it, and transferring the process to a fresh question.
+The shared Academic and General Training Writing Task 2 workshop at `writing/task-2/` follows one continuous sequence: understand the question, plan the structure, write an introduction, develop both main paragraphs and finish with a conclusion. Learners carry the canonical adult online-courses question through short Cool/Spicy/Splat activities and saved writing, with optional support and no completion gates. The workshop ends after conclusion writing.
 
-Genuine free-writing stages provide optional, stage-specific prompts that learners can copy into an external AI chatbot before returning to revise their own saved writing. The site does not send learner writing or call an AI service.
+Task 2 writing and activity choices save on the learner’s device. Learners can download readable writing or a full recovery backup; original drafts from earlier workshops remain recoverable. Core activities do not send learner writing or call an AI service. Other writing workshops also offer optional prompts for use with an external AI chatbot.
 
 To preview it locally from the repository root, start any simple static server, for example:
 

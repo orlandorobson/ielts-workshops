@@ -24,7 +24,7 @@ For the recommended paragraph shape:
 
 > A useful way to build a paragraph is to start with its main point, explain it, and add support. Finish when the point is clear. Sometimes one last sentence helps; sometimes the paragraph is already finished.
 
-Teacher-facing distinction: IELTS assesses relevant task response, development, organisation and language. It does not prescribe our named three-part paragraph formula, exactly two body paragraphs, a fixed sentence count or a separate closure sentence. These are useful teaching options, not additional assessment rules. Paragraphing and logical organisation themselves do matter: do not imply that all structure is optional. Reference: [official Task 2 descriptors](https://ielts.org/cdn/ielts-guides/ielts-writing-band-descriptors.pdf).
+Teacher-facing distinction: IELTS assesses relevant task response, development, organisation and language. It does not prescribe our named three-part paragraph formula, exactly two paragraphs, a fixed sentence count or a separate closure sentence. These are useful teaching options, not additional assessment rules. Paragraphing and logical organisation themselves do matter: do not imply that all structure is optional. Reference: [official Task 2 descriptors](https://ielts.org/cdn/ielts-guides/ielts-writing-band-descriptors.pdf).
 
 Students should learn by noticing, making a small decision and writing. They should not have to memorise the terminology or complete an exhaustive planning method before they can begin.
 
@@ -98,7 +98,7 @@ For WT2-W06 provide only:
 - **Paragraph 2 — Positive or negative?** Short idea notes.
 - **My view:** positive / negative / mixed, with an optional few words explaining it.
 
-The view field appears only when relevant to the demand. Two body groups are the recommended default, not a rigid content limit. Learners can edit the groups or change their mind while writing. Do not require a topic sentence, explanation, example, closure and reflection for each group at the planning stage.
+The view field appears only when relevant to the demand. Two paragraph groups are the recommended default, not a rigid content limit. Learners can edit the groups or change their mind while writing. Do not require a topic sentence, explanation, example, closure and reflection for each group at the planning stage.
 
 No long plan assessment, ranking exercise, compulsory justification, word minimum or completion gate. If someone is stuck, offer two possible idea fragments and a hint, not a full essay plan by default.
 
@@ -147,8 +147,8 @@ Introduce “topic sentence,” “development” and “closure” as optional 
 1. Read one short Cool paragraph and notice what each part contributes. Include a paragraph that ends successfully without an extra closure sentence.
 2. Judge a small number of contrasting paragraphs or fragments. Explain the specific Splat and compare a local Cool repair.
 3. Try one repair. Preserve the writer's idea; do not replace it with a new expert argument.
-4. Write the learner's first body paragraph with the question and short plan available.
-5. Use the same process for the second body paragraph with less repeated instruction. Both body contributions belong in the complete-essay journey; they are not permanently optional merely because one is practised in detail first.
+4. Write the learner's first paragraph with the question and short plan available.
+5. Use the same process for the second paragraph with less repeated instruction. Both paragraph contributions belong in the complete-essay journey; they are not permanently optional merely because one is practised in detail first.
 6. Offer an optional Spicy comparison or another attempt. Useful spice is a clearer relationship, qualification or precise example, not difficult vocabulary for its own sake.
 
 ### Student-grounded Splat library
@@ -189,15 +189,15 @@ For agreement, discussion-and-opinion, outweigh or positive/negative tasks, ensu
 ### Teaching sequence
 
 1. Compare a small set of endings: Cool synthesis, a workable but mechanical restatement, and a Splat that changes position or starts a new main argument.
-2. Connect an ending to the actual body points, not just to the topic.
+2. Connect an ending to the actual paragraph points, not just to the topic.
 3. Try a brief restatement or synthesis using the learner's own paragraph notes.
-4. When relevant, check that the conclusion's judgement matches the introduction and body. Then write the short conclusion in the answer.
+4. When relevant, check that the conclusion's judgement matches the introduction and paragraphs. Then write the short conclusion in the answer.
 
 A mechanical restatement can be acceptable; do not classify it as Splat solely for lacking elegance. “In conclusion” is a useful option, not a required phrase. Do not prescribe an exact sentence count or penalise a conclusion for retaining important nouns.
 
 ## 8. Finish with the learner's whole answer
 
-Assemble introduction, both body contributions and conclusion in one editable answer. Keep the question available. Preserve the first assembled version before revision, and never overwrite later edits from stale component fields.
+Assemble introduction, both paragraph contributions and conclusion in one editable answer. Keep the question available. Preserve the first assembled version before revision, and never overwrite later edits from stale component fields.
 
 Three short checking prompts:
 
@@ -243,7 +243,7 @@ No automatic AI scoring or network service is required for the core flow. Typing
 1. Inspect the repository and map existing activities to the five sections: retain, simplify, optional or retire.
 2. Integrate the frozen content and build the **Understand → Plan the structure** portion first in a local preview. Test the simpler planning experience before multiplying activities.
 3. Build introductions: short judgements, Cool clusters, optional Spicy clusters, independent writing with help.
-4. Build the shared paragraph process and a small, high-value Splat/repair set; use the same process for both body contributions.
+4. Build the shared paragraph process and a small, high-value Splat/repair set; use the same process for both paragraph contributions.
 5. Build conclusions with main-answer synthesis and conditional judgement work.
 6. Connect the assembled answer, preservation/migration, revision, optional models and verified practice handoff.
 7. Review the full local release candidate and evidence before requesting deployment confirmation. No deployment is authorised by this specification.
@@ -257,9 +257,14 @@ No automatic AI scoring or network service is required for the core flow. Typing
 - Main-point/development/optional-finish teaching does not become a compulsory three-part paragraph template or a fixed sentence count.
 - At least one example ends without an additional closure sentence and is explicitly accepted.
 - Splat feedback identifies the actual meaning/development issue and offers a repair path; it does not merely count errors or replace the learner's argument.
-- Both body contributions and a conclusion can become part of a complete editable answer; the endpoint does not quietly leave half the essay unwritten.
+- Both paragraph contributions and a conclusion can become part of a complete editable answer; the endpoint does not quietly leave half the essay unwritten.
 - Conclusion activities distinguish synthesis/restatement from an opinion judgement, without requiring both in separate sentences.
 - The model bank is preserved and remains clearly fictional and estimated; whole models are not silently converted into flawless teaching text.
 - All drafts, choices and valid cluster arrangements persist. Old entry points and storage migration are verified without deleting recoverable work.
 - Check keyboard access, phone/tablet/laptop layouts, sustained typing, stable focus, scroll and support disclosures. No visible typing or navigation stalls.
 - Pilot whether learners can make and use a plan more quickly and with less confusion. Do not claim that shorter scrolling time itself proves better writing.
+
+
+## Terminology update — 4 November 2026
+
+Use “Paragraph 1” and “Paragraph 2” throughout student-facing Task 2 material, including graphics, navigation, instructions and optional support prompts. Do not use “body” as a paragraph label. The approved second essay-layout image is the active PNG. Keep existing internal storage keys unchanged so saved learner writing remains available.

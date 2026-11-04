@@ -1,0 +1,21 @@
+# Task 2 opening pages — 4 November 2026
+
+The workshop now opens with a question-type explorer and then an essay-layout page. These are unrestricted reference pages with no compulsory activity. Existing workshop material follows unchanged at #understand; existing activity hashes still work. New links return from that material to the opening pages.
+
+The explorer includes all nine WT2-W01–WT2-W09 canonical questions. Every prompt is checked against the corresponding model prompt before rendering. The complete model-bank JSON is copied byte-for-byte from the reviewed 3 November source in the 2 November Codex outputs folder. All nine essays and all 36 comments were verified verbatim against the tracked Markdown model bank. Aisha's Markdown-only feedback is adapted at runtime without rewriting it. No submission-portal T2 question is substituted.
+
+Models are labelled fictional, deliberately imperfect teaching constructions. Criterion and Task 2 estimates are provisional, not official IELTS marks. Source links and model IDs/versions accompany each answer. Existing source provenance and qualifications remain available in the model-bank notes.
+
+The PNG follows Task 1's stacked pastel paper graphic, using Introduction, Paragraph 1, Paragraph 2, Conclusion. Its full text is available as alt text. Four parts are a recommended starting structure, not a required IELTS paragraph count. Models retain their original paragraph breaks, including five-paragraph responses.
+
+Validation: JavaScript syntax checks; all nine rendered selections and four feedback sections per selection; feedback disclosure; page 1 → page 2 → existing workshop → page 1 navigation; 390px phone rendering and 1280px desktop viewport; no horizontal overflow at 390px. The PNG was visually inspected and its corrected paragraph labels verified. Existing continuous workshop, introduction, paragraph, conclusion and storage modules are byte-for-byte unchanged. Only explorer selection uses a new independent local-storage key. No existing learner records are migrated or cleared.
+
+Deployment: this is the existing GitHub Pages project, not a Sites-hosted project. Commit the seven scoped changed/new files and push to the existing GitHub publishing branch using the project's normal GitHub Pages process. No build or dependency installation is required. Verify the Pages deployment completes, then check /ielts-workshops/writing/task-2/ and #layout. This change does not itself publish or push.
+
+Follow-up terminology check: the active PNG is the corrected second image, headed “Paragraph 1” and “Paragraph 2”. Active student-facing Task 2 scripts, navigation, HTML, prompts and content contain no “body” paragraph labels. The build specification now records this terminology for future edits. Internal HTML elements and existing storage identifiers are retained for functionality and saved-progress compatibility. Approved learner-model source text is unchanged.
+
+## Same-page paragraph recognition addition
+
+Page 2 now includes six exact extracts drawn uniformly without replacement from all 38 approved model paragraphs, using the existing cryptographic Fisher–Yates shuffle helper. No fixed category quotas, alternating answers, sorted positions or forced category order are used. Each dropdown’s three choices are also shuffled and retained for that attempt. A new independent storage record preserves the set and selections across reloads; “Try six new extracts” draws a fresh set. Existing essay writing records are untouched. Introduction means the first paragraph, Conclusion the last, and Paragraph any intervening paragraph. Feedback follows a selection and choices remain editable. Pill-shaped native selectors with arrows are embedded in each extract header.
+
+Validation: exact reconstruction of all nine source essays from the 38 eligible extracts; unique source IDs and six distinct excerpts per set; 200 draws exercised the entire pool and varied category sequences; browser checks for selection feedback, persistence after reload, new-set button, six controls, phone rendering and navigation. No new dependencies or build step. Deploy the new shared/js/task-2-structure.js module alongside the updated explorer, entry, CSS, HTML and notes using the existing GitHub Pages process.

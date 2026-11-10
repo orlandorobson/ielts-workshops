@@ -1,0 +1,58 @@
+[
+  {
+    "id": "P2-S01-BRIEF-SHORT",
+    "file": "P2-S01-BRIEF-SHORT.mp3",
+    "bytes": 228842,
+    "sha256": "cfd57be7f237bbfdd7e0fbb937d776ba30011f7f41e7954c908c19f45c60e214",
+    "approval": "User listened to and approved audio; canonical editorial status remains draft"
+  },
+  {
+    "id": "P2-S01-BRIEF",
+    "file": "P2-S01-BRIEF.mp3",
+    "bytes": 272310,
+    "sha256": "d6eeb362b54d54ad8d311afe902609c9b4b2fd69f88f57e65b1b961e480b77c0",
+    "approval": "User listened to and approved audio; canonical editorial status remains draft"
+  },
+  {
+    "id": "P2-S01-CARD-INTRO",
+    "file": "P2-S01-CARD-INTRO.mp3",
+    "bytes": 100946,
+    "sha256": "bf19bc2c340513f613404204a6a3cf0383efa0b0e10c77acdcb90ce6bc8e53b8",
+    "approval": "User listened to and approved audio; canonical editorial status remains draft"
+  },
+  {
+    "id": "P2-S01-CLOSE",
+    "file": "P2-S01-CLOSE.mp3",
+    "bytes": 70017,
+    "sha256": "73441eebff13e9216638cc0a945ed5ad698646bd205de04a1e6f15522d16c5f3",
+    "approval": "User listened to and approved audio; canonical editorial status remains draft"
+  },
+  {
+    "id": "P2-S01-END-EARLY",
+    "file": "P2-S01-END-EARLY.mp3",
+    "bytes": 40760,
+    "sha256": "f93d868cd09cc10a61c3bdb55545b5c6dab4645cbee3d8b20bd8d1647c47db20",
+    "approval": "User listened to and approved audio; canonical editorial status remains draft"
+  },
+  {
+    "id": "P2-S01-END-LIMIT",
+    "file": "P2-S01-END-LIMIT.mp3",
+    "bytes": 55807,
+    "sha256": "127817890576365db7c3acaa98df941d5c8c73dbb6ee56106c773f825326d22f",
+    "approval": "User listened to and approved audio; canonical editorial status remains draft"
+  },
+  {
+    "id": "P2-S01-PREP-START",
+    "file": "P2-S01-PREP-START.mp3",
+    "bytes": 118501,
+    "sha256": "5e263a91414b772806b37dee59c19acf836e06fff83fd7f27918666441f2c324",
+    "approval": "User listened to and approved audio; canonical editorial status remains draft"
+  },
+  {
+    "id": "P2-S01-SPEAK-START",
+    "file": "P2-S01-SPEAK-START.mp3",
+    "bytes": 52045,
+    "sha256": "611d77730798a3c17ed49eab375be0f5e5c8d3c907c11e595015403900f81934",
+    "approval": "User listened to and approved audio; canonical editorial status remains draft"
+  }
+]

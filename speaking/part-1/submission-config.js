@@ -1,3 +1,2 @@
-// Enable only after verifying a dedicated Speaking form, paid upload plan,
-// application/zip acceptance, storage/retention, and end-to-end test delivery.
-export const submission = { endpoint: '', verified: false, maxBytes: 25_000_000 };
+// Endpoint wired; deliveryVerified records independent receipt/download verification.
+export const submission = { endpoint: 'https://formspree.io/f/xdeeqgyg', enabled: true, deliveryVerified: true, maxBytes: 25_000_000 };

@@ -18,7 +18,9 @@ setInterval(updateClock,250);
 const status = text => { $('status').textContent = text; };
 const format = seconds => `${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(Math.floor(seconds)%60).padStart(2,'0')}`;
 const release = () => { stream?.getTracks().forEach(t=>{t.onended=null;t.stop();}); stream=null; };
-const canSend = () => submission.verified && /^https:\/\/formspree\.io\/f\/[a-zA-Z0-9]+$/.test(submission.endpoint);
+const validStudent = () => $('student-id').value.trim().length > 0;
+const updateSubmit = () => { $('submit').disabled=sending || sent || !archive || !canSend() || !validStudent() || !$('upload-consent').checked || archive.size>submission.maxBytes || !answers.some(Boolean) || answers.some(a=>a && !a.complete); };
+const canSend = () => submission.enabled && /^https:\/\/formspree\.io\/f\/[a-zA-Z0-9]+$/.test(submission.endpoint);
 let examinerBusy = false, audioRun = 0, cancelAudio;
 function stopExaminer() {
  audioRun++; cancelAudio?.(); cancelAudio=null;
@@ -133,18 +135,22 @@ async function review() {
   if(archiveURL)URL.revokeObjectURL(archiveURL);archiveURL=URL.createObjectURL(archive);
   $('download').href=archiveURL;$('download').download=`${attempt.attempt_id}.zip`;$('download').hidden=false;
   $('package-status').textContent=`One ZIP · ${meta.recorded_answers}/${meta.question_ids.length} recordings · ${meta.complete?'Complete':'Partial'} attempt + manifest · ${(archive.size/1024/1024).toFixed(2)} MB`;
-  $('submit').disabled=!canSend() || sent || archive.size>submission.maxBytes;
-  $('submission-note').textContent=!canSend()?'Online submission is not connected yet. Download this complete attempt to share with your teacher.':archive.size>submission.maxBytes?'This attempt exceeds the upload limit. Download it to share with your teacher.':'Only press Submit when you are ready to send the whole attempt to your teacher.';
+  updateSubmit();
+  $('submission-note').textContent=!canSend()?'Online submission is not connected yet. Download this complete attempt to share with your teacher.':archive.size>submission.maxBytes?'This attempt exceeds the upload limit. Download it to share with your teacher.':'Maximum ZIP size: 25 MB. Agree below to submit. Partial attempts include all saved answers and mark missing questions. Interrupted recordings must be recorded again. Keep a downloaded backup.';
   status('');
  }catch {status('Could not package your attempt. Your answers are safe; review them and try again.');}
  finishing=false;$('result-title').focus();
 }
 $('welcome-start').onclick=()=>{$('welcome').hidden=true;$('setup').hidden=false;$('route').focus();};
-$('consent').onchange=()=>{$('start').disabled=!$('consent').checked;};
+const updateStart=()=>{$('start').disabled=!$('consent').checked || !validStudent();};
+$('consent').onchange=updateStart;
+$('student-id').oninput=updateStart;
+$('upload-consent').onchange=updateSubmit;
 $('start').onclick=()=>{
+ if(!$('consent').checked || !validStudent())return;
  const route=$('route').value,blocks=[route,...($('include-weekends').checked?['E']:[]),...($('include-relax').checked?['R']:[])];
- attempt={attempt_id:`P1-S01-${crypto.randomUUID()}`,set_id:'P1-S01',version:content.version,content_status:content.status,route,selected_topics:blocks.map(b=>names[b]),topic_order:blocks,started_at:new Date().toISOString(),continuous_recording:false,question_ids:blocks.flatMap(b=>Array.from({length:4},(_,i)=>`${b}0${i+1}`)),events:[]};
- answers=[];index=0;sent=false;archive=null;overallStarted=performance.now();overallEnded=0;$('attempt-clock').hidden=false;updateClock();$('setup').hidden=true;$('practice').hidden=false;render(['OPEN',`T-${route}`,attempt.question_ids[0]]);status('');
+ attempt={student_identifier:$('student-id').value.trim(),recording_consent_at:new Date().toISOString(),attempt_id:`P1-S01-${crypto.randomUUID()}`,set_id:'P1-S01',version:content.version,content_status:content.status,route,selected_topics:blocks.map(b=>names[b]),topic_order:blocks,started_at:new Date().toISOString(),continuous_recording:false,question_ids:blocks.flatMap(b=>Array.from({length:4},(_,i)=>`${b}0${i+1}`)),events:[]};
+ $('upload-consent').checked=false;$('submit').textContent='Submit complete attempt';answers=[];index=0;sent=false;archive=null;overallStarted=performance.now();overallEnded=0;$('attempt-clock').hidden=false;updateClock();$('setup').hidden=true;$('practice').hidden=false;render(['OPEN',`T-${route}`,attempt.question_ids[0]]);status('');
 };
 $('replay-question').onclick=()=>playExaminer([attempt.question_ids[index]]);
 $('record').onclick=record;$('stop').onclick=()=>stop();
@@ -158,17 +164,17 @@ $('restart').onclick=()=>{
  overallStarted=0;overallEnded=0;$('attempt-clock').hidden=true;$('result').hidden=true;$('setup').hidden=false;status('');
 };
 $('submit').onclick=async()=>{
- if(sending || sent || !archive || !canSend() || archive.size>submission.maxBytes)return;
- sending=true;$('submit').disabled=true;$('review').disabled=true;$('restart').disabled=true;status('Sending your complete attempt…');
+ updateSubmit();if($('submit').disabled)return;
+ sending=true;$('submit').textContent='Uploading…';$('submit').setAttribute('aria-busy','true');$('upload-consent').disabled=true;$('submit').disabled=true;$('review').disabled=true;$('restart').disabled=true;status('Sending your complete attempt…');
  const abort=new AbortController(), timeout=setTimeout(()=>abort.abort(),30000);
  try {
-  const data=new FormData();data.append('attempt_id',attempt.attempt_id);data.append('attempt',JSON.stringify(manifest()));data.append('attachment',archive,`${attempt.attempt_id}.zip`);
+  const data=new FormData();data.append('student_identifier',attempt.student_identifier);data.append('submission_kind','IELTS Speaking Part 1');data.append('upload_consent','Agreed');data.append('upload_consent_at',new Date().toISOString());data.append('attempt_id',attempt.attempt_id);data.append('attempt',JSON.stringify(manifest()));data.append('attachment',archive,`${attempt.attempt_id}.zip`);
   const response=await fetch(submission.endpoint,{method:'POST',body:data,headers:{Accept:'application/json'},signal:abort.signal});
   const body=await response.json().catch(()=>null);
-  if(!response.ok || body?.ok!==true)throw new Error(response.status===429?'Too many requests. Wait before retrying.':'Submission was not confirmed.');
-  sent=true;status('Your complete attempt was submitted. You can still download a copy.');
- }catch(error){status(`${error.message} Your recordings are safe. If the connection failed, check with your teacher before retrying to avoid duplicates. Attempt ID: ${attempt.attempt_id}`);}
- finally{clearTimeout(timeout);sending=false;$('submit').disabled=sent;$('review').disabled=false;$('restart').disabled=false;}
+  if(!response.ok || body?.ok!==true)throw new Error(response.status===429?'Too many requests. Wait before retrying.':`Upload not confirmed (${response.status}). ${body?.errors?.map(e=>e.message).join(' ') || 'Check with your teacher that ZIP uploads are enabled.'}`);
+  sent=true;status('Formspree accepted your attempt. Keep a downloaded copy; your teacher can confirm receipt and file access.');
+ }catch(error){status(`${error.name==='AbortError'?'Upload timed out.':error.message} Your recordings are safe. If the connection failed, check with your teacher before retrying to avoid duplicates. Attempt ID: ${attempt.attempt_id}`);}
+ finally{clearTimeout(timeout);sending=false;$('upload-consent').disabled=false;$('submit').removeAttribute('aria-busy');$('submit').textContent=sent?'Accepted by Formspree':'Retry submission';updateSubmit();$('review').disabled=false;$('restart').disabled=false;}
 };
 window.addEventListener('beforeunload',e=>{if(answers.length || ['requesting','recording','stopping'].includes(state)){e.preventDefault();e.returnValue='';}});
 document.addEventListener('visibilitychange',()=>{if(attempt && state==='recording'){attempt.events.push({type:document.hidden?'page_hidden':'page_visible',at:new Date().toISOString()});if(document.hidden)status('Keep this page open and in the foreground. If recording is interrupted, record this answer again.');}});

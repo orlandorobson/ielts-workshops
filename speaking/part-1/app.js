@@ -1,4 +1,5 @@
 import { content } from './content.js';
+import { toMP3 } from './mp3.js';
 import { bundle } from './bundle.js';
 import { submission } from './submission-config.js';
 const $ = id => document.getElementById(id);
@@ -19,7 +20,7 @@ const status = text => { $('status').textContent = text; };
 const format = seconds => `${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(Math.floor(seconds)%60).padStart(2,'0')}`;
 const release = () => { stream?.getTracks().forEach(t=>{t.onended=null;t.stop();}); stream=null; };
 const validStudent = () => $('student-id').value.trim().length > 0;
-const updateSubmit = () => { $('submit').disabled=sending || sent || !archive || !canSend() || !validStudent() || !$('upload-consent').checked || archive.size>submission.maxBytes || !answers.some(Boolean) || answers.some(a=>a && !a.complete); };
+const updateSubmit = () => { $('submit').disabled=finishing || sending || sent || !archive || !canSend() || !validStudent() || !$('upload-consent').checked || archive.size>submission.maxBytes || !answers.some(Boolean) || answers.some(a=>a && !a.complete); };
 const canSend = () => submission.enabled && /^https:\/\/formspree\.io\/f\/[a-zA-Z0-9]+$/.test(submission.endpoint);
 let examinerBusy = false, audioRun = 0, cancelAudio;
 function stopExaminer() {
@@ -112,7 +113,7 @@ function stop(failed=false) {
 function manifest() {
  return {...attempt,total_elapsed_seconds:Number(totalSeconds().toFixed(2)),target_seconds:240,recorded_answers:answers.filter(Boolean).length,complete:answers.length===attempt.question_ids.length && answers.every(a=>a?.complete),questions:attempt.question_ids.map((id,i)=>{
   const a=answers[i],ext=a?.blob.type.includes('mp4')?'m4a':a?.blob.type.includes('ogg')?'ogg':'webm';
-  return {order:i+1,topic:names[id[0]],status:!a?'not_recorded':a.complete?'recorded':'interrupted',id:`P1-S01-${id}`,text:content.questions[id],audio_file:a?`P1-S01-${id}.${ext}`:null,duration_seconds:a?.duration_seconds,audio_bytes:a?.blob.size,audio_mime:a?.blob.type,complete:a?.complete,recorded_at:a?.recorded_at};
+  return {order:i+1,topic:names[id[0]],status:!a?'not_recorded':a.complete?'recorded':'interrupted',id:`P1-S01-${id}`,text:content.questions[id],audio_file:a?`P1-S01-${id}.${a.mp3?'mp3':ext}`:null,original_audio_file:a?`${a.mp3?'originals/':''}P1-S01-${id}.${ext}`:null,original_audio_bytes:a?.blob.size,original_audio_mime:a?.blob.type,duration_seconds:a?.duration_seconds,audio_bytes:(a?.mp3 || a?.blob)?.size,audio_mime:(a?.mp3 || a?.blob)?.type,complete:a?.complete,recorded_at:a?.recorded_at};
  })};
 }
 async function review() {
@@ -123,6 +124,9 @@ async function review() {
  overallEnded=performance.now();attempt.finished_at=new Date().toISOString();updateClock();
  $('practice').hidden=true;$('result').hidden=false;$('answers').replaceChildren();
  $('download').hidden=true;$('submit').disabled=true;status('Preparing your complete attempt…');
+ $('review').disabled=true;$('restart').disabled=true;
+ let conversionFailed=false;
+ for(let i=0;i<answers.length;i++){const a=answers[i];if(!a || a.mp3)continue;status(`Preparing MP3 ${i+1} of ${attempt.question_ids.length}… Keep this page open.`);try{a.mp3=await toMP3(a.blob);}catch{conversionFailed=true;}}
  const meta=manifest();
  meta.questions.forEach((q,i)=>{
   const box=document.createElement('div'),label=document.createElement('p'),audio=document.createElement('audio');
@@ -131,15 +135,15 @@ async function review() {
  });
  try {
   const readable=[`IELTS Speaking Part 1 — ${meta.complete?'Complete':'Partial'} attempt`, `Attempt: ${meta.attempt_id}`, `Selected topics: ${meta.selected_topics.join(' → ')}`, `Total elapsed: ${meta.total_elapsed_seconds}s (240s practice target)`, `Started: ${meta.started_at}`, `Finished: ${meta.finished_at}`, `Recordings: ${meta.recorded_answers}/${meta.question_ids.length}`, '', ...meta.questions.map(q=>`${q.order}. ${q.id} | ${q.topic} | ${q.status}\n${q.text}\nFile: ${q.audio_file || 'none'} | Duration: ${q.duration_seconds ?? 'not recorded'} seconds`)].join('\n');
-  archive=await bundle([...answers.flatMap((a,i)=>a?[{name:meta.questions[i].audio_file,blob:a.blob}]:[]),{name:'manifest.txt',blob:new Blob([readable],{type:'text/plain'})},{name:'attempt.json',blob:new Blob([JSON.stringify(meta,null,2)],{type:'application/json'})}]);
+  archive=await bundle([...answers.flatMap((a,i)=>a?[{name:meta.questions[i].audio_file,blob:a.mp3 || a.blob},...(a.mp3?[{name:meta.questions[i].original_audio_file,blob:a.blob}]:[])]:[]),{name:'manifest.txt',blob:new Blob([readable],{type:'text/plain'})},{name:'attempt.json',blob:new Blob([JSON.stringify(meta,null,2)],{type:'application/json'})}]);
   if(archiveURL)URL.revokeObjectURL(archiveURL);archiveURL=URL.createObjectURL(archive);
-  $('download').href=archiveURL;$('download').download=`${attempt.attempt_id}.zip`;$('download').hidden=false;
-  $('package-status').textContent=`One ZIP · ${meta.recorded_answers}/${meta.question_ids.length} recordings · ${meta.complete?'Complete':'Partial'} attempt + manifest · ${(archive.size/1024/1024).toFixed(2)} MB`;
+  $('download').textContent=conversionFailed?'Download ZIP (original audio preserved)':'Download attempt ZIP (MP3)';$('download').href=archiveURL;$('download').download=`${attempt.attempt_id}.zip`;$('download').hidden=false;
+  $('package-status').textContent=`One ZIP · ${meta.recorded_answers}/${meta.question_ids.length} recordings · ${meta.complete?'Complete':'Partial'} attempt + manifest + original audio backup · ${(archive.size/1024/1024).toFixed(2)} MB`;
   updateSubmit();
   $('submission-note').textContent=!canSend()?'Online submission is not connected yet. Download this complete attempt to share with your teacher.':archive.size>submission.maxBytes?'This attempt exceeds the upload limit. Download it to share with your teacher.':'Maximum ZIP size: 25 MB. Agree below to submit. Partial attempts include all saved answers and mark missing questions. Interrupted recordings must be recorded again. Keep a downloaded backup.';
-  status('');
+  status(conversionFailed?'Some MP3 conversions failed. This ZIP preserves those original recordings. Choose Review answers, then finish again to retry conversion.':'MP3 recordings are ready. Original audio is included in the originals folder as a backup.');
  }catch {status('Could not package your attempt. Your answers are safe; review them and try again.');}
- finishing=false;$('result-title').focus();
+ finishing=false;updateSubmit();$('review').disabled=false;$('restart').disabled=false;$('result-title').focus();
 }
 $('welcome-start').onclick=()=>{$('welcome').hidden=true;$('setup').hidden=false;$('route').focus();};
 const updateStart=()=>{$('start').disabled=!$('consent').checked || !validStudent();};
@@ -157,9 +161,9 @@ $('record').onclick=record;$('stop').onclick=()=>stop();
 $('next').onclick=()=>{if($('next').disabled)return;if(index===attempt.question_ids.length-1)review();else{index++;const id=attempt.question_ids[index];render([...(id[0]!==attempt.question_ids[index-1][0]?[`T-${id[0]}`]:[]),id]);status('');}};
 $('previous').onclick=()=>{if(!$('previous').disabled){index--;render([attempt.question_ids[index]]);status('');}};
 $('finish').onclick=()=>{if(!$('finish').disabled && confirm('Finish now? Unanswered questions will be listed as not recorded in your partial attempt.'))review();};
-$('review').onclick=()=>{if(sending)return;overallEnded=0;delete attempt.finished_at;$('result').hidden=true;$('practice').hidden=false;render();};
+$('review').onclick=()=>{if(sending || finishing)return;overallEnded=0;delete attempt.finished_at;$('result').hidden=true;$('practice').hidden=false;render();};
 $('restart').onclick=()=>{
- if(sending || !confirm('Have you saved this attempt? Starting a new attempt removes these recordings from this page.'))return;
+ if(sending || finishing || !confirm('Have you saved this attempt? Starting a new attempt removes these recordings from this page.'))return;
  stopExaminer();answers.forEach(a=>a && URL.revokeObjectURL(a.url));if(archiveURL)URL.revokeObjectURL(archiveURL);answers=[];attempt=null;archive=null;
  overallStarted=0;overallEnded=0;$('attempt-clock').hidden=true;$('result').hidden=true;$('setup').hidden=false;status('');
 };

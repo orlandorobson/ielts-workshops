@@ -13,12 +13,12 @@ function submitControl(){$('submit').disabled=!archive||archive.size>maxBytes||!
 for(const c of cards){const o=document.createElement('option');o.value=c.id;o.textContent=`${c.id} · ${c.title}`;$('card-select').append(o);}
 function renderCard(){const lines=card.text.split('\n');$('cue-card').replaceChildren();const h=document.createElement('h2');h.textContent=lines[0];$('cue-card').append(h);const label=document.createElement('p');label.textContent='You should say:';const ul=document.createElement('ul');for(const line of lines.filter(l=>l.startsWith('- '))){const li=document.createElement('li');li.textContent=line.slice(2);ul.append(li);}const ending=document.createElement('p');ending.textContent=lines.filter(Boolean).at(-1);$('cue-card').append(label,ul,ending);}
 async function prompt(id){
- const player=$('examiner');$('phase').textContent='Listen to the practice examiner';$('prompt-text').textContent=scripts[id];
+ const player=$('examiner');$('phase').textContent='Listen to the practice examiner';$('prompt-text').textContent=scripts[id];$('prompt-fallback').hidden=false;$('prompt-fallback').open=false;
  const asset=`P2-S01-${id}`;event('prompt_requested',{audio_asset_id:asset});
  await new Promise(resolve=>{
  let settled=false,timeout;
  const done=()=>{if(settled)return;settled=true;clearTimeout(timeout);player.onended=null;player.onerror=null;resumePrompt=null;$('resume').hidden=true;event('prompt_ended',{audio_asset_id:asset});resolve();};
- const blocked=()=>{clearTimeout(timeout);player.pause();$('resume').hidden=false;status('Audio paused or unavailable. Tap to retry this prompt; timing waits until it finishes.');event('prompt_retry_required',{audio_asset_id:asset});};
+ const blocked=()=>{clearTimeout(timeout);player.pause();$('resume').hidden=false;status('Audio paused or unavailable. Tap to retry this prompt; timing waits until it finishes. You can also open “Can’t hear? Read the prompt”.');event('prompt_retry_required',{audio_asset_id:asset});};
  const play=()=>{if(settled)return;$('resume').hidden=true;status('');player.currentTime=0;event('prompt_play',{audio_asset_id:asset});timeout=setTimeout(blocked,60000);player.play().catch(blocked);};
  player.onended=done;player.onerror=blocked;player.src=`assets/v0.2.0/${asset}.mp3`;resumePrompt=()=>{player.load();play();};play();
  });
@@ -37,7 +37,7 @@ async function begin(){
  blob=null;archive=null;sent=false;$('upload-consent').checked=false;$('setup').hidden=true;$('result').hidden=true;$('practice').hidden=false;$('finish').hidden=true;renderCard();state='prompts';status('Microphone ready. Keep this page in the foreground.');
  await prompt('BRIEF-SHORT');await prompt('CARD-INTRO');await prompt('PREP-START');
  if(!stream?.active)throw Error('Microphone disconnected');
- state='preparing';$('phase').textContent='Preparation';$('prompt-text').textContent='';$('guidance').textContent='Start writing your notes now';startTime=performance.now();attempt.preparation_started_at=stamp();event('preparation_started');
+ state='preparing';$('phase').textContent='Preparation';$('prompt-text').textContent='';$('prompt-fallback').hidden=true;$('prompt-fallback').open=false;$('guidance').textContent='Start writing your notes now';startTime=performance.now();attempt.preparation_started_at=stamp();event('preparation_started');
  await new Promise(resolve=>{const tick=()=>{const elapsed=(performance.now()-startTime)/1000;$('clock').textContent=fmt(Math.max(0,Math.ceil(60-elapsed)));if(elapsed>=60){clearInterval(clockTimer);resolve();}};tick();clockTimer=setInterval(tick,100);});
  attempt.preparation_duration_seconds=(performance.now()-startTime)/1000;attempt.preparation_ended_at=stamp();event('preparation_ended');state='prompts';await prompt('SPEAK-START');startRecording();
  }catch(e){clearInterval(clockTimer);release();state='setup';$('setup').hidden=false;$('practice').hidden=true;updateStart();status(`Could not begin: ${e.message}. Allow microphone access and try again.`);}
@@ -48,7 +48,7 @@ function startRecording(){
  recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data);};
  finishPromise=new Promise(resolve=>{recorder.onstop=()=>{attempt.capture_ended_at=stamp();event('capture_ended');blob=new Blob(chunks,{type:recorder.mimeType||chunks[0]?.type});release();resolve();};});
  recorder.onerror=()=>finish(true);
- recorder.start(250);startTime=performance.now();attempt.speaking_started_at=stamp();event('speaking_started');state='speaking';$('phase').textContent='Recording your answer';$('prompt-text').textContent='';$('finish').hidden=false;$('finish').disabled=false;
+ recorder.start(250);startTime=performance.now();attempt.speaking_started_at=stamp();event('speaking_started');state='speaking';$('phase').textContent='Recording your answer';$('prompt-text').textContent='';$('prompt-fallback').hidden=true;$('prompt-fallback').open=false;$('finish').hidden=false;$('finish').disabled=false;
  const tick=()=>{const s=(performance.now()-startTime)/1000;$('clock').textContent=`${fmt(s)} / 02:00`;$('phase-controls').classList.toggle('target',s>=120);$('guidance').textContent=s>=120?'Two-minute target reached. Recording continues until you finish.':'Aim for two minutes. Finish when you are ready.';};tick();clockTimer=setInterval(tick,200);
 }
 async function finish(interrupted=false){

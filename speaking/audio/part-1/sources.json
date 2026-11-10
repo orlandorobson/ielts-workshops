@@ -1,0 +1,110 @@
+{
+  "OPEN.mp3": {
+    "original": "OPEN.mp3",
+    "sha256": "9341305169a1e512896f8abd0a6c25cb8b4c8ace189c3f66248017f8c2e395bf"
+  },
+  "CLOSE.mp3": {
+    "original": "CLOSE.mp3",
+    "sha256": "bbdaacb9ac22ac83ab7290c7bfd9812dbb003737f3a9ccb0b0e99e8e3cd73f9b"
+  },
+  "W01.mp3": {
+    "original": "W01.mp3",
+    "sha256": "1ba86ac1f795760eff98a0d46e6d0171d309ad588ace453c0f2d9e9483f11b04"
+  },
+  "W02.mp3": {
+    "original": "W02.mp3",
+    "sha256": "5fe78f2ded358841df77976499d4df96010751a2c080775dfd37d2558512e84b"
+  },
+  "W03.mp3": {
+    "original": "W03.mp3",
+    "sha256": "295a1f8d58b4ca63ab5af4ad7a09264ae45c50f034dc3302c7e8c78ea02a71f4"
+  },
+  "W04.mp3": {
+    "original": "W04.mp3",
+    "sha256": "470d8beb6f2b93a095004e22d108a199f5a42eea268a61a7b217406bc5bd8ef0"
+  },
+  "S01.mp3": {
+    "original": "S01.mp3",
+    "sha256": "014dbedd7df8e79a0cc005fa96a4f3bcf58fd46401061e30da712f2dbf15643b"
+  },
+  "S02.mp3": {
+    "original": "S02.mp3",
+    "sha256": "b55623bc3722bb9df8bb1a06ea896f863b94f5ad54991d18ae2a5e9724bfe965"
+  },
+  "S03.mp3": {
+    "original": "S03.mp3",
+    "sha256": "b0d07c4878268a2348242ef1438d379e7e7f028f35c71a956fd16a961db77a7b"
+  },
+  "S04.mp3": {
+    "original": "S04.mp3",
+    "sha256": "d7825c317dbace97a5ada1939fd8afe9f9e7642f09d644f9ba17073e28db33eb"
+  },
+  "D01.mp3": {
+    "original": "D01.mp3",
+    "sha256": "451789be8d22e7d40f9cc84e2742682a640252f35c934d24239f9a320d2f8dea"
+  },
+  "D02.mp3": {
+    "original": "D02.mp3",
+    "sha256": "f9be7461698c4e00e356dde294e4cc7b540bfeeba852dcd2e5cd9619ca27a650"
+  },
+  "D03.mp3": {
+    "original": "D03.mp3",
+    "sha256": "5106af10739df2b1bc5b72d132c6d8b4b52887fe786c9da737586162e26bd1cc"
+  },
+  "D04.mp3": {
+    "original": "D04.mp3",
+    "sha256": "0d549b553fc6f82fb2dd224813cb29a84f379194d9942949c92ad7659316e5e4"
+  },
+  "E01.mp3": {
+    "original": "E01.mp3",
+    "sha256": "0a8a1f4641c080216bac33b66fa4dd157a2caed73dd80948e166310a83059fd6"
+  },
+  "E02.mp3": {
+    "original": "E02.mp3",
+    "sha256": "601ffe74bca8f04ba493887aa6457058c324dae22825935480f76aa1e7a77450"
+  },
+  "E03.mp3": {
+    "original": "E03.mp3",
+    "sha256": "9e4773f532bfc05b0993a19429328c4e72d67deb2d48921091967e809c49e5ad"
+  },
+  "E04.mp3": {
+    "original": "E04.mp3",
+    "sha256": "650b9e8bdc255250cb72d406d0ab41b5599e6ceda55a2b7062759fd7d8444949"
+  },
+  "R01.mp3": {
+    "original": "R01.mp3",
+    "sha256": "abef77f4c7b122a19a4d4939b361f307a216e81a54ace09acadc0d363d3a4329"
+  },
+  "R02.mp3": {
+    "original": "R02.mp3",
+    "sha256": "ad95b896bb666e2b9d4ceb0b0ada850ce3b9aea9d741bb6508642ca1284ac62b"
+  },
+  "R03.mp3": {
+    "original": "R03.mp3",
+    "sha256": "925a273d62671f144fbdbde306a093f36749b778424e364135bddf72c11a3fe3"
+  },
+  "R04.mp3": {
+    "original": "R04.mp3",
+    "sha256": "621b8093bb4f536fc082cdfa704248f34e7b982d4732beb32ec06618db4fad66"
+  },
+  "T-W.mp3": {
+    "original": "Work.mp3",
+    "sha256": "f9377f35701dd6be8fd90a06c67fe191d88f1c46876da0dd60e5e1c5718a2df4"
+  },
+  "T-S.mp3": {
+    "original": "Study.mp3",
+    "sha256": "b40be918a3fe3e178276728b4302e029b3a278c40a88081d6113e577ab038ccc"
+  },
+  "T-D.mp3": {
+    "original": "Daily Routine.mp3",
+    "sha256": "03daa59f2d0d5546a66ba40f21be2e4bc96c7251d02a4eb875676f54a9ec96c6"
+  },
+  "T-E.mp3": {
+    "original": "Weekends.mp3",
+    "sha256": "3c815068aebaa9019902ca4d45eb7e245f0b229a30a873c05e1fb8046a43d349"
+  },
+  "T-R.mp3": {
+    "original": "Places to relax.mp3",
+    "sha256": "d04225223c88c2dd6c516cc53a49824b99bf2aa77144f37034a2bc8e52c39000"
+  }
+}

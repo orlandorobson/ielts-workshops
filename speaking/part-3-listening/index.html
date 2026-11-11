@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IELTS Speaking Part 3 · Two listens</title>
+<style>
+  :root { color-scheme: light; font-family: "DM Sans", system-ui, sans-serif; color: #192b25; background: #f5f6f1; --green: #245542; --muted: #475d53; --line: #c7d2c9; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; line-height: 1.5; }
+  main { max-width: 43rem; margin: auto; padding: 1.5rem clamp(1rem, 4vw, 2rem) 3rem; }
+  header { border-bottom: 1px solid var(--line); padding-bottom: 1rem; margin-bottom: 1.5rem; }
+  header p, .round, .hint { color: var(--muted); margin: 0; }
+  .round { font-weight: 700; }
+  h1 { font-size: clamp(1.9rem, 6vw, 2.7rem); line-height: 1.1; margin: .25rem 0 .5rem; letter-spacing: -.035em; }
+  h2 { font-size: 1.4rem; margin: .2rem 0 .35rem; line-height: 1.2; }
+  .progress { margin: 1rem 0; font-size: .95rem; font-weight: 700; }
+  progress { display: block; width: 100%; height: .55rem; accent-color: var(--green); margin-top: .35rem; }
+  .item, .release, .results { background: #fff; border: 1px solid var(--line); border-radius: .85rem; padding: .9rem; margin: .65rem 0; }
+  fieldset { min-width: 0; border: 0; padding: 0; margin: 0; }
+  legend { font-weight: 650; padding: 0; margin-bottom: .7rem; }
+  .choices { display: grid; grid-template-columns: 1fr 1fr; gap: .55rem; }
+  .choice { display: flex; align-items: center; justify-content: center; gap: .45rem; min-height: 46px; border: 1px solid #82968b; border-radius: .55rem; cursor: pointer; }
+  .choice:has(:checked) { background: #e5f2e8; border-color: var(--green); box-shadow: inset 0 0 0 1px var(--green); font-weight: 700; }
+  input[type=radio] { accent-color: var(--green); width: 1.05rem; height: 1.05rem; margin: 0; }
+  :focus-visible { outline: 3px solid #245e9a; outline-offset: 3px; }
+  .release { margin-top: 1rem; }
+  .release label { display: block; font-weight: 700; margin-bottom: .25rem; }
+  #code { width: 100%; min-height: 46px; font: inherit; border: 1px solid #82968b; border-radius: .55rem; padding: .5rem .65rem; margin-top: .55rem; }
+  button { font: inherit; font-weight: 700; width: 100%; min-height: 46px; padding: .65rem 1rem; border: 0; border-radius: .55rem; background: var(--green); color: #fff; cursor: pointer; margin-top: .65rem; }
+  button:disabled { color: #43544a; background: #e5ebe5; cursor: default; }
+  .feedback { margin: .7rem 0 0; }
+  .incorrect, #error { color: #852c1d; }
+  .correct { color: var(--green); }
+  #error { margin: .5rem 0 0; }
+  #error:empty { margin: 0; }
+  .results p { margin: .3rem 0; }
+  .results a { color: var(--green); }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <p>IELTS Speaking · Part 3</p>
+    <h1>Shopping, status and advertising</h1>
+    <p>Your teacher will play the recording. Choose True or False as you listen.</p>
+  </header>
+  <noscript>This activity needs JavaScript to record and check your choices.</noscript>
+  <section id="activity" aria-labelledby="heading" hidden>
+    <p class="round" id="round"></p>
+    <h2 id="heading" tabindex="-1"></h2>
+    <p class="hint" id="instruction"></p>
+    <div class="progress">
+      <span id="count" role="status"></span>
+      <progress id="progress" aria-label="Statements answered"></progress>
+    </div>
+    <div id="results" class="results" hidden>
+      <h2 id="score" tabindex="-1"></h2>
+      <p id="review">Review the feedback below.</p>
+      <button id="next" type="button">Go to Listen 2</button>
+    </div>
+    <div id="questions"></div>
+    <form id="release" class="release">
+      <label for="code">Teacher’s completion code</label>
+      <p class="hint" id="code-help">Your teacher will give you the code when this listen ends.</p>
+      <input id="code" type="text" maxlength="24" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="code-help error">
+      <button id="check" type="submit" disabled>Check answers</button>
+      <p id="error" role="alert"></p>
+    </form>
+  </section>
+</main>
+<script>
+"use strict";
+const rounds = [{"title":"Understand the candidate","instruction":"Listen for the candidate’s ideas and examples.","statements":["The candidate thinks expensive cars can give people status in Oman.","He says his father's generation cared more about brands than young people today.","He believes people with expensive cars always have plenty of money.","He admits that advertising sometimes influences his own choices.","He believes governments should stop all advertising."],"salt":"7WBzfhPA5+pXpASv1Bzj0g==","iv":"Q6rm/REjOXoy2Z3m","locked":"JoupfiDkBBSC/gTb8vu0x8YR9G5aUsLdXsZ7A50QMfdQOXGOjZPFrOoYkEBfUmX45/4+L7+RQvabKP48zKj8JoXQsdj+I7RHO8oZKg02A6MNYhN+kaUuVqNf4Z5dNR1Hun8I1CchU9OzBz/rI2imRfo6kx0mbGEY9fXyCdZKLDEgmkaOc2IHNRjwDZDz+vf6n7VLzGuIJeNdw98MKZjrMosZ5UpnUodz8NpxHO/8dyHPC4zuB53EIg9Q3bTQKdLPU/PxuJmKBjK77CulS0KimGU7LpOj365qifwJ1pN66Io8+HHxsZ4UAvDrZYfVcXo2qroxnuRzpPNcKI9CqQLNjN0mfHYJBHv3TM5gEdSUlGNixQ/UPmKVznTOm4uw8xpkZXvjRzSSPqMKGhn1RwYCoKZg0tRQjSIRVVP+XmuPhkieOAQYxqbTzFP+Z8C1Ex0bBrhDmh2/iX+/w8rxSiDOzwFhuUIGfjVta4h9a90/UOBwLVy/it8eIj6sL8WE+M6rVY7mHXb1/o2wzEWCYjrM4Jq781CrtXYfR0LpfFakyZJVmikkozHZiF6t4yhGxwm45TMzb0oQhUrLEv7CkMJAaWP/ndgUrxsyZ0NwqHXRsL/ZjVIE9/x8dSyC7kYeYsmVH5Ez8pMaRt2sQlZqiR1lqcaU9Z/zglmvkeqeiUTjE68EVHSfac9ZpesEJGG63BEcz/U1sYhSKvQYqubzBN2o1N7tPxGQdYXUIZuyN42MzzkEhQw="},{"title":"Notice the English","instruction":"Listen for how the candidate explains ideas, hesitates and responds to difficult questions.","statements":["The candidate speaks equally fluently about every topic.","Sometimes the candidate repeats words or ideas while thinking.","The candidate always uses correct grammar when explaining his opinions.","The candidate sometimes uses simple words because he cannot find a more precise expression.","The candidate sometimes communicates his idea successfully even when his grammar is incorrect.","The candidate gives a clear, fully developed answer to every question."],"salt":"PVOxhX4X/VpZXfkpzx7gBA==","iv":"P9WuhhJRJ64jmI99","locked":"XFBYoMutcQ+6lEQTPun4Sqa3B5CLvSOej8j81GEgkySqnGbqxnRWtWpZWE02Pjkqzx+iCLWN1MvhrxFtA4E5YYAafi2ufH5aINBxW+Ur23wjOJ5azrlQNP+UTSDyjBCByO7o+sSyO5ceUC+JvsFbu2au+bx7wNS7x641rC0QM5TvtTJaR6O2QZy+MDACXB7U7OXu+hUV1PLWtq/9JbrPbQc7p85Lv++tTaDIT27MpfYC6q2loQd/bnXEOwWVgTWbUuvQzX3MBvhtFJpZE2lmIzJkkORGMh9FjfWkCLP5EVrr7juH+bmZR+qxYOIj0SIcX/NkKjoG3wT42gZApu0aW9MjwhsHy/IqjWiwlEGzbs+mAtWspHxM8UNjyo3hyWIfqdsT/PvT1xTL/uyEMKV0EgHnJW42n5l3TK/7OxDY08Js10nkTAlP+GU1f9YjNMgAg6Crt+THRcH6SdzpoQ8Uy4FcHFVwzOMWV9u7dKabwsE7BE7sYqKcnH4GtyfpjxdHHjVsu7KHCDC1PcBkSO8IQnoGkM72K2GWZ6c5PWqizxNiFnTuDMSYGe8+HBzh8mnpwQnCdILeuxIw2p6IqtvI4jDE2MITL4Wy/om56ETVnmCUwMJrw92H0A/mOxixWyLShhYYgBSmj1kkrsa0nlIVQgkdov18Ksyf5Sc2Pw2Q2QbKZHdNejjFOF/atrrL69buEuRL7ELHATcWsbRz11inqXyamiWnDiY8jNSFs8Rc9tHbuX+SwJTL4OSUOIMLkqYF72LjdtSvbhQcBHnH3/7+ssR34ooouJ1kCKgH5in0WcL1aIAz9gKZibjwn60D38Fy8BQpQ/JgSkye9EmGu9oEZ3NUb3LyAST8gkIqgF3n662+FNZyCz7o/oCOTOwIc1B8Xm30TWp8b1PR5aTFjnX0fUmp6jxGiEGY1sqH+G5qK4S8bFj4P3jYSQpGTrl6nw=="}];
+const byId = id => document.getElementById(id);
+const questions = byId("questions");
+const release = byId("release");
+const code = byId("code");
+const check = byId("check");
+const error = byId("error");
+const results = byId("results");
+const next = byId("next");
+const encoder = new TextEncoder();
+let roundIndex = 0;
+let busy = false;
+let choices = [];
+let scores = [];
+
+function element(tag, text, className) {
+  const node = document.createElement(tag);
+  node.textContent = text;
+  if (className) node.className = className;
+  return node;
+}
+
+function ready() {
+  return choices.length > 0 && choices.every(choice => choice !== null) && code.value.trim().length > 0;
+}
+
+function updateProgress() {
+  const answered = choices.filter(choice => choice !== null).length;
+  byId("count").textContent = `${answered} of ${choices.length} answered`;
+  byId("progress").value = answered;
+  check.disabled = busy || !ready();
+}
+
+function showRound() {
+  const round = rounds[roundIndex];
+  choices = round.statements.map(() => null);
+  byId("round").textContent = `Listen ${roundIndex + 1} of ${rounds.length}`;
+  byId("heading").textContent = round.title;
+  byId("instruction").textContent = round.instruction;
+  byId("progress").max = choices.length;
+  questions.replaceChildren();
+  for (const [index, statement] of round.statements.entries()) {
+    const item = element("div", "", "item");
+    const group = element("fieldset", "");
+    group.append(element("legend", `${index + 1}. ${statement}`));
+    const options = element("div", "", "choices");
+    for (const value of ["True", "False"]) {
+      const label = element("label", "", "choice");
+      const input = element("input", "");
+      input.type = "radio";
+      input.name = `statement-${index}`;
+      input.value = value;
+      input.addEventListener("change", () => {
+        choices[index] = value === "True";
+        updateProgress();
+      });
+      label.append(input, value);
+      options.append(label);
+    }
+    group.append(options);
+    item.append(group);
+    questions.append(item);
+  }
+  release.reset();
+  error.textContent = "";
+  results.hidden = true;
+  release.hidden = false;
+  updateProgress();
+}
+
+function bytes(base64) {
+  return Uint8Array.from(atob(base64), char => char.charCodeAt(0));
+}
+
+async function unlock(round, entered) {
+  const material = await crypto.subtle.importKey("raw", encoder.encode(entered), "PBKDF2", false, ["deriveKey"]);
+  const key = await crypto.subtle.deriveKey(
+    {name: "PBKDF2", salt: bytes(round.salt), iterations: 150000, hash: "SHA-256"},
+    material, {name: "AES-GCM", length: 256}, false, ["decrypt"]
+  );
+  const plain = await crypto.subtle.decrypt(
+    {name: "AES-GCM", iv: bytes(round.iv)}, key, bytes(round.locked)
+  );
+  return JSON.parse(new TextDecoder().decode(plain));
+}
+
+function showResults(key) {
+  let score = 0;
+  for (const [index, [answer, explanation]] of key.entries()) {
+    const correct = choices[index] === answer;
+    score += Number(correct);
+    const item = questions.children[index];
+    item.querySelector("fieldset").disabled = true;
+    const feedback = element("p", "", "feedback");
+    feedback.append(
+      element("strong", correct ? "Correct." : `Correct answer: ${answer ? "True" : "False"}.`, correct ? "correct" : "incorrect"),
+      " " + explanation
+    );
+    item.append(feedback);
+  }
+  scores.push(score);
+  const last = roundIndex === rounds.length - 1;
+  byId("score").textContent = `Listen ${roundIndex + 1} · ${score} of ${key.length} correct`;
+  byId("review").textContent = last
+    ? `Both listens complete. Total: ${scores.reduce((sum, value) => sum + value, 0)} of ${rounds.reduce((sum, round) => sum + round.statements.length, 0)} correct. Review the feedback below.`
+    : "Review the feedback below, then go to Listen 2.";
+  next.hidden = last;
+  release.reset();
+  release.hidden = true;
+  results.hidden = false;
+  byId("score").focus();
+}
+
+code.addEventListener("input", () => {
+  error.textContent = "";
+  updateProgress();
+});
+release.addEventListener("submit", async event => {
+  event.preventDefault();
+  if (busy || release.hidden || !ready()) return;
+  if (!globalThis.crypto?.subtle) {
+    error.textContent = "Open this activity over HTTPS or on localhost to check answers.";
+    return;
+  }
+  busy = true;
+  code.readOnly = true;
+  updateProgress();
+  error.textContent = "";
+  const entered = code.value.toUpperCase().replace(/[\s-]/g, "");
+  try {
+    showResults(await unlock(rounds[roundIndex], entered));
+  } catch {
+    error.textContent = "That code didn’t open this round. Check the code with your teacher and try again.";
+    code.focus();
+  } finally {
+    busy = false;
+    code.readOnly = false;
+    updateProgress();
+  }
+});
+next.addEventListener("click", () => {
+  roundIndex += 1;
+  showRound();
+  byId("heading").focus();
+});
+showRound();
+byId("activity").hidden = false;
+</script>
+</body>
+</html>

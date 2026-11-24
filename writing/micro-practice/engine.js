@@ -176,7 +176,7 @@ function showResults(root, content, score, total, hooks, retry) {
   if (first && (first.correct !== score || first.total !== total)) card.append(el('p', `Your first completed round: ${first.correct}/${first.total} (${Math.round(first.correct / first.total * 100)}%).`, 'muted'));
   reveal(card, content.reveal);
   if (content.bonus) {
-    const link = el('a', 'Practise second, third and together →', 'activity-link'); link.href = `#${content.bonus}`; card.append(link);
+    const link = el('a', 'Practise three more word forms →', 'activity-link'); link.href = `#${content.bonus}`; card.append(link);
   }
   card.append(button(content.id === 'silent-e-ing' ? 'Try all ten again →' : 'Try again →', 'next', retry));
   const home = el('a', 'Back to all activities', 'activity-link'); home.href = '#'; card.append(home);
@@ -431,7 +431,7 @@ export function startWorkshop(root) {
       document.title = `${content.title} · IELTS micro-practice`;
       const home = el('a', '← All activities', 'back-link'); home.href = '#'; root.append(home);
       if (content.id === 'silent-e-ing') {
-        const extra = el('a', 'More spellings: second, third, together →', 'activity-link small-link'); extra.href = '#more-word-forms'; root.append(extra);
+        const extra = el('a', 'More written word forms →', 'activity-link small-link'); extra.href = '#more-word-forms'; root.append(extra);
       }
       const area = el('div'); root.append(area);
       const entry = state[content.id] ||= {};

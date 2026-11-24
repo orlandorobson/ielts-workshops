@@ -35,3 +35,52 @@ del { color: #8b3824; text-decoration-thickness: 3px; background: #f8ded3; paddi
 .word-bank { margin-top: 1rem; font-size: .9rem; }
 footer { font-size: .75rem; margin-top: 1.5rem; }
 @media (min-width: 600px) { .shell { padding-top: 3rem; } .options { grid-template-columns: 1fr 1fr; } }
+/* Workshop navigation and reusable text interactions. */
+h1 { max-width: 24ch; }
+.activity-grid { display: grid; gap: 1rem; margin: 1rem 0 2rem; }
+.activity-tile { display: block; border: 1px solid var(--line); border-radius: .6rem; padding: 1.25rem; text-decoration: none; background: var(--surface); }
+.activity-tile:hover { border-color: var(--accent); background: #f1f5ee; }
+.activity-tile h3 { margin: .65rem 0 .5rem; line-height: 1.35; }
+.activity-tile p { color: var(--muted); font-size: .85rem; margin-bottom: .75rem; }
+.tile-number { color: var(--accent); font-size: .8rem; font-weight: 750; letter-spacing: .1em; }
+.completion { color: var(--accent-dark); font-weight: 700; }
+.saved-score { display: block; color: var(--muted); font-size: .8rem; margin-top: .4rem; }
+.activity-link { display: block; width: fit-content; margin-top: 1.25rem; padding: .35rem 0; }
+.back-link { display: block; width: fit-content; margin-bottom: 1.25rem; padding: .5rem 0; }
+.small-link { font-size: .85rem; margin: -.75rem 0 1.25rem; }
+.long-options { grid-template-columns: 1fr; }
+.long-options .answer { text-align: left; font-size: 1rem; font-weight: 500; line-height: 1.6; }
+.explanation-list { padding-left: 1.25rem; font-size: .95rem; }
+.explanation-list li { margin: .75rem 0; }
+.source-panel { background: var(--surface-quiet); border: 1px solid var(--line); border-radius: .4rem; padding: .9rem 1rem; margin: 1rem 0; font-size: .9rem; }
+summary { cursor: pointer; font-weight: 650; min-height: 28px; }
+.chart { margin: 1.25rem 0; }
+figcaption, caption { text-align: left; font-weight: 700; margin-bottom: .65rem; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; table-layout: fixed; }
+th, td { text-align: left; border-bottom: 1px solid var(--line); padding: .55rem .25rem; overflow-wrap: anywhere; }
+th { width: 58%; font-weight: 550; }
+thead { font-size: .8rem; color: var(--muted); }
+.bar-track { display: block; height: .6rem; background: var(--surface-quiet); width: 100%; margin-top: .3rem; }
+.bar-fill { display: block; height: 100%; background: var(--accent); }
+.bank { display: flex; gap: .5rem; flex-wrap: wrap; margin: 1rem 0; }
+.token { min-height: 48px; padding: .55rem .8rem; background: var(--accent-soft); color: var(--accent-dark); border: 2px solid transparent; font-size: .95rem; }
+.token.selected { border-color: var(--accent-dark); background: white; }
+.token[draggable="true"] { cursor: grab; }
+.token:disabled { opacity: .45; }
+.practice-paragraph { line-height: 2.6; margin: 1.25rem 0; }
+.gap { display: inline-block; vertical-align: baseline; min-height: 48px; min-width: 80px; border: 1px dashed var(--accent); background: var(--accent-soft); padding: .2rem .5rem; color: var(--accent-dark); font-size: .95rem; line-height: 1.4; margin: .1rem .15rem; }
+.gap:disabled { opacity: 1; }
+.inline-punctuation, .inline-case { max-width: 100%; min-height: 44px; font: inherit; font-size: .85rem; color: var(--accent-dark); background: var(--surface); border: 1px solid var(--accent); border-radius: .25rem; padding: .3rem .2rem; margin: .15rem; vertical-align: baseline; }
+.inline-punctuation { width: 9.3rem; }
+.inline-case { width: 6.5rem; }
+textarea { display: block; width: 100%; margin: .6rem 0; resize: vertical; border: 1px solid var(--line); padding: .75rem; border-radius: .35rem; background: var(--surface); color: var(--ink); font: inherit; }
+.check-row { display: flex; gap: .7rem; align-items: start; margin: 1rem 0; padding: .5rem 0; }
+.check-row input { flex-shrink: 0; width: 24px; height: 24px; margin-top: .15rem; }
+fieldset { margin-top: 1.5rem; }
+.feedback h3 { margin-top: 1rem; }
+.feedback ul { padding-left: 1.25rem; }
+.feedback li { margin-bottom: .7rem; }
+@media (min-width: 600px) { .activity-grid { grid-template-columns: 1fr 1fr; } }
+.token { touch-action: none; }
+.gap.drop-target { outline: 3px solid var(--accent); background: white; }
+h1:focus, h2:focus { outline: none; }
